@@ -37,6 +37,10 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue'
+      }, {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: "babel"
       },
       {
         test: /\.js$/,
@@ -69,7 +73,9 @@ module.exports = {
     ]
   },
   vue: {
-    loaders: utils.cssLoaders({ sourceMap: useCssSourceMap }),
+    loaders: utils.cssLoaders({
+      sourceMap: useCssSourceMap
+    }),
     postcss: [
       require('autoprefixer')({
         browsers: ['last 2 versions']
