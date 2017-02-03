@@ -10,6 +10,10 @@ var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const BUILD_DIR = path.resolve(__dirname, 'build');
+const extractCSS = new ExtractTextPlugin(`${BUILD_DIR}/styles.css`);
+
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -50,6 +54,10 @@ module.exports = {
         ],
         exclude: /node_modules/
       },
+      // {
+      //   test: /\.scss$/,
+      //   loaders: ["style", "css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]", "sass"],
+      // },
       {
         test: /\.json$/,
         loader: 'json'
@@ -81,5 +89,8 @@ module.exports = {
         browsers: ['last 2 versions']
       })
     ]
-  }
+  },
+  plugins: [
+    extractCSS,
+  ],
 }
