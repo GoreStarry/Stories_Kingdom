@@ -1,5 +1,8 @@
 .test {
     text-align: right;
+    button{
+        float: left;
+    }
 }
 
 :global .DraftEditor-root {
@@ -10,4 +13,11 @@
     background-color: #c3c1c1;
     writing-mode: vertical-rl;
     text-align: left;
+}
+
+:global .superFancyBlockquote {
+    color: #999;
+    font-family: 'Hoefler Text', Georgia, serif;
+    font-style: italic;
+    text-align: center;
 }
