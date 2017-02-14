@@ -3,9 +3,19 @@ import Immutable from 'immutable';
 
 import BlockWapperTest from '../components/BlockWapperTest.jsx';
 
-export default Immutable.Map({
+
+export const BlockRenderMap = Immutable.Map({
   'superTitleBlock': {
     element: 'h1',
-    wapper: <BlockWapperTest {...this.props} />
+    wrapper: <BlockWapperTest/>
   }
 })
+
+
+export function myBlockStyleFn(contentBlock) {
+  const type = contentBlock.getType();
+  switch (type) {
+    case 'superTitleBlock':
+      return 'super__title'
+  }
+}

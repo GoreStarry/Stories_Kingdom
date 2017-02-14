@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 
 class BlockWapperTest extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
     return (
-      <div>
-        Block Wapper Test
+      <div className='MyCustomBlock'>
+        { this.props.children }
       </div>
       );
   }
