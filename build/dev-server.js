@@ -51,7 +51,7 @@ Object.keys(proxyTable).forEach(function(context) {
 })
 
 // add api router to dev server
-const apiRouter = require('../server/api/router-api');
+const apiRouter = require('../server/api/router-api').apiRouter;
 app.use('/api', apiRouter);
 
 // handle fallback for HTML5 history API

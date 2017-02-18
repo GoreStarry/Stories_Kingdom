@@ -29,6 +29,8 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.common.js',
       'src': path.resolve(__dirname, '../src'),
+      'server': path.resolve(__dirname, '../server'),
+      'config': path.resolve(__dirname, '../config'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components')
     }
@@ -37,23 +39,32 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
+    exprContextCritical: false,
     loaders: [
       {
         test: /\.vue$/,
         loader: 'vue'
       }, {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: "babel"
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel',
+        loader: "babel",
         include: [
-          path.join(projectRoot, 'src')
+          path.join(projectRoot, 'src'),
+          path.join(projectRoot, 'server')
         ],
-        exclude: /node_modules/
+        exclude: /node_modules/,
+      }, {
+        test: /(LICENSE|\.md)$/,
+        loader: 'null'
       },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'babel',
+      //   include: [
+      //     path.join(projectRoot, 'src'),
+      //     path.join(projectRoot, 'server')
+      //   ],
+      //   exclude: /node_modules/
+      // },
       // {
       //   test: /\.scss$/,
       //   loaders: ["style", "css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]", "sass"],
@@ -90,6 +101,13 @@ module.exports = {
       })
     ]
   },
+  // node: {
+  //   fs: "empty",
+  //   dns: "empty",
+  //   tls: "empty",
+  //   module: "empty",
+  //   net: "empty"
+  // },
   plugins: [
     extractCSS,
   ],

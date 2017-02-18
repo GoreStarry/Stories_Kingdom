@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const storySchema = new Schema({
-  storyId: Schema.Types.ObjectId,
+const StorySchema = new Schema({
   name: {
     type: String,
     required: true
@@ -21,6 +20,14 @@ const storySchema = new Schema({
   },
 })
 
-const Story = mongoose.model('Story', storySchema);
+StorySchema.pre('save', next => {
+  const now = new Date();
+  if (!this.updateAt) {
+    this.updateTime = now;
+  }
+  next();
+})
+
+const Story = mongoose.model('Story', StorySchema);
 
 module.exports = Story;
