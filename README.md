@@ -1,4 +1,4 @@
-# stories_kingdom
+# Stories Kingdom
 
 > The environment for vertical writing
 
@@ -13,6 +13,9 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# run api tests
+npm run api_test
 
 # run unit tests
 npm run unit
