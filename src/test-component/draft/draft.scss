@@ -1,0 +1,24 @@
+.test {
+    text-align: right;
+}
+
+.box__hashtag {
+    color: blue;
+}
+
+:global .DraftEditor-root {
+    display: inline-block;
+    min-height: 100px;
+    min-width: 100px;
+    line-height: 2rem;
+    background-color: #c3c1c1;
+    writing-mode: vertical-rl;
+    text-align: left;
+}
+
+:global .superFancyBlockquote {
+    color: #999;
+    font-family: 'Hoefler Text', Georgia, serif;
+    font-style: italic;
+    text-align: center;
+}

@@ -1,11 +1,15 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './App'
+import React from 'react';
+import { render } from 'react-dom';
+import DraftTest from './test-component/draft/DraftVertical.jsx';
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  template: '<App/>',
-  components: { App }
-})
+// var Immutable = require("immutable");
+
+// var installDevTools = require("immutable-devtools");
+
+// installDevTools(Immutable);
+
+const MainContainer = () => (
+  <DraftTest/>
+);
+
+render(<MainContainer/>, document.getElementById('app'))
