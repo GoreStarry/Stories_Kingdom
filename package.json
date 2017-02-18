@@ -1,7 +1,7 @@
 {
     "name": "stories_kingdom",
     "version": "1.0.0",
-    "description": "The environment for vertical writing",
+    "description": "The environment builds for vertical writing.",
     "author": "Gore Wang <sunrise91.t3@gmail.com>",
     "private": true,
     "scripts": {
