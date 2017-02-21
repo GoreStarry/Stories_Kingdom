@@ -13,7 +13,7 @@ mongoose.Promise = global.Promise;
 const Database = process.env.NODE_ENV === 'test' ? 'sk_test' : 'storis_kingdom';
 mongoose.connect(`localhost:27017/${Database}`)
 
-const authRouter = require('./user/authRouter');
+const authRouter = require('./user/authRouter.js');
 const userRouter = require('./user/userRouter.js');
 const storiesRouter = require('./stories/storiesRouter.js');
 
