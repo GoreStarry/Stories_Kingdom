@@ -22,7 +22,6 @@ authRouter.post('/', (req, res) => {
       }, res.app.get('jwt_hash_key'), {
         expiresIn: '30d'
       })
-      console.log(user);
       if (user) {
         res.json({
           success: true,
