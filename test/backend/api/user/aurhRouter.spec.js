@@ -1,18 +1,54 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import User from '../../../../server/mongodb/model/user-settings.js';
 
 import server from '../../helpers/test-server.js';
-// let should = chai.should();
 const assert = chai.assert;
 
 chai.use(chaiHttp);
 
-describe('Auth test', () => {
-  it('first test', (done) => {
-    chai.request(server).get('/api/').end((err, res) => {
-      // res.should.have.status(404);
-      assert.ok(res, "[message]");
+const api_url = {
+  get_jwt_token: '/api/auth/'
+}
+
+describe('Auth API Test', () => {
+
+  before((done) => { // empty the User database
+    User.remove({}, (err) => {
       done();
     })
   })
+
+  describe('None signin user', () => {
+
+    it('first time sign up', (done) => {
+      chai.request(server)
+        .post(api_url['get_jwt_token'])
+        .send({
+          name: 'Gore'
+        })
+        .end((err, res) => {
+          assert.propertyVal(res, 'status', 200, "[success]");
+          assert.propertyVal(res.body, 'message', 'Sign Up Success', "[message]");
+          assert.isString(res.body.token, "[token exist]");
+          done();
+        })
+    })
+
+    it('second time login', (done) => {
+      chai
+        .request(server)
+        .post(api_url['get_jwt_token'])
+        .send({
+          name: 'Gore'
+        })
+        .end((err, res) => {
+          assert.propertyVal(res, 'status', 200, "[status 200]");
+          assert.deepPropertyVal(res, 'body.message', 'Login Success', "[Login Success]");
+          assert.isString(res.body.token, "[token]");
+          done();
+        })
+    })
+
+  });
 });
