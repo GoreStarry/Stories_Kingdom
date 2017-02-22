@@ -4,6 +4,11 @@ mongoose.Promise = global.Promise;
 const Schema = mongoose.Schema;
 
 const StorySchema = new Schema({
+  createBy: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
   name: {
     type: String,
     required: true
@@ -21,9 +26,9 @@ const StorySchema = new Schema({
   },
 })
 
-StorySchema.pre('save', next => {
+StorySchema.pre('save', function(next) {
   const now = new Date();
-  if (!this.updateAt) {
+  if (!this.updateTime) {
     this.updateTime = now;
   }
   next();

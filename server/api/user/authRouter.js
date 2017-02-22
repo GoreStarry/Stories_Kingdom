@@ -16,18 +16,21 @@ authRouter.post('/', (req, res) => {
     name
   })
     .then((user) => {
-
-      const token = jwt.sign({
-        name
-      }, res.app.get('jwt_hash_key'), {
-        expiresIn: '30d'
-      })
       if (user) {
+        const id = user._id;
+
+        const token = jwt.sign({
+          id
+        }, res.app.get('jwt_hash_key'), {
+          expiresIn: '30d'
+        })
+
         res.json({
           success: true,
           message: 'Login Success',
           token
         })
+
       } else { //create user
         const newUser = new User({
           name
@@ -35,6 +38,15 @@ authRouter.post('/', (req, res) => {
         newUser
           .save()
           .then((data) => {
+
+            const id = data._id;
+
+            const token = jwt.sign({
+              id
+            }, res.app.get('jwt_hash_key'), {
+              expiresIn: '30d'
+            })
+
             res.json({
               success: true,
               message: 'Sign Up Success',

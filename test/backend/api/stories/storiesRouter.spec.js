@@ -1,6 +1,8 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import User from '../../../../server/mongodb/model/user-settings.js';
+import Story from '../../../../server/mongodb/model/story-schema.js';
+
 
 import server from '../../helpers/test-server.js';
 const assert = chai.assert;
@@ -27,9 +29,17 @@ describe('Stories Page api Test', () => {
     })
   });
 
-  describe('have jwt token ', () => {
+  describe('with jwt token ', () => {
+
     let token;
+
     before((done) => {
+      // empty the stories collection 
+      Story.remove({}, (err) => {
+        console.log(err);
+      })
+
+      // get token
       chai
         .request(server)
         .post(api_url.get_jwt_token)
@@ -43,6 +53,21 @@ describe('Stories Page api Test', () => {
         })
     })
 
+    it('post a new stroy', (done) => {
+      chai
+        .request(server)
+        .post(api_url.getStories)
+        .send({
+          name: 'title1'
+        })
+        .set('x-access-token', token)
+        .end((err, res) => {
+          assert.propertyVal(res, 'status', 200, "200 success");
+          assert.deepPropertyVal(res, 'body.data.story.name', 'title1', "create by right title");
+          done();
+        })
+    })
+
     it('get story list', (done) => {
       chai
         .request(server)
@@ -50,6 +75,26 @@ describe('Stories Page api Test', () => {
         .set('x-access-token', token)
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "get story list successful");
+          assert.deepPropertyVal(res, 'body.data.0.name', 'title1', "[first story with right title name]");
+          done();
+        })
+    })
+
+    it('make sure the last created story, was in the first of order', (done) => {
+      chai
+        .request(server)
+        .post(api_url.getStories)
+        .send({
+          name: 'title1'
+        })
+        .set('x-access-token', token)
+        .end((err, res) => {
+
+          // console.log(res.body.data);
+          const lastStoryId = res.body.data.story._id;
+
+          assert.propertyVal(res, 'status', 200, "200 success");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', lastStoryId, "last story id");
           done();
         })
     })
