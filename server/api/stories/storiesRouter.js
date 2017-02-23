@@ -1,55 +1,140 @@
 const express = require('express');
 
 const Story = require('../../mongodb/model/story-schema.js');
-const UserSetting = require('../../mongodb/model/user-settings.js');
+const User = require('../../mongodb/model/user-settings.js');
 
 const storiesRouter = express.Router();
 
-storiesRouter.get('/', (req, res) => {
-  res.send('test success')
+storiesRouter.get('/', async (req, res) => {
+  const createBy = req.decoded.id;
+  console.log(createBy);
+  try {
+
+    const stories = await Story
+      .find({
+        createBy,
+        close: false
+      })
+      .sort('-updateTime')
+
+    res.json({
+      success: true,
+      data: stories
+    })
+
+  } catch (error) {
+    console.log(error);
+    res.send(error)
+  }
+
 })
 
-// async function checkStoriesOrderExist() {
-//   const order = await UserSetting.find();
-//   console.log(order);
-//   return order;
-// }
-
 // create a new story
-storiesRouter.post('/', (req, res) => {
+storiesRouter.post('/', async (req, res) => {
+
   const name = req.body.name;
+  const createBy = req.decoded.id;
+
   const newStory = new Story({
-    name
+    name,
+    createBy
   })
-  console.log();
 
   try {
-    // const doc = await newStory.save();
+
+    const story = await newStory.save();
+    const userWidthNewOrder = await User.findByIdAndUpdate(createBy, {
+      $push: {
+        storiesOrder: {
+          $each: [story._id],
+          $position: 0
+        }
+      }
+    }, {
+      new: true
+    })
+
+    const {storiesOrder} = userWidthNewOrder;
+
+    res.json({
+      success: true,
+      data: {
+        story,
+        storiesOrder
+      }
+    });
+
   } catch (err) {
     console.log(err);
     res.send(err)
   }
 
-  // newStory
-  //   .save()
-  //   .then((doc) => {
-  //     res.json(doc)
-  //   })
-  //   .catch((err) => {
-  //     res.send(err);
-  //   })
+})
+
+// update story
+storiesRouter.patch('/:id', async (req, res) => {
+  const storyId = req.params.id;
+  const createBy = req.decoded.id;
+
+  try {
+
+    const storyEdited = await Story.findOneAndUpdate({
+      _id: storyId,
+      createBy
+    }, req.body, {
+      new: true
+    })
+
+    res.json({
+      success: true,
+      data: storyEdited
+    })
+
+
+  } catch (error) {
+    console.log(error);
+  }
 
 })
 
 // delete story
-storiesRouter.delete('/:id', (req, res) => {
+storiesRouter.delete('/:id', async (req, res) => {
+  const storyId = req.params.id;
+  const createBy = req.decoded.id;
 
+  try {
+
+    const deletedStory = await Story.findOneAndUpdate({
+      _id: storyId,
+      createBy
+    }, {
+      close: true
+    })
+
+    const userWidthNewOrder = await User.findOneAndUpdate({
+      _id: createBy,
+    }, {
+      $pull: {
+        storiesOrder: storyId
+      }
+    }, {
+      new: true
+    })
+
+    const {storiesOrder} = userWidthNewOrder;
+
+    res.json({
+      success: true,
+      data: {
+        storiesOrder
+      }
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
 })
 
-// update story
-storiesRouter.patch('/:id', (req, res) => {
-
-})
 
 
 module.exports = storiesRouter;
