@@ -24,6 +24,10 @@ const StorySchema = new Schema({
     type: Date,
     default: Date.now
   },
+  close: {
+    type: Boolean,
+    default: false
+  }
 })
 
 StorySchema.pre('save', function(next) {

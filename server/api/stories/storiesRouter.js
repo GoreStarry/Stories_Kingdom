@@ -70,15 +70,37 @@ storiesRouter.post('/', async (req, res) => {
 
 })
 
+// update story
+storiesRouter.patch('/:id', async (req, res) => {
+  const storyId = req.params.id;
+  const createBy = req.decoded.id;
+
+  try {
+
+    const storyEdited = await Story.findOneAndUpdate({
+      _id: storyId,
+      createBy
+    }, req.body, {
+      new: true
+    })
+
+    res.json({
+      success: true,
+      data: storyEdited
+    })
+
+
+  } catch (error) {
+    console.log(error);
+  }
+
+})
+
 // delete story
 storiesRouter.delete('/:id', (req, res) => {
 
 })
 
-// update story
-storiesRouter.patch('/:id', (req, res) => {
-
-})
 
 
 module.exports = storiesRouter;

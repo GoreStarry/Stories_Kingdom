@@ -80,6 +80,8 @@ describe('Stories Page api Test', () => {
         })
     })
 
+    let lastStoryId;
+
     it('make sure the last created story, was in the first of order', (done) => {
       chai
         .request(server)
@@ -91,12 +93,50 @@ describe('Stories Page api Test', () => {
         .end((err, res) => {
 
           // console.log(res.body.data);
-          const lastStoryId = res.body.data.story._id;
+          lastStoryId = res.body.data.story._id;
 
           assert.propertyVal(res, 'status', 200, "200 success");
           assert.deepPropertyVal(res, 'body.data.storiesOrder.0', lastStoryId, "last story id");
           done();
         })
+    })
+
+    it('update the description for story', (done) => {
+
+      const description = 'I am the test description1';
+
+      chai
+        .request(server)
+        .patch(api_url.getStories + lastStoryId)
+        .send({
+          description
+        })
+        .set('x-access-token', token)
+        .end((err, res) => {
+          assert.propertyVal(res, 'status', 200, "[success]");
+          assert.deepPropertyVal(res, 'body.data.description', description, "[get description]");
+          done();
+        })
+    })
+
+    it('update the story name for story', (done) => {
+
+      const name = 'The New Title';
+
+      chai
+        .request(server)
+        .patch(api_url.getStories + lastStoryId)
+        .send({
+          name
+        })
+        .set('x-access-token', token)
+        .end((err, res) => {
+          // console.log(res);
+          assert.deepPropertyVal(res, 'body.data.name', name, "[get description]");
+          assert.propertyVal(res, 'status', 200, "[success]");
+          done();
+        })
+
     })
 
   });
