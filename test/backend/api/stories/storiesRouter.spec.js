@@ -53,6 +53,8 @@ describe('Stories Page api Test', () => {
         })
     })
 
+    let firstStoryId;
+
     it('post a new stroy', (done) => {
       chai
         .request(server)
@@ -64,6 +66,8 @@ describe('Stories Page api Test', () => {
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "200 success");
           assert.deepPropertyVal(res, 'body.data.story.name', 'title1', "create by right title");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', res.body.data.story._id, "story shoud save in the user story order");
+          firstStoryId = res.body.data.story._id;
           done();
         })
     })
@@ -92,7 +96,6 @@ describe('Stories Page api Test', () => {
         .set('x-access-token', token)
         .end((err, res) => {
 
-          // console.log(res.body.data);
           lastStoryId = res.body.data.story._id;
 
           assert.propertyVal(res, 'status', 200, "200 success");
@@ -131,9 +134,26 @@ describe('Stories Page api Test', () => {
         })
         .set('x-access-token', token)
         .end((err, res) => {
-          // console.log(res);
           assert.deepPropertyVal(res, 'body.data.name', name, "[get description]");
           assert.propertyVal(res, 'status', 200, "[success]");
+          done();
+        })
+
+    })
+
+    it('delete stroy by close', (done) => {
+
+      chai
+        .request(server)
+        .delete(api_url.getStories + lastStoryId)
+        .set('x-access-token', token)
+        .end((err, res) => {
+          assert.propertyVal(res, 'status', 200, "delete success");
+          assert.deepPropertyVal(res, 'body.success', true, "[delete success]");
+          assert.equal(res.body.data.storiesOrder.indexOf(lastStoryId), -1, "[not found deleted story in order]");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', firstStoryId, "[first story id should keep in order]");
+          console.log(res.body.data.storiesOrder);
+          console.log(firstStoryId);
           done();
         })
 

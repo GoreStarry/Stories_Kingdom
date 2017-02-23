@@ -12,7 +12,8 @@ storiesRouter.get('/', async (req, res) => {
 
     const stories = await Story
       .find({
-        createBy
+        createBy,
+        close: false
       })
       .sort('-updateTime')
 
@@ -97,8 +98,41 @@ storiesRouter.patch('/:id', async (req, res) => {
 })
 
 // delete story
-storiesRouter.delete('/:id', (req, res) => {
+storiesRouter.delete('/:id', async (req, res) => {
+  const storyId = req.params.id;
+  const createBy = req.decoded.id;
 
+  try {
+
+    const deletedStory = await Story.findOneAndUpdate({
+      _id: storyId,
+      createBy
+    }, {
+      close: true
+    })
+
+    const userWidthNewOrder = await User.findOneAndUpdate({
+      _id: createBy,
+    }, {
+      $pull: {
+        storiesOrder: storyId
+      }
+    }, {
+      new: true
+    })
+
+    const {storiesOrder} = userWidthNewOrder;
+
+    res.json({
+      success: true,
+      data: {
+        storiesOrder
+      }
+    })
+
+  } catch (error) {
+    console.log(error);
+  }
 })
 
 
