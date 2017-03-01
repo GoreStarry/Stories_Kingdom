@@ -152,8 +152,6 @@ describe('Stories Page api Test', () => {
           assert.deepPropertyVal(res, 'body.success', true, "[delete success]");
           assert.equal(res.body.data.storiesOrder.indexOf(lastStoryId), -1, "[not found deleted story in order]");
           assert.deepPropertyVal(res, 'body.data.storiesOrder.0', firstStoryId, "[first story id should keep in order]");
-          console.log(res.body.data.storiesOrder);
-          console.log(firstStoryId);
           done();
         })
 

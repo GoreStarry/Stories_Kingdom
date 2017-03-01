@@ -13,6 +13,7 @@
         "test": "npm run unit && npm run e2e"
     },
     "dependencies": {
+        "axios": "^0.15.3",
         "body-parser": "^1.16.1",
         "draft-js": "^0.10.0",
         "jsonwebtoken": "^7.3.0",
