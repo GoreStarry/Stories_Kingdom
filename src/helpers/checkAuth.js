@@ -35,7 +35,12 @@ async function fetchTheToken(name) {
   }).then((res) => {
     token = res.body.token;
 
-    token ? setTokenToLocal(token) : false
+    if (token) {
+      console.log(token);
+      return setTokenToLocal(token)
+    } else {
+      token = false;
+    }
 
   })
   console.log(token);
