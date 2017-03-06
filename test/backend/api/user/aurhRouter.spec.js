@@ -31,6 +31,7 @@ describe('Auth API Test', () => {
           assert.propertyVal(res, 'status', 200, "[success]");
           assert.propertyVal(res.body, 'message', 'Sign Up Success', "[message]");
           assert.isString(res.body.token, "[token exist]");
+          assert.notProperty(res.body.user, '_id', "[should not have _id in user info]");
           done();
         })
     })
@@ -46,6 +47,7 @@ describe('Auth API Test', () => {
           assert.propertyVal(res, 'status', 200, "[status 200]");
           assert.deepPropertyVal(res, 'body.message', 'Login Success', "[Login Success]");
           assert.isString(res.body.token, "[token]");
+          assert.notProperty(res.body.user, '_id', "[should not have _id in user info]");
           done();
         })
     })

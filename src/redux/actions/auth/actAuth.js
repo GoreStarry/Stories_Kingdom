@@ -35,7 +35,7 @@ export function actionGetAuth(name) {
     return async function(dispatch, getState) {
 
       try {
-        console.log(name);
+
         const token = await axios.post('/api/auth/', {
           name
         })
