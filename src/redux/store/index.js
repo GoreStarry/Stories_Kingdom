@@ -10,6 +10,7 @@ let finalCreateStore;
 if (process.env.NODE_ENV === 'production') {
   finalCreateStore = applyMiddleware(...middleware)(createStore);
 } else {
+
   finalCreateStore = compose(
     applyMiddleware(...middleware),
     window.devToolsExtension ? window.devToolsExtension() : DevTools.instrument(),
@@ -19,6 +20,13 @@ if (process.env.NODE_ENV === 'production') {
       )
     )
   )(createStore)
+
+
+  var Immutable = require("immutable");
+  var installDevTools = require("immutable-devtools");
+  installDevTools(Immutable);
+
+
 }
 
 

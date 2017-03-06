@@ -16,13 +16,13 @@ function getUserInfo(token) {
       })
 
     } catch (error) {
-
       console.log(error);
 
       dispatch({
         type: SERVER_ERROR,
         error
       })
+
     }
 
   }

@@ -4,14 +4,9 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../../mongodb/model/user-settings');
 
-authRouter.get('/', (req, res) => {
-  res.json({
-    val: 'successs'
-  });
-})
-
 authRouter.post('/', (req, res) => {
   const {name} = req.body;
+  console.log(name);
   User.findOne({
     name
   })
@@ -40,7 +35,7 @@ authRouter.post('/', (req, res) => {
           .then((data) => {
 
             const id = data._id;
-
+            console.log(res.app.get('jwt_hash_key'));
             const token = jwt.sign({
               id
             }, res.app.get('jwt_hash_key'), {

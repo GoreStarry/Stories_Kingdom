@@ -7,10 +7,6 @@ import createBrowserHistory from 'history/createBrowserHistory'
 
 import { configureStore } from './redux/store/index.js';
 
-var Immutable = require("immutable");
-var installDevTools = require("immutable-devtools");
-installDevTools(Immutable);
-
 let store = configureStore();
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
