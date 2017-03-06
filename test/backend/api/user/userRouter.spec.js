@@ -29,6 +29,21 @@ describe('User API Test', () => {
       })
   })
 
+  it('get user info', (done) => {
+    chai
+      .request(server)
+      .get(api_url['user'])
+      .set('x-access-token', token)
+      .end((err, res) => {
+        const {data} = res.body;
+        console.log(data);
+        assert.notProperty(data, '_id', "[ _id should not pass to user]");
+        assert.property(data, 'name', "[ name in data ]");
+        done();
+      })
+
+  })
+
   it('update stories order', (done) => {
     const ObjectID = require('mongodb').ObjectID;
     const O1 = new ObjectID();

@@ -1,13 +1,23 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, NavLinkyarn } from 'react-router-dom';
+import { Provider } from 'react-redux'
+import { syncHistoryWithStore } from 'react-router-redux';
+import createBrowserHistory from 'history/createBrowserHistory'
+
+import { configureStore } from './redux/store/index.js';
 
 var Immutable = require("immutable");
 var installDevTools = require("immutable-devtools");
 installDevTools(Immutable);
 
+let store = configureStore();
+
+const history = syncHistoryWithStore(createBrowserHistory(), store);
+
+
 import AllViewNav from './components/all-view-nav/AllNewNav.jsx';
-import StoriesList from './modules/Stories-List/StoriesList.jsx';
+import StoriesList from './containers/Stories-List/StoriesList.jsx';
 import DraftTest from './test-component/draft/DraftVertical.jsx';
 
 const routes = [
@@ -28,17 +38,20 @@ const testPath = {
   component: StoriesList
 };
 
+
 const MainContainer = () => (
-  <Router>
-    <div>
-      <AllViewNav routes={ routes } />
+  <Provider store={ store }>
+    <Router history={ history }>
       <div>
-        { routes.map((route, index) => {
-            return <Route key={ route.path + index } {...route}></Route>
-          }) }
+        <AllViewNav routes={ routes } />
+        <div>
+          { routes.map((route, index) => {
+              return <Route key={ route.path + index } {...route}></Route>
+            }) }
+        </div>
       </div>
-    </div>
-  </Router>
+    </Router>
+  </Provider>
 );
 
 render(<MainContainer/>, document.getElementById('app'))

@@ -19,13 +19,6 @@ describe('check auth', () => {
 
   let sandbox;
 
-  before(() => {
-
-
-
-
-  })
-
   beforeEach(() => {
     localStorage.removeItem('auth_token');
     sandbox = sinon.sandbox.create();
