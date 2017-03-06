@@ -17,43 +17,53 @@ import auth from '../../../../src/helpers/checkAuth.js';
 
 describe('check auth', () => {
 
-  before(() => {
+  let sandbox;
 
+  beforeEach(() => {
+    localStorage.removeItem('auth_token');
+    sandbox = sinon.sandbox.create();
+  })
+
+  afterEach(() => {
+    sandbox.restore();
+  })
+
+  it('get token when localStorage with no token exist', async () => {
     const resolved = new Promise((r) => r({
       body: {
         token: 'token_string'
       }
     }));
 
-    sinon.stub(axios, 'post').returns(resolved);
+    sandbox.stub(axios, 'post').returns(resolved);
 
-    localStorage.removeItem('auth_token');
-
-  })
-
-  it('get token when localStorage with no token exist', async () => {
     const token = await auth.checkAuth('test_user');
     assert.isString(token, "[token is string]");
   })
 
-  it('get token when localStorage exist token', () => {
-
-    const fetchStub = sinon.stub(auth, 'fetchTheToken');
-    const token = auth.checkAuth('test_user');
+  it('get token when localStorage exist token', async () => {
+    localStorage.setItem('auth_token', 'test_token')
+    const fetchStub = sandbox.stub(auth, 'fetchTheToken');
+    const token = await auth.checkAuth('test_user');
 
     assert.isString(token, "[token is string]");
+
     sinon.assert.neverCalledWith(fetchStub)
+
   })
 
-  it('get token with server err', () => {
+  it('get token with server err', async () => {
 
-    // const resolved = new Promise((r) => r({
-    //   status: 500
-    // }));
+    const resolved = new Promise((r) => r({
+      body: {
+        success: false
+      }
+    }));
 
-    // sinon.stub(axios, 'post').returns(resolved);
-    // const token = auth.checkAuth('test_user');
-    // assert.isFalse(token, "[server err]");
+    sandbox.stub(axios, 'post').returns(resolved);
+
+    const token = await auth.checkAuth('test_user');
+    assert.isFalse(token, "[server err]");
   })
 
 

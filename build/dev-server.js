@@ -5,6 +5,7 @@ if (!process.env.NODE_ENV)
 var path = require('path')
 var express = require('express')
 var webpack = require('webpack')
+var fs = require('fs')
 var opn = require('opn')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = process.env.NODE_ENV === 'testing'
@@ -18,6 +19,9 @@ var port = process.env.PORT || config.dev.port
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+const jwt_hash_key = fs.readFileSync(path.resolve(__dirname, '..//server/api/user/hash.key'))
+app.set('jwt_hash_key', jwt_hash_key);
+
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

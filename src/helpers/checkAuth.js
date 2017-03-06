@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 /**
  * this helper is just for localhost dev version to make sure token is always on the localStorage
  * 
@@ -35,14 +34,18 @@ async function fetchTheToken(name) {
   }).then((res) => {
     token = res.body.token;
 
-    token ? setTokenToLocal(token) : false
+    if (token) {
+      console.log(token);
+      return setTokenToLocal(token)
+    } else {
+      token = false;
+    }
 
   })
-  console.log(token);
   return token;
 }
 
 export default {
   checkAuth,
-  fetchTheToken
+  fetchTheToken // export for unit test
 }
