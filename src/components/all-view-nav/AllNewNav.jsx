@@ -9,11 +9,15 @@ import style from './AllNewNav.scss';
 
 class AllNewNav extends PureComponent {
 
-  componentDidMount() {
-    const {getAuth} = this.props;
-    // login page not preparing yet
-    getAuth('user_name_dev');
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.auth !== false && this.props.auth == 'success') {
+
+    }
   }
+
+
+
+  componentDidMount() {}
 
   render() {
     const {routes} = this.props;
@@ -33,20 +37,5 @@ AllNewNav.propTypes = {
   routes: React.PropTypes.array.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllNewNav);
+export default AllNewNav;
 
-
-function mapStateToProps(state) {
-  const {auth} = state;
-  return {
-    auth
-  }
-}
-
-import { actionGetAuth } from '../../redux/actions/auth/actAuth.js';
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getAuth: name => dispatch(actionGetAuth(name)),
-  }
-}

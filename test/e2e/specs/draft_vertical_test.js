@@ -2,6 +2,7 @@ module.exports = {
   '顯示輸入欄位'(broswer) {
     broswer
       .url('http://localhost:8080')
+      .waitForElementVisible('body')
       .waitForElementVisible('#app', 1000)
       .assert.elementPresent('#outer')
       .assert.containsText('#outer', 'test')

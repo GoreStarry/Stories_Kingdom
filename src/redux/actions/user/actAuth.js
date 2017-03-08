@@ -23,7 +23,6 @@ const setTokenAndSetToHeader = _flow([
  * @returns 
  */
 export function actionGetAuth(name) {
-
   if (getTokenAndSetToHeader()) {
 
     return {
@@ -36,14 +35,20 @@ export function actionGetAuth(name) {
 
       try {
 
-        const token = await axios.post('/api/auth/', {
+        const res = await axios.post('/api/auth/', {
           name
         })
+
+        console.log(res);
+
+        const {token, user} = res.data;
 
         setTokenAndSetToHeader(token);
 
         dispatch({
           type: GET_AUTH_SUCCESS,
+          token,
+          user_info: user
         })
 
       } catch (error) {
