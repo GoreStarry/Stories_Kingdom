@@ -6,7 +6,7 @@ module.exports = {
   src_folders: ['test/e2e/specs'],
   output_folder: 'test/e2e/reports',
   custom_assertions_path: ['test/e2e/custom-assertions'],
-
+  page_objects_path: ['test/e2e/pages'],
   selenium: {
     start_process: true,
     server_path: 'node_modules/selenium-server/lib/runner/selenium-server-standalone-2.53.1.jar',
@@ -23,6 +23,7 @@ module.exports = {
       selenium_host: 'localhost',
       silent: true,
       globals: {
+        "waitForConditionTimeout": 40000, // sometimes internet is slow so wait.
         devServerURL: 'http://localhost:' + (process.env.PORT || config.dev.port)
       }
     },

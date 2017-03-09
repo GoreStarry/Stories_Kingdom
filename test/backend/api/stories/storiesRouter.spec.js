@@ -66,7 +66,7 @@ describe('Stories Page api Test', () => {
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "200 success");
           assert.deepPropertyVal(res, 'body.data.story.name', 'title1', "create by right title");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', res.body.data.story._id, "story shoud save in the user story order");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', res.body.data.story._id, "story shoud save in the user story order");
           firstStoryId = res.body.data.story._id;
           done();
         })
@@ -99,7 +99,7 @@ describe('Stories Page api Test', () => {
           lastStoryId = res.body.data.story._id;
 
           assert.propertyVal(res, 'status', 200, "200 success");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', lastStoryId, "last story id");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', lastStoryId, "last story id");
           done();
         })
     })
@@ -151,7 +151,7 @@ describe('Stories Page api Test', () => {
           assert.propertyVal(res, 'status', 200, "delete success");
           assert.deepPropertyVal(res, 'body.success', true, "[delete success]");
           assert.equal(res.body.data.storiesOrder.indexOf(lastStoryId), -1, "[not found deleted story in order]");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0', firstStoryId, "[first story id should keep in order]");
+          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', firstStoryId, "[first story id should keep in order]");
           done();
         })
 

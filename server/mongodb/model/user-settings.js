@@ -6,11 +6,14 @@ const Schema = mongoose.Schema;
 const userSettingsSchema = new Schema({
   name: {
     type: String,
+    unique: true,
     required: true,
   },
   storiesOrder: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Story'
+    id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Story'
+    }
   }]
 })
 

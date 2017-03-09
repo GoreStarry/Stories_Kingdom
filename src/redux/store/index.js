@@ -7,7 +7,7 @@ import { persistState } from 'redux-devtools';
 let middleware = [ReduxThunk];
 let finalCreateStore;
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || 'testing') {
   finalCreateStore = applyMiddleware(...middleware)(createStore);
 } else {
 

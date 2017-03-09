@@ -34,7 +34,7 @@ userRouter.patch('/', async (req, res) => {
       storiesOrder
     }, {
       new: true
-    })
+    }).select('-_id');
 
     res.json({
       success: true,

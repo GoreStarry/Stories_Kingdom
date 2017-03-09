@@ -6,7 +6,6 @@ const User = require('../../mongodb/model/user-settings');
 
 authRouter.post('/', (req, res) => {
   const {name} = req.body;
-  console.log(name);
   User.findOne({
     name
   })
@@ -20,10 +19,15 @@ authRouter.post('/', (req, res) => {
           expiresIn: '30d'
         })
 
+        const writebleUser = user.toObject();
+
+        delete writebleUser['_id'];
+
         res.json({
           success: true,
           message: 'Login Success',
-          token
+          token,
+          user: writebleUser
         })
 
       } else { //create user
@@ -35,17 +39,21 @@ authRouter.post('/', (req, res) => {
           .then((data) => {
 
             const id = data._id;
-            console.log(res.app.get('jwt_hash_key'));
             const token = jwt.sign({
               id
             }, res.app.get('jwt_hash_key'), {
               expiresIn: '30d'
             })
 
+            const writebleData = data.toObject();
+
+            delete writebleData['_id'];
+
             res.json({
               success: true,
               message: 'Sign Up Success',
-              token
+              token,
+              user: writebleData
             })
           })
           .catch((err) => {
@@ -62,4 +70,5 @@ authRouter.post('/', (req, res) => {
     })
 })
 
+module.exports = authRouter;
 module.exports = authRouter;
