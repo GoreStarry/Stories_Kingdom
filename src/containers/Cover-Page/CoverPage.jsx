@@ -20,12 +20,12 @@ class CoverPage extends PureComponent {
   }
 
   render() {
-    const {auth} = this.props;
+    const {auth} = this.props.user;
 
     const LoginBlock = (
     <div>
-      <input type="text" ref={ input => this.usernameInput = input } />
-      <button onClick={ this.clickLoginBtn }>Login</button>
+      <input id="input_login" type="text" ref={ input => this.usernameInput = input } />
+      <button id="btn_login" onClick={ this.clickLoginBtn }>Login</button>
     </div>
     )
 

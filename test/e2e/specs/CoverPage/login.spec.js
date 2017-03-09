@@ -4,11 +4,10 @@ const project_url = `http://localhost:${config.dev.port}`;
 console.log(project_url);
 
 module.exports = {
-  'all viwe nav loaded'(browser) {
+  'component AllViweNav loaded': function(browser) {
     browser
-      .url(project_url)
-      .waitForElementVisible('#app')
-      .assert.elementPresent('body')
+      .page.cover().mountShow()
+      .page.cover().loginAndRedirect()
       .end()
 
   }
