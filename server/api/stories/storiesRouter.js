@@ -46,7 +46,9 @@ storiesRouter.post('/', async (req, res) => {
     const userWidthNewOrder = await User.findByIdAndUpdate(createBy, {
       $push: {
         storiesOrder: {
-          $each: [story._id],
+          $each: [{
+            id: story._id
+          }],
           $position: 0
         }
       }
@@ -115,7 +117,9 @@ storiesRouter.delete('/:id', async (req, res) => {
       _id: createBy,
     }, {
       $pull: {
-        storiesOrder: storyId
+        storiesOrder: {
+          id: storyId
+        }
       }
     }, {
       new: true

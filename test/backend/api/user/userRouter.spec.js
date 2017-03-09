@@ -48,7 +48,11 @@ describe('User API Test', () => {
     const ObjectID = require('mongodb').ObjectID;
     const O1 = new ObjectID();
     const O2 = new ObjectID();
-    const newOrder = [O1.toString(), O2.toString()];
+    const newOrder = [{
+      id: O1.toString()
+    }, {
+      id: O2.toString()
+    }];
     chai
       .request(server)
       .patch(api_url['user'])
@@ -57,7 +61,8 @@ describe('User API Test', () => {
       })
       .set('x-access-token', token)
       .end((err, res) => {
-        assert.deepEqual(res.body.data.storiesOrder, newOrder, "[same as new order]");
+        console.log(res.body.data.storiesOrder);
+        assert.deepEqual(res.body.data.storiesOrder[0].id, newOrder[0].id, "[same as new order]");
         done();
       })
 
