@@ -10,6 +10,7 @@ const userSettingsSchema = new Schema({
     required: true,
   },
   storiesOrder: [{
+    _id: false,
     id: {
       type: Schema.Types.ObjectId,
       ref: 'Story'
