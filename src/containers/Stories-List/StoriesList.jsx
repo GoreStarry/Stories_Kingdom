@@ -40,23 +40,27 @@ class StoriesList extends PureComponent {
   componentDidMount() {}
 
   _onListChange(newList) {
+    console.log(newList);
     this.setState({
       list: newList
     });
   }
 
   render() {
+    const {useContainer} = this.state;
     return (
       <div>
+        <h1>Lists</h1>
         <DraggableList
-                       itemKey="name"
-                       template={ StoryCard }
-                       list={ this.state.list }
-                       onMoveEnd={ newList => this._onListChange(newList) }
-                       container={ () => useContainer ? this.refs.container : document.body } />
+          itemKey="name"
+          template={ StoryCard }
+          list={ this.state.list }
+          onMoveEnd={ newList => this._onListChange(newList) }
+          container={ () => useContainer ? this.refs.container : document.body } />
       </div>
       );
   }
+
 }
 
 export default StoriesList;

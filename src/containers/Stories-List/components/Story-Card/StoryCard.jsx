@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import cx from 'classnames';
 
 class StoryCard extends Component {
 
   render() {
     const {item, itemSelected, dragHandle} = this.props;
     const dragged = itemSelected !== 0;
+    const scale = itemSelected * 0.05 + 1;
     const shadow = itemSelected * 15 + 1;
 
     const boxClassName = cx('item', {
@@ -17,8 +19,9 @@ class StoryCard extends Component {
 
     return (
       <div className={ boxClassName } style={ boxStyle }>
-        { dragHandle(<div className="dragHandle" />) }
-        <div>123</div>
+        { dragHandle(<div>
+                       <span>123</span>
+                     </div>) }
       </div>
       );
   }

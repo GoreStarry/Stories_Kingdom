@@ -19,11 +19,6 @@ import CoverPage from './containers/Cover-Page/CoverPage.jsx';
 
 const routes = [
   {
-    name: 'Cover Page',
-    path: '/',
-    component: CoverPage
-  },
-  {
     name: 'Stories List',
     path: '/lists',
     component: StoriesList
@@ -32,6 +27,11 @@ const routes = [
     name: 'Draft Test',
     path: '/draft_test',
     component: DraftTest
+  },
+  {
+    name: 'Cover Page',
+    path: '/',
+    component: CoverPage
   },
 ];
 
