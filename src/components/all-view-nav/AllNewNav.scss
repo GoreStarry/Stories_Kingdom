@@ -1,3 +1,12 @@
 .AllNewNav {
     color: red;
+     :global {
+        .pusher {
+            min-height: 100vh;
+        }
+        .box__btn_setting {
+            text-align: right;
+            padding: 0.5rem;
+        }
+    }
 }

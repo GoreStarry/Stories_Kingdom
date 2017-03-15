@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react';
 import DraggableList from 'react-draggable-list';
-import cx from 'classnames';
+import classNames from 'classnames/bind';
+import { Button, Icon } from 'semantic-ui-react';
+
+import styles from './StoriesList.scss';
+const cx = classNames.bind(styles);
+
 
 import StoryCard from './components/Story-Card/StoryCard.jsx';
 
@@ -39,6 +44,7 @@ class StoriesList extends PureComponent {
   };
   componentDidMount() {}
 
+
   _onListChange(newList) {
     console.log(newList);
     this.setState({
@@ -51,6 +57,9 @@ class StoriesList extends PureComponent {
     return (
       <div>
         <h1>Lists</h1>
+        <Button icon id="btn__addStory">
+          <Icon name="plus" />
+        </Button>
         <DraggableList
           itemKey="name"
           template={ StoryCard }

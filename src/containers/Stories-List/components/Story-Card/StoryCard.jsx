@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import cx from 'classnames';
+import classNames from 'classnames/bind';
+import styles from './StoryCard.scss';
+
+let cx = classNames.bind(styles);
 
 class StoryCard extends Component {
 
@@ -9,9 +12,10 @@ class StoryCard extends Component {
     const scale = itemSelected * 0.05 + 1;
     const shadow = itemSelected * 15 + 1;
 
-    const boxClassName = cx('item', {
-      dragged
+    const boxClassName = cx('StoryCard', {
+      dragged,
     });
+
     const boxStyle = {
       transform: `scale(${scale})`,
       boxShadow: `rgba(0, 0, 0, 0.3) 0px ${shadow}px ${2 * shadow}px 0px`

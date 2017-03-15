@@ -16,11 +16,9 @@ if (['production', 'testing'].indexOf(process.env.NODE_ENV) != -1) {
     applyMiddleware(...middleware),
   )(createStore)
 
-
   var Immutable = require("immutable");
   var installDevTools = require("immutable-devtools");
   installDevTools(Immutable);
-
 
 }
 
