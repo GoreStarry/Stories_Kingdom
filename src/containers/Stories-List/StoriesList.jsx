@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import DraggableList from 'react-draggable-list';
 import classNames from 'classnames/bind';
-import { Button, Icon } from 'semantic-ui-react';
 
 import styles from './StoriesList.scss';
 const cx = classNames.bind(styles);
 
 
 import StoryCard from './components/Story-Card/StoryCard.jsx';
+import NewStroyForm from './components/New-Story-Form/NewStroyForm.jsx';
 
 class StoriesList extends PureComponent {
   state = {
@@ -57,9 +57,7 @@ class StoriesList extends PureComponent {
     return (
       <div>
         <h1>Lists</h1>
-        <Button icon id="btn__addStory">
-          <Icon name="plus" />
-        </Button>
+        <NewStroyForm/>
         <DraggableList
           itemKey="name"
           template={ StoryCard }

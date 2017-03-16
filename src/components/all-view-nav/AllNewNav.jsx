@@ -1,12 +1,38 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { Component, PureComponent, PropTypes } from 'react';
+
+import axios from 'axios';
+// for 400 request 
+axios.defaults.validateStatus = function(status) {
+  return status >= 200 && status < 405; // default
+};
+
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react'
+import { Sidebar, Segment, Button, Menu, Icon } from 'semantic-ui-react'
 
 
 import checkAuth from '../../helpers/checkAuth.js';
 
 import style from './AllNewNav.scss';
+
+
+class PageBody extends PureComponent {
+
+  render() {
+    return (
+      <Sidebar.Pusher>
+        <Segment basic>
+          <div className="box__btn_setting">
+            <Button icon onClick={ this.props._toggleNav }>
+              <Icon name='setting' />
+            </Button>
+          </div>
+          { this.props.pages }
+        </Segment>
+      </Sidebar.Pusher>
+      );
+  }
+}
 
 class AllNewNav extends PureComponent {
   state = {
@@ -34,7 +60,7 @@ class AllNewNav extends PureComponent {
 
   render() {
 
-    const {routes} = this.props;
+    const {routes, children} = this.props;
     const {nav_open} = this.state;
 
     return (
@@ -62,21 +88,16 @@ class AllNewNav extends PureComponent {
                 )
               }) }
           </Sidebar>
-          <Sidebar.Pusher>
-            <Segment basic>
-              <div className="box__btn_setting">
-                <Button icon onClick={ this._toggleNav }>
-                  <Icon name='setting' />
-                </Button>
-              </div>
-              { this.props.children }
-            </Segment>
-          </Sidebar.Pusher>
+          { children && <PageBody
+                          visible="nav_open"
+                          pages={ children }
+                          _toggleNav={ this._toggleNav } /> }
         </Sidebar.Pushable>
       </div>
       );
   }
 }
+
 
 AllNewNav.propTypes = {
   routes: React.PropTypes.array.isRequired
