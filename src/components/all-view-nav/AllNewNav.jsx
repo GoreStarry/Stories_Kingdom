@@ -1,4 +1,11 @@
 import React, { Component, PureComponent, PropTypes } from 'react';
+
+import axios from 'axios';
+// for 400 request 
+axios.defaults.validateStatus = function(status) {
+  return status >= 200 && status < 405; // default
+};
+
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Sidebar, Segment, Button, Menu, Icon } from 'semantic-ui-react'
@@ -81,7 +88,10 @@ class AllNewNav extends PureComponent {
                 )
               }) }
           </Sidebar>
-          { children && <PageBody visible="nav_open" pages={ children } _toggleNav={ this._toggleNav } /> }
+          { children && <PageBody
+                          visible="nav_open"
+                          pages={ children }
+                          _toggleNav={ this._toggleNav } /> }
         </Sidebar.Pushable>
       </div>
       );
