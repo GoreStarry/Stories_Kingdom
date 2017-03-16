@@ -3,7 +3,7 @@
     "jsx": {
         "formatJSX": true, //Duh! that's the default 
         "attrsOnSameLineAsTag": false, // move each attribute to its own line 
-        "maxAttrsOnTag": 3, // if lower or equal than 3 attributes, they will be kept on a single line 
+        "maxAttrsOnTag": 2, // if lower or equal than 3 attributes, they will be kept on a single line 
         "firstAttributeOnSameLine": false, // keep the first attribute in the same line as the tag 
         "formatJSXExpressions": true, // default true, if false jsxExpressions won't be recursively formatted 
         "JSXExpressionsSingleLine": true, // default true, if false the JSXExpressions might span several lines 
