@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import DraggableList from 'react-draggable-list';
 import classNames from 'classnames/bind';
 
@@ -54,7 +56,10 @@ class StoriesList extends PureComponent {
 
   render() {
     const {useContainer} = this.state;
+    const {auth} = this.props;
+
     return (
+    auth === 'success' ?
       <div>
         <h1>Lists</h1>
         <NewStroyForm/>
@@ -65,9 +70,18 @@ class StoriesList extends PureComponent {
           onMoveEnd={ newList => this._onListChange(newList) }
           container={ () => useContainer ? this.refs.container : document.body } />
       </div>
-      );
+      :
+      <Redirect to='/' />
+    );
   }
 
 }
 
-export default StoriesList;
+
+function mapStateToProps(state) {
+  return {
+    auth: state.user.auth
+  }
+}
+
+export default connect(mapStateToProps)(StoriesList);

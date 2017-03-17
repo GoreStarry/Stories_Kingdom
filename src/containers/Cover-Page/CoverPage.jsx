@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 class CoverPage extends PureComponent {
 
   componentDidMount() {
-    localStorage.removeItem('auth_token')
+    // localStorage.removeItem('auth_token')
   }
 
 
@@ -24,14 +24,19 @@ class CoverPage extends PureComponent {
 
     const LoginBlock = (
     <div>
-      <input id="input_login" type="text" ref={ input => this.usernameInput = input } />
-      <button id="btn_login" onClick={ this.clickLoginBtn }>Login</button>
+      <input
+        id="input_login"
+        type="text"
+        ref={ input => this.usernameInput = input } />
+      <button id="btn_login" onClick={ this.clickLoginBtn }>
+        Login
+      </button>
     </div>
     )
 
     return (
-    auth ? (
-      <Redirect push to={ '/draft_test' } />
+    auth === 'success' ? (
+      <Redirect to={ '/lists' } />
       ) : (
       LoginBlock
       )
@@ -56,10 +61,10 @@ function mapStateToProps(state) {
   };
 }
 
-import { actionGetAuth } from '../../redux/actions/user/actAuth.js';
+import { actGetToken } from '../../redux/actions/user/actAuth.js';
 
 function mapDispatchToProps(dispatch) {
   return {
-    getAuth: name => dispatch(actionGetAuth(name)),
+    getAuth: name => dispatch(actGetToken(name)),
   }
 }

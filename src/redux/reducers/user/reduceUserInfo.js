@@ -9,9 +9,10 @@ export function reduceUserInfo(state = initialState, action) {
 
   switch (action.type) {
 
+    // TODO: 把資料結構轉成object給 order list 取
+
     case GET_AUTH_SUCCESS:
       const {token, user_info} = action;
-
       return Object.assign({}, state, {
         auth: 'success',
         token,
@@ -22,12 +23,6 @@ export function reduceUserInfo(state = initialState, action) {
       return Object.assign({}, state, {
         auth: 'fail'
       });
-
-
-    case GET_USER_INFO:
-      return Object.assign({}, state, {
-        test: true
-      })
 
     default:
       return {

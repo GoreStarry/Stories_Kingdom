@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const GET_USER_INFO = 'GET_USER_INFO';
+export const GET_USER_INFO = 'GET_AUTH_SUCCESS';
 export const SERVER_ERROR = 'SERVER_ERROR'
 
-function getUserInfo(token) {
+export function getUserInfo(token) {
   return async function(dispatch, getState) {
 
     try {
@@ -12,7 +12,8 @@ function getUserInfo(token) {
 
       dispatch({
         type: GET_USER_INFO,
-        data
+        token,
+        user_info: data.user
       })
 
     } catch (error) {

@@ -9,13 +9,13 @@ userRouter.get('/', async (req, res) => {
   const createBy = req.decoded.id;
   try {
 
-    const data = await User
+    const user = await User
       .findById(createBy)
       .select(['-_id', '-__v']);
 
     res.json({
       success: true,
-      data
+      user
     })
 
   } catch (error) {
@@ -38,7 +38,7 @@ userRouter.patch('/', async (req, res) => {
 
     res.json({
       success: true,
-      data: newUser
+      user: newUser
     })
 
   } catch (error) {
