@@ -44,31 +44,38 @@ class StoriesList extends PureComponent {
       }
     ]
   };
-  componentDidMount() {}
+
+
+  componentWillMount() {
+    this.props.actions.getStories();
+  }
 
 
   _onListChange(newList) {
-    console.log(newList);
     this.setState({
       list: newList
     });
   }
 
+  _createKeyForStoryCard = story => `story_${story.id}`;
+
   render() {
     const {useContainer} = this.state;
-    const {auth} = this.props;
-
+    const {auth, storiesOrder, stories} = this.props;
+    console.log(stories);
     return (
     auth === 'success' ?
       <div>
         <h1>Lists</h1>
         <NewStroyForm/>
-        <DraggableList
-          itemKey="name"
-          template={ StoryCard }
-          list={ this.state.list }
-          onMoveEnd={ newList => this._onListChange(newList) }
-          container={ () => useContainer ? this.refs.container : document.body } />
+        { stories &&
+          <DraggableList
+            itemKey={ this._createKeyForStoryCard }
+            template={ StoryCard }
+            commonProps={ stories }
+            list={ storiesOrder }
+            onMoveEnd={ newList => this._onListChange(newList) }
+            container={ () => useContainer ? this.refs.container : document.body } /> }
       </div>
       :
       <Redirect to='/' />
@@ -80,8 +87,21 @@ class StoriesList extends PureComponent {
 
 function mapStateToProps(state) {
   return {
-    auth: state.user.auth
+    auth: state.user.auth,
+    storiesOrder: state.user.user_info.storiesOrder,
+    stories: state.stories.stories
   }
 }
 
-export default connect(mapStateToProps)(StoriesList);
+import { actionGetStories } from '../../redux/actions/stories/actGetStories.js';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      getStories: () => dispatch(actionGetStories())
+    }
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(StoriesList);

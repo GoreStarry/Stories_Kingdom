@@ -19,7 +19,7 @@ storiesRouter.get('/', async (req, res) => {
 
     res.json({
       success: true,
-      data: stories
+      stories
     })
 
   } catch (error) {
@@ -32,11 +32,12 @@ storiesRouter.get('/', async (req, res) => {
 // create a new story
 storiesRouter.post('/', async (req, res) => {
 
-  const name = req.body.name;
+  const {name, description} = req.body;
   const createBy = req.decoded.id;
 
   const newStory = new Story({
     name,
+    description,
     createBy
   })
 
@@ -60,10 +61,8 @@ storiesRouter.post('/', async (req, res) => {
 
     res.json({
       success: true,
-      data: {
-        story,
-        storiesOrder
-      }
+      story,
+      storiesOrder
     });
 
   } catch (err) {
@@ -89,7 +88,7 @@ storiesRouter.patch('/:id', async (req, res) => {
 
     res.json({
       success: true,
-      data: storyEdited
+      story: storyEdited
     })
 
 
@@ -129,9 +128,7 @@ storiesRouter.delete('/:id', async (req, res) => {
 
     res.json({
       success: true,
-      data: {
-        storiesOrder
-      }
+      storiesOrder
     })
 
   } catch (error) {

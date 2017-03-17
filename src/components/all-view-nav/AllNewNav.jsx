@@ -72,7 +72,7 @@ class AllNewNav extends PureComponent {
             inverted>
             { routes.map((route, index) => {
                 return (
-                  <Menu.Item name='home' key={ `navAll${index}` }>
+                  <Menu.Item name='home' key={ `navAll${route.name}` }>
                     <NavLink
                       exact
                       to={ route.path }

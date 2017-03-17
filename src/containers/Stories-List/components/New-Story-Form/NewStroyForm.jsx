@@ -71,7 +71,7 @@ function mapStateToProps(state) {
   }
 }
 
-import * as storyActionCreators from '../../../../redux/actions/stories/actStories.js';
+import * as storyActionCreators from '../../../../redux/actions/stories/actCreateStory.js';
 
 function mapDispatchToProps(dispatch) {
   return {

@@ -5,8 +5,9 @@ export const CREATE_STORY_FAIL = 'CREATE_STORY_FAIL';
 
 
 /**
- * creact new story
- * 
+ * creact new story, 
+ * this action will pass two reducer 
+ * reducer: reduceUserInfo & reduceStories both
  * @export
  * @param {Object} {name, description} 
  * @returns 
@@ -40,3 +41,4 @@ export function actionCreateNewStroy({name, description}) {
 
   }
 }
+

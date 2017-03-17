@@ -8,7 +8,6 @@ class CoverPage extends PureComponent {
     // localStorage.removeItem('auth_token')
   }
 
-
   clickLoginBtn = (event) => {
     event.preventDefault()
     const inputName = this.usernameInput.value;
