@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory'
@@ -20,6 +20,12 @@ import CoverPage from './containers/Cover-Page/CoverPage.jsx';
 
 const routes = [
   {
+    name: 'Cover Page',
+    path: '/',
+    component: CoverPage,
+    exact: true
+  },
+  {
     name: 'Stories List',
     path: '/lists',
     component: StoriesList
@@ -29,25 +35,41 @@ const routes = [
     path: '/draft_test',
     component: DraftTest
   },
-  {
-    name: 'Cover Page',
-    path: '/',
-    component: CoverPage
-  },
+
 ];
 
-const MainContainer = () => (
-  <Provider store={ store }>
-    <Router history={ history }>
-      <AllViewNav routes={ routes }>
-        <Switch>
-          { routes.map((route, index) => {
-              return <Route key={ route.path + index } {...route}></Route>
-            }) }
-        </Switch>
-      </AllViewNav>
-    </Router>
-  </Provider>
-);
+
+class MainContainer extends Component {
+  render() {
+    return (
+      <Provider store={ store }>
+        <Router history={ history }>
+          <AllViewNav routes={ routes }>
+            <Switch>
+              { routes.map((route, index) => {
+                  return <Route key={ route.path + index } {...route}></Route>
+                }) }
+            </Switch>
+          </AllViewNav>
+        </Router>
+      </Provider>
+      );
+  }
+}
+
+
+// const MainContainer = () => (
+//   <Provider store={ store }>
+//     <Router history={ history }>
+//       <AllViewNav routes={ routes }>
+//         <Switch>
+//           { routes.map((route, index) => {
+//               return <Route key={ route.path + index } {...route}></Route>
+//             }) }
+//         </Switch>
+//       </AllViewNav>
+//     </Router>
+//   </Provider>
+// );
 
 render(<MainContainer/>, document.getElementById('app'))

@@ -3,9 +3,10 @@ import _flow from 'lodash/fp/flow';
 
 export const GET_AUTH_SUCCESS = 'GET_AUTH_SUCCESS';
 export const GET_AUTH_FAIL = 'GET_AUTH_FAIL';
+export const SET_AUTH_SUCCESS = 'SET_AUTH_SUCCESS';
 
 
-const getTokenAndSetToHeader = _flow([
+export const getTokenAndSetToHeader = _flow([
   getTokenFormLocal,
   setAxiosAccessTokenHeader
 ])
@@ -19,27 +20,26 @@ const setTokenAndSetToHeader = _flow([
 /**
  * try to get auth token form local or post to get one
  * 
- * @param {any} name 
+ * @param {String} name 
  * @returns 
  */
-export function actionGetAuth(name) {
-  if (getTokenAndSetToHeader()) {
+export function actGetToken(name) {
+  const local_token = getTokenFormLocal();
+  if (local_token) {
 
     return {
       type: GET_AUTH_SUCCESS,
+      token: local_token
     }
 
   } else {
 
-    return async function(dispatch, getState) {
+    return async function FetchAuthAndDispatch(dispatch, getState) {
 
       try {
-
         const res = await axios.post('/api/auth/', {
           name
         })
-
-        console.log(res);
 
         const {token, user} = res.data;
 
@@ -63,9 +63,10 @@ export function actionGetAuth(name) {
     }
 
   }
-
-
 }
+
+
+
 
 
 /**

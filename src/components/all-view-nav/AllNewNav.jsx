@@ -1,4 +1,7 @@
 import React, { Component, PureComponent, PropTypes } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Sidebar, Segment, Button, Menu, Icon } from 'semantic-ui-react'
 
 import axios from 'axios';
 // for 400 request 
@@ -6,15 +9,7 @@ axios.defaults.validateStatus = function(status) {
   return status >= 200 && status < 405; // default
 };
 
-import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { Sidebar, Segment, Button, Menu, Icon } from 'semantic-ui-react'
-
-
-import checkAuth from '../../helpers/checkAuth.js';
-
 import style from './AllNewNav.scss';
-
 
 class PageBody extends PureComponent {
 
@@ -34,17 +29,18 @@ class PageBody extends PureComponent {
   }
 }
 
+import { getTokenAndSetToHeader } from '../../redux/actions/user/actAuth.js';
+
+
 class AllNewNav extends PureComponent {
   state = {
     navOpen: false,
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.auth !== false && this.props.auth == 'success') {
 
-    }
+  componentWillMount() {
+    const local_token = getTokenAndSetToHeader();
+    local_token && this.props.actions.getUserInfo(local_token);
   }
-
-  componentDidMount() {}
 
   _toggleNav = () => {
     this.setState({
@@ -76,7 +72,7 @@ class AllNewNav extends PureComponent {
             inverted>
             { routes.map((route, index) => {
                 return (
-                  <Menu.Item name='home' key={ `navAll${index}` }>
+                  <Menu.Item name='home' key={ `navAll${route.name}` }>
                     <NavLink
                       exact
                       to={ route.path }
@@ -88,10 +84,10 @@ class AllNewNav extends PureComponent {
                 )
               }) }
           </Sidebar>
-          { children && <PageBody
-                          visible="nav_open"
-                          pages={ children }
-                          _toggleNav={ this._toggleNav } /> }
+          <PageBody
+            visible="nav_open"
+            pages={ children }
+            _toggleNav={ this._toggleNav } />
         </Sidebar.Pushable>
       </div>
       );
@@ -103,5 +99,23 @@ AllNewNav.propTypes = {
   routes: React.PropTypes.array.isRequired
 };
 
-export default AllNewNav;
+function mapStateToProps(state) {
+  return {
+    auth: state.auth
+  }
+}
+
+import { getUserInfo } from '../../redux/actions/user/actUserInfo.js';
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: {
+      getUserInfo: token => {
+        dispatch(getUserInfo(token))
+      }
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllNewNav);
 

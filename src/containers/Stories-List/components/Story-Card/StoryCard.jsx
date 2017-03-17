@@ -7,7 +7,7 @@ let cx = classNames.bind(styles);
 class StoryCard extends Component {
 
   render() {
-    const {item, itemSelected, dragHandle} = this.props;
+    const {item, itemSelected, dragHandle, commonProps} = this.props;
     const dragged = itemSelected !== 0;
     const scale = itemSelected * 0.05 + 1;
     const shadow = itemSelected * 15 + 1;
@@ -24,7 +24,8 @@ class StoryCard extends Component {
     return (
       <div className={ boxClassName } style={ boxStyle }>
         { dragHandle(<div>
-                       <span>123</span>
+                       <span>{ commonProps[item.id].name }</span>
+                       <span>{ commonProps[item.id].desciption }</span>
                      </div>) }
       </div>
       );
