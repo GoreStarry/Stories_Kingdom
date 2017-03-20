@@ -14,35 +14,6 @@ import NewStroyForm from './components/New-Story-Form/NewStroyForm.jsx';
 class StoriesList extends PureComponent {
   state = {
     useContainer: false,
-    list: [
-      {
-        name: 'Mercury'
-      },
-      {
-        name: 'Venus'
-      },
-      {
-        name: 'Earth',
-        subtitle: true
-      },
-      {
-        name: 'Mars'
-      },
-      {
-        name: 'Jupiter'
-      },
-      {
-        name: 'Saturn',
-        subtitle: true
-      },
-      {
-        name: 'Uranus',
-        subtitle: true
-      },
-      {
-        name: 'Neptune'
-      }
-    ]
   };
 
 
@@ -51,10 +22,9 @@ class StoriesList extends PureComponent {
   }
 
 
-  _onListChange(newList) {
-    this.setState({
-      list: newList
-    });
+  _onMoveEnd = (newList) => {
+    console.log(newList);
+    this.props.actions.changeStoriesOrder(newList);
   }
 
   _createKeyForStoryCard = story => `story_${story.id}`;
@@ -62,7 +32,6 @@ class StoriesList extends PureComponent {
   render() {
     const {useContainer} = this.state;
     const {auth, storiesOrder, stories} = this.props;
-    console.log(stories);
     return (
     auth === 'success' ?
       <div>
@@ -74,7 +43,7 @@ class StoriesList extends PureComponent {
             template={ StoryCard }
             commonProps={ stories }
             list={ storiesOrder }
-            onMoveEnd={ newList => this._onListChange(newList) }
+            onMoveEnd={ this._onMoveEnd }
             container={ () => useContainer ? this.refs.container : document.body } /> }
       </div>
       :
@@ -88,17 +57,18 @@ class StoriesList extends PureComponent {
 function mapStateToProps(state) {
   return {
     auth: state.user.auth,
-    storiesOrder: state.user.user_info.storiesOrder,
+    storiesOrder: state.user.storiesOrder,
     stories: state.stories.stories
   }
 }
 
 import { actionGetStories } from '../../redux/actions/stories/actGetStories.js';
-
+import { actChangeStoriesOrder } from '../../redux/actions/user/actChangeStoriesOrder.js';
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      getStories: () => dispatch(actionGetStories())
+      getStories: () => dispatch(actionGetStories()),
+      changeStoriesOrder: (newOrder) => dispatch(actChangeStoriesOrder(newOrder))
     }
   }
 }

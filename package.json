@@ -35,7 +35,8 @@
         "redux-thunk": "^2.2.0",
         "semantic-ui-css": "^2.2.9",
         "semantic-ui-react": "^0.67.1",
-        "vue": "^2.1.0"
+        "vue": "^2.1.0",
+        "why-did-you-update": "^0.0.8"
     },
     "devDependencies": {
         "autoprefixer": "^6.4.0",

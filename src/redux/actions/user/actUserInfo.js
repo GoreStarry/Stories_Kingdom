@@ -13,7 +13,7 @@ export function getUserInfo(token) {
       dispatch({
         type: GET_USER_INFO,
         token,
-        user_info: data.user
+        ...data.user //[name] and [storiesOrder]
       })
 
     } catch (error) {

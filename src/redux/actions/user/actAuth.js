@@ -44,11 +44,12 @@ export function actGetToken(name) {
         const {token, user} = res.data;
 
         setTokenAndSetToHeader(token);
-
+        const {name, storiesOrder} = user
         dispatch({
           type: GET_AUTH_SUCCESS,
           token,
-          user_info: user
+          name,
+          storiesOrder
         })
 
       } catch (error) {
