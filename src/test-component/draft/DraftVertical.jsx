@@ -86,7 +86,7 @@ class DraftVertical extends Component {
     const {editorState} = this.state;
     const currentSelection = editorState.getSelection();
     const startKey = currentSelection.getStartKey()
-    console.log(startKey);
+    // console.log(startKey);
     return startKey;
   }
 
@@ -169,7 +169,7 @@ class DraftVertical extends Component {
     );
     const entityKey = contentStateCreateEntity.getLastCreatedEntityKey();
     console.log(convertToRaw(contentStateCreateEntity));
-    console.log(entityKey);
+    // console.log(entityKey);
     const contentStateWithEntity = Modifier.applyEntity(
       contentState,
       selection,
@@ -196,23 +196,54 @@ class DraftVertical extends Component {
   render() {
     return (
       <div id="outer" className={ styles.test }>
-        <Editor ref={ editor => this.editor = editor } customStyleMap={ StyleMap } blockStyleFn={ myBlockStyleFn } keyBindingFn={ KeyBindingMap } handleKeyCommand={ this.handleKeyCommand }
-          editorState={ this.state.editorState } onChange={ this.onChange } blockRenderMap={ extendedBlockRenderMap } />
+        <Editor
+          ref={ editor => this.editor = editor }
+          customStyleMap={ StyleMap }
+          blockStyleFn={ myBlockStyleFn }
+          keyBindingFn={ KeyBindingMap }
+          handleKeyCommand={ this.handleKeyCommand }
+          editorState={ this.state.editorState }
+          onChange={ this.onChange }
+          blockRenderMap={ extendedBlockRenderMap } />
         <div>
-          <button onClick={ this.consoleEditorState }>Editor State</button>
-          <button onClick={ this.clRawContentState }>Raw Content State</button>
-          <button onClick={ this.clInlineStyle }>Inline Style</button>
-          <button onClick={ this.clBlockTree }>Block Tree</button>
-          <button onClick={ this.clBlockKey }>Block Key</button>
-          <button onClick={ this.clCurrentInlineStyle }>CurrentInline Style</button>
-          <button onClick={ this.clClear }>clear console</button>
+          <button onClick={ this.consoleEditorState }>
+            Editor State
+          </button>
+          <button onClick={ this.clRawContentState }>
+            Raw Content State
+          </button>
+          <button onClick={ this.clInlineStyle }>
+            Inline Style
+          </button>
+          <button onClick={ this.clBlockTree }>
+            Block Tree
+          </button>
+          <button onClick={ this.clBlockKey }>
+            Block Key
+          </button>
+          <button onClick={ this.clCurrentInlineStyle }>
+            CurrentInline Style
+          </button>
+          <button onClick={ this.clClear }>
+            clear console
+          </button>
         </div>
         <div>
-          <button onClick={ this.toggleBlockType }>Toggle Block Style</button>
-          <button onClick={ this.selectionHeighlight }>Heigh Light</button>
-          <button onClick={ this.removeInlineStyle }>Remove Styles</button>
-          <button onClick={ this.createEntity }>Create Entitiy</button>
-          <button onClick={ this.focus }>focus</button>
+          <button onClick={ this.toggleBlockType }>
+            Toggle Block Style
+          </button>
+          <button onClick={ this.selectionHeighlight }>
+            Heigh Light
+          </button>
+          <button onClick={ this.removeInlineStyle }>
+            Remove Styles
+          </button>
+          <button onClick={ this.createEntity }>
+            Create Entitiy
+          </button>
+          <button onClick={ this.focus }>
+            focus
+          </button>
         </div>
       </div>
       );

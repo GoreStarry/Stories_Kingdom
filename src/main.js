@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux'
 import { syncHistoryWithStore } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory'
@@ -9,6 +9,21 @@ import 'semantic-ui-css/semantic.min.css';
 import { configureStore } from './redux/store/index.js';
 
 let store = configureStore();
+
+if (module.hot) {
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('./redux/reducers/reduceAll.js', () => {
+    const nextRootReducer = require('./redux/reducers/reduceAll.js');
+    store.replaceReducer(nextRootReducer);
+  });
+}
+
+// import { whyDidYouUpdate } from 'why-did-you-update'
+
+// if (['production', 'testing'].indexOf(process.env.NODE_ENV) == -1) {
+//   whyDidYouUpdate(React)
+// }
+
 
 const history = syncHistoryWithStore(createBrowserHistory(), store);
 

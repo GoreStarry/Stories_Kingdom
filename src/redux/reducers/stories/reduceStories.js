@@ -8,7 +8,6 @@ const initialState = {
 export function reduceStories(state = initialState, action) {
   switch (action.type) {
 
-    // TODO: 把資料結構轉成object給 order list 取
     case GET_STORIES_SUCCESS:
       const {stories} = action;
 

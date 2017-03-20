@@ -26,13 +26,6 @@ if (['production', 'testing'].indexOf(process.env.NODE_ENV) != -1) {
 export function configureStore(initialState) {
   const store = finalCreateStore(combineReducer, initialState);
 
-  if (module.hot) {
-    // Enable Webpack hot module replacement for reducers
-    module.hot.accept('../reducers/reduceAll.js', () => {
-      const nextRootReducer = require('../reducers/reduceAll.js');
-      store.replaceReducer(nextRootReducer);
-    });
-  }
-
+  
   return store;
 }
