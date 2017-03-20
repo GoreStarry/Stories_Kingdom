@@ -12,6 +12,9 @@ function testKeyBindingFn(e) {
     case ( hasCommand && 191):
       return 'commend-block';
 
+    case ( hasCommand && 13):
+      return 'new-block';
+
     default:
       return getDefaultKeyBinding(e);
   }

@@ -2029,7 +2029,7 @@ domutils@1.5.1:
     dom-serializer "0"
     domelementtype "1"
 
-draft-js, draft-js@>=0.7.0:
+draft-js, draft-js@>=0.9.1:
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/draft-js/-/draft-js-0.10.0.tgz#29d16191012b932fdab28a9b37ec1538f421abf6"
   dependencies:
@@ -2043,16 +2043,14 @@ draft-js-block-breakout-plugin:
   dependencies:
     immutable "~3.7.4"
 
-draft-js-plugins-editor:
-  version "2.0.0-beta1"
-  resolved "https://registry.yarnpkg.com/draft-js-plugins-editor/-/draft-js-plugins-editor-2.0.0-beta1.tgz#184e0c3579bffeb4b18b8b65a172ffdfce110d04"
+draft-js-plugins-editor@2.0.0-beta10:
+  version "2.0.0-beta10"
+  resolved "https://registry.yarnpkg.com/draft-js-plugins-editor/-/draft-js-plugins-editor-2.0.0-beta10.tgz#d8f84199186a651b603e13328dda90d2f800d5ef"
   dependencies:
     decorate-component-with-props "^1.0.2"
-    draft-js ">=0.7.0"
+    draft-js ">=0.9.1"
     find-with-regex "^1.0.2"
-    immutable ">=3.8.1"
-    react ">=15.1.0"
-    react-dom ">=15.1.0"
+    immutable "~3.7.4"
     union-class-names "^1.0.0"
 
 duplexer@~0.1.1:
@@ -3028,7 +3026,7 @@ ignore-by-default@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ignore-by-default/-/ignore-by-default-1.0.1.tgz#48ca6d72f6c6a3af00a9ad4ae6876be3889e2b09"
 
-immutable, immutable@>=3.8.1:
+immutable:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.1.tgz#200807f11ab0f72710ea485542de088075f68cd2"
 
@@ -5193,7 +5191,7 @@ rc@^1.0.1, rc@~1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~1.0.4"
 
-react, react@>=15.1.0:
+react:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react/-/react-15.4.2.tgz#41f7991b26185392ba9bae96c8889e7e018397ef"
   dependencies:
@@ -5292,7 +5290,7 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-react-dom, react-dom@>=15.1.0:
+react-dom:
   version "15.4.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.2.tgz#015363f05b0a1fd52ae9efdd3a0060d90695208f"
   dependencies:

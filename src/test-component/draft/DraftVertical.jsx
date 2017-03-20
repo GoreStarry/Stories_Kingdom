@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw } from 'draft-js';
+import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
+const blockBreakoutPlugin = createBlockBreakoutPlugin({
+  breakoutBlockType: 'commendBlock',
+  breakoutBlocks: ['unstyled*', 'unstyled', 'commendBlock', 'div', 'commendBlock']
+});
+import Editor from 'draft-js-plugins-editor';
+
+const plugins = [blockBreakoutPlugin]
+
+import { EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw } from 'draft-js';
 import HashtagSpan from './components/HashtagSpan.jsx';
 
 import styles from './draft.scss';
@@ -53,6 +62,7 @@ class DraftVertical extends Component {
   }
 
   handleKeyCommand = (command) => {
+    console.log('key in');
     if (command === 'myeditor-save') {
       console.log('save');
       this.consoleEditorState();
@@ -209,6 +219,7 @@ class DraftVertical extends Component {
     return (
       <div id="outer" className={ styles.test }>
         <Editor
+          plugins={ plugins }
           ref={ editor => this.editor = editor }
           customStyleMap={ StyleMap }
           blockStyleFn={ myBlockStyleFn }
