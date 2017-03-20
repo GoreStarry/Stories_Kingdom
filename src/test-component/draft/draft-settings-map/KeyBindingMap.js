@@ -4,10 +4,21 @@ const {hasCommandModifier} = KeyBindingUtil;
 
 function testKeyBindingFn(e) {
   // console.log(e.keyCode);
-  if (e.keyCode === 83 && hasCommandModifier(e)) {
-    return 'myeditor-save';
+  const hasCommand = hasCommandModifier(e);
+  switch (e.keyCode) {
+    case ( hasCommand && 83):
+      return 'myeditor-save';
+
+    case ( hasCommand && 191):
+      return 'commend-block';
+
+    case ( hasCommand && 13):
+      return 'new-block';
+
+    default:
+      return getDefaultKeyBinding(e);
   }
-  return getDefaultKeyBinding(e);
+
 }
 
 export default testKeyBindingFn;

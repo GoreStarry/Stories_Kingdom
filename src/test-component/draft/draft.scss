@@ -1,24 +1,36 @@
 .test {
     text-align: right;
+    font-size: 1.2rem;
 }
 
 .box__hashtag {
     color: blue;
 }
 
-:global .DraftEditor-root {
-    display: inline-block;
-    min-height: 100px;
-    min-width: 100px;
-    line-height: 2rem;
-    background-color: #c3c1c1;
-    writing-mode: vertical-rl;
-    text-align: left;
-}
-
-:global .superFancyBlockquote {
-    color: #999;
-    font-family: 'Hoefler Text', Georgia, serif;
-    font-style: italic;
-    text-align: center;
+:global {
+    .DraftEditor-root {
+        display: inline-block;
+        width: 100%;
+        min-height: 100px;
+        min-width: 100px;
+        padding: 0.5rem;
+        line-height: 2rem;
+        background-color: #c3c1c1;
+        writing-mode: vertical-rl;
+        text-align: left;
+    }
+    .superFancyBlockquote {
+        color: #999;
+        font-family: 'Hoefler Text', Georgia, serif;
+        font-style: italic;
+        text-align: center;
+    }
+    .ctrlBar {
+        &>div {
+            margin: 1rem 0;
+        }
+        button {
+            margin: 2px;
+        }
+    }
 }

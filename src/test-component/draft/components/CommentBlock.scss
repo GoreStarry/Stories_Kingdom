@@ -1,0 +1,6 @@
+.CommentBlock {
+    color: gray;
+    & span :before {
+        content: '//';
+    }
+}

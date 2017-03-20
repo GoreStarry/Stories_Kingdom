@@ -19,6 +19,8 @@
         "body-parser": "^1.16.1",
         "classnames": "^2.2.5",
         "draft-js": "^0.10.0",
+        "draft-js-block-breakout-plugin": "^1.0.2",
+        "draft-js-plugins-editor": "2.0.0-beta10",
         "history": "^4.5.1",
         "immutable": "^3.8.1",
         "jsonwebtoken": "^7.3.0",

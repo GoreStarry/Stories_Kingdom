@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw } from 'draft-js';
+import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
+const blockBreakoutPlugin = createBlockBreakoutPlugin({
+  breakoutBlockType: 'commendBlock',
+  breakoutBlocks: ['unstyled*', 'unstyled', 'commendBlock', 'div', 'commendBlock']
+});
+import Editor from 'draft-js-plugins-editor';
+
+const plugins = [blockBreakoutPlugin]
+
+import { EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw } from 'draft-js';
 import HashtagSpan from './components/HashtagSpan.jsx';
 
 import styles from './draft.scss';
@@ -35,8 +44,7 @@ class DraftVertical extends Component {
       {
         strategy: findTestEntitiy,
         component: TestDecoratorWapper
-      }
-
+      },
     ]);
 
     this.state = {
@@ -54,9 +62,14 @@ class DraftVertical extends Component {
   }
 
   handleKeyCommand = (command) => {
+    console.log('key in');
     if (command === 'myeditor-save') {
       console.log('save');
       this.consoleEditorState();
+      return 'handled'
+    } else if (command == 'commend-block') {
+      console.log('commend');
+      this.toggleComment();
       return 'handled'
     }
     return 'not-handled'
@@ -117,6 +130,14 @@ class DraftVertical extends Component {
     });
   }
 
+  toggleComment = () => {
+    const {editorState} = this.state;
+    const myEditorState = RichUtils.toggleBlockType(editorState, "commendBlock")
+    this.setState({
+      editorState: myEditorState
+    });
+  }
+
   clCurrentInlineStyle = (e) => {
     e.preventDefault();
     const {editorState} = this.state;
@@ -167,16 +188,17 @@ class DraftVertical extends Component {
         test_data: 'test'
       }
     );
+
     const entityKey = contentStateCreateEntity.getLastCreatedEntityKey();
-    console.log(convertToRaw(contentStateCreateEntity));
+    // console.log(convertToRaw(contentStateCreateEntity));
     // console.log(entityKey);
     const contentStateWithEntity = Modifier.applyEntity(
       contentState,
       selection,
       entityKey
     )
-    console.log(contentStateWithEntity);
-    console.log(convertToRaw(contentStateWithEntity));
+    // console.log(contentStateWithEntity);
+    // console.log(convertToRaw(contentStateWithEntity));
 
     const newEditorState = EditorState.set(editorState, {
       currentContent: contentStateWithEntity
@@ -197,6 +219,7 @@ class DraftVertical extends Component {
     return (
       <div id="outer" className={ styles.test }>
         <Editor
+          plugins={ plugins }
           ref={ editor => this.editor = editor }
           customStyleMap={ StyleMap }
           blockStyleFn={ myBlockStyleFn }
@@ -205,45 +228,47 @@ class DraftVertical extends Component {
           editorState={ this.state.editorState }
           onChange={ this.onChange }
           blockRenderMap={ extendedBlockRenderMap } />
-        <div>
-          <button onClick={ this.consoleEditorState }>
-            Editor State
-          </button>
-          <button onClick={ this.clRawContentState }>
-            Raw Content State
-          </button>
-          <button onClick={ this.clInlineStyle }>
-            Inline Style
-          </button>
-          <button onClick={ this.clBlockTree }>
-            Block Tree
-          </button>
-          <button onClick={ this.clBlockKey }>
-            Block Key
-          </button>
-          <button onClick={ this.clCurrentInlineStyle }>
-            CurrentInline Style
-          </button>
-          <button onClick={ this.clClear }>
-            clear console
-          </button>
-        </div>
-        <div>
-          <button onClick={ this.toggleBlockType }>
-            Toggle Block Style
-          </button>
-          <button onClick={ this.selectionHeighlight }>
-            Heigh Light
-          </button>
-          <button onClick={ this.removeInlineStyle }>
-            Remove Styles
-          </button>
-          <button onClick={ this.createEntity }>
-            Create Entitiy
-          </button>
-          <button onClick={ this.focus }>
-            focus
-          </button>
+        <div className="ctrlBar">
+          <div>
+            <button onClick={ this.consoleEditorState }>
+              Editor State
+            </button>
+            <button onClick={ this.clRawContentState }>
+              Raw Content State
+            </button>
+            <button onClick={ this.clInlineStyle }>
+              Inline Style
+            </button>
+            <button onClick={ this.clBlockTree }>
+              Block Tree
+            </button>
+            <button onClick={ this.clBlockKey }>
+              Block Key
+            </button>
+            <button onClick={ this.clCurrentInlineStyle }>
+              CurrentInline Style
+            </button>
+            <button onClick={ this.clClear }>
+              clear console
+            </button>
+          </div>
+          <div>
+            <button onClick={ this.toggleBlockType }>
+              Toggle Block Style
+            </button>
+            <button onClick={ this.selectionHeighlight }>
+              Heigh Light
+            </button>
+            <button onClick={ this.removeInlineStyle }>
+              Remove Styles
+            </button>
+            <button onClick={ this.createEntity }>
+              Create Entitiy
+            </button>
+            <button onClick={ this.focus }>
+              focus
+            </button>
+          </div>
         </div>
       </div>
       );
