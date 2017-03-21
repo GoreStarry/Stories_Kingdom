@@ -56,7 +56,6 @@ class DraftVertical extends Component {
   newBlock = () => {
     // fork by Shingo Sato's draft-js-block-breakout-plugin https://github.com/icelab/draft-js-block-breakout-plugin/issues
 
-
     const breakoutBlockType = 'unstyled';
     const {editorState} = this.state;
     const selection = editorState.getSelection()
