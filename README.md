@@ -2,6 +2,10 @@
 
 > The environment for vertical writing
 
+<p align="center">
+  <img alt="Stories Kingdom dev gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_test_gif.gif">
+</p>
+
 ## Build Setup
 
 ``` bash
