@@ -11,11 +11,12 @@
     .DraftEditor-root {
         display: inline-block;
         width: 100%;
-        min-height: 100px;
+        min-height: 300px;
         min-width: 100px;
-        padding: 0.5rem;
-        line-height: 2rem;
-        background-color: #c3c1c1;
+        padding: 1rem 1.5rem;
+        line-height: 2rem; // background-color: #c3c1c1;
+        background-color: black;
+        color: white;
         writing-mode: vertical-rl;
         text-align: left;
     }
