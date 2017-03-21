@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
+import { List } from 'immutable';
+
 const blockBreakoutPlugin = createBlockBreakoutPlugin({
   breakoutBlockType: 'commendBlock',
   breakoutBlocks: ['unstyled*', 'unstyled', 'commendBlock', 'div', 'commendBlock']
 });
-import Editor from 'draft-js-plugins-editor';
+// import Editor from 'draft-js-plugins-editor';
 
 const plugins = [blockBreakoutPlugin]
 
-import { EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw } from 'draft-js';
+import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw, genKey, ContentBlock } from 'draft-js';
 import HashtagSpan from './components/HashtagSpan.jsx';
 
 import styles from './draft.scss';
@@ -61,18 +63,84 @@ class DraftVertical extends Component {
 
   }
 
-  handleKeyCommand = (command) => {
-    console.log('key in');
-    if (command === 'myeditor-save') {
-      console.log('save');
-      this.consoleEditorState();
-      return 'handled'
-    } else if (command == 'commend-block') {
-      console.log('commend');
-      this.toggleComment();
+  newBlock = () => {
+    // fork by Shingo Sato's draft-js-block-breakout-plugin https://github.com/icelab/draft-js-block-breakout-plugin/issues
+
+
+    const breakoutBlockType = 'unstyled';
+    const {editorState} = this.state;
+    const selection = editorState.getSelection()
+    if (selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent()
+      const currentBlock = contentState.getBlockForKey(selection.getEndKey())
+      const endOffset = selection.getEndOffset()
+      const emptyBlockKey = genKey()
+      const emptyBlock = new ContentBlock({
+        key: emptyBlockKey,
+        text: '',
+        type: breakoutBlockType,
+        characterList: List(),
+        depth: 0,
+      })
+      const blockMap = contentState.getBlockMap()
+      const blocksBefore = blockMap.toSeq().takeUntil(function(v) {
+        return v === currentBlock
+      })
+      const blocksAfter = blockMap.toSeq().skipUntil(function(v) {
+        return v === currentBlock
+      }).rest()
+      let augmentedBlocks
+      let focusKey
+      // Choose which order to apply the augmented blocks in depending
+      // on whether we’re at the start or the end
+      augmentedBlocks = [
+        [currentBlock.getKey(), currentBlock],
+        [emptyBlockKey, emptyBlock],
+      ]
+      focusKey = emptyBlockKey;
+      // Join back together with the current + new block
+      const newBlocks = blocksBefore.concat(augmentedBlocks, blocksAfter).toOrderedMap()
+      const newContentState = contentState.merge({
+        blockMap: newBlocks,
+        selectionBefore: selection,
+        selectionAfter: selection.merge({
+          anchorKey: focusKey,
+          anchorOffset: 0,
+          focusKey: focusKey,
+          focusOffset: 0,
+          isBackward: false
+        })
+      })
+      // Set the state
+      this.setState({
+        editorState: EditorState.push(editorState, newContentState, 'split-block')
+      })
       return 'handled'
     }
     return 'not-handled'
+  }
+
+  handleKeyCommand = (command) => {
+    console.log('key in');
+    switch (command) {
+      case 'myeditor-save':
+        console.log('save');
+        this.consoleEditorState();
+        return 'handled'
+
+      case 'commend-block':
+        console.log('commend');
+        this.toggleComment();
+        return 'handled'
+
+      case 'new-block':
+        console.log('new block');
+        return this.newBlock();
+
+      default:
+        return 'not-handled'
+    }
+
   };
 
   consoleEditorState = () => {
@@ -218,8 +286,8 @@ class DraftVertical extends Component {
   render() {
     return (
       <div id="outer" className={ styles.test }>
+        { /*plugins={ plugins }*/ }
         <Editor
-          plugins={ plugins }
           ref={ editor => this.editor = editor }
           customStyleMap={ StyleMap }
           blockStyleFn={ myBlockStyleFn }
