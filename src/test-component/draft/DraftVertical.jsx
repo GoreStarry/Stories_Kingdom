@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import createBlockBreakoutPlugin from 'draft-js-block-breakout-plugin';
 import { List } from 'immutable';
-
-const blockBreakoutPlugin = createBlockBreakoutPlugin({
-  breakoutBlockType: 'commendBlock',
-  breakoutBlocks: ['unstyled*', 'unstyled', 'commendBlock', 'div', 'commendBlock']
-});
-// import Editor from 'draft-js-plugins-editor';
-
-const plugins = [blockBreakoutPlugin]
-
 import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw, genKey, ContentBlock } from 'draft-js';
 import HashtagSpan from './components/HashtagSpan.jsx';
 
@@ -73,8 +63,8 @@ class DraftVertical extends Component {
     if (selection.isCollapsed()) {
       const contentState = editorState.getCurrentContent()
       const currentBlock = contentState.getBlockForKey(selection.getEndKey())
-      const endOffset = selection.getEndOffset()
       const emptyBlockKey = genKey()
+
       const emptyBlock = new ContentBlock({
         key: emptyBlockKey,
         text: '',
@@ -82,6 +72,7 @@ class DraftVertical extends Component {
         characterList: List(),
         depth: 0,
       })
+
       const blockMap = contentState.getBlockMap()
       const blocksBefore = blockMap.toSeq().takeUntil(function(v) {
         return v === currentBlock
