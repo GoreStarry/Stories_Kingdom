@@ -6,6 +6,10 @@
   <img alt="Stories Kingdom dev gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_test_gif.gif">
 </p>
 
+## Prerequisite Technologies
+* *Node.js*
+* *MongoDB*
+
 ## Build Setup
 
 ``` bash
@@ -30,5 +34,3 @@ npm run e2e
 # run all tests
 npm test
 ```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,0 +1,27 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        }
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        // "react/jsx-uses-vars": "error",
+        "react/prop-types": [2, {
+            "ignore": ["actions", "children"]
+        }],
+        "react/no-string-refs": "error",
+        // "react/prefer-stateless-function": "error",
+        "react/jsx-no-bind": [2, {
+            "ignoreRefs": true,
+            "allowArrowFunctions": false,
+            "allowBind": false
+        }],
+        "react/no-unused-prop-types": "error",
+        "react/jsx-key": "error"
+    }
+}

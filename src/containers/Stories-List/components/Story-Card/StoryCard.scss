@@ -1,5 +1,35 @@
-.StoryCard {}
+.StoryCard {
+    border-radius: .28571429rem;
+}
+
 
 .dragged {
     color: blue;
+}
+
+:global {
+    .StoryCard__inner_flex {
+        display: flex;
+        flex-direction: row;
+        .icon.icon.icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+}
+
+.story__detail {
+    flex: 1;
+     :global {
+        div {}
+        .detail__name {
+            padding: 0.6rem 0 0.1rem 0.2rem;
+            font-size: 1.5rem;
+        }
+        .detail__description {
+            padding: 0.2rem 0 0.4rem 0.4rem;
+            color: gray;
+        }
+    }
 }

@@ -5,7 +5,7 @@ import { CREATE_STORY_SUCCESS } from '../../actions/stories/actCreateStory.js';
 const initialState = {
   auth: false, // [false, 'fail', 'success']
   name: false,
-  storiesOlder: false
+  storiesOrder: false
 }
 
 export function reduceUserInfo(state = initialState, action) {
@@ -30,7 +30,12 @@ export function reduceUserInfo(state = initialState, action) {
 
     case CREATE_STORY_SUCCESS:
       return Object.assign({}, state, {
-
+        storiesOrder: [
+          {
+            id: action.story._id
+          },
+          ...state.storiesOrder
+        ]
       });
 
     case CHANGE_STORIES_ORDER_SUCCESS:
