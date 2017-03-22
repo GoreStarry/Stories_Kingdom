@@ -6,6 +6,10 @@
   <img alt="Stories Kingdom dev gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_test_gif.gif">
 </p>
 
+## Prerequisite Technologies
+* *Node.js*
+* *MongoDB*
+
 ## Build Setup
 
 ``` bash

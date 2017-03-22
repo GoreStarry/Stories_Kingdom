@@ -29,6 +29,11 @@ class PageBody extends PureComponent {
   }
 }
 
+PageBody.propTypes = {
+  _toggleNav: PropTypes.func.isRequired,
+  pages: PropTypes.object.isRequired,
+}
+
 import { getTokenAndSetToHeader } from '../../redux/actions/user/actAuth.js';
 
 
@@ -96,7 +101,9 @@ class AllNewNav extends PureComponent {
 
 
 AllNewNav.propTypes = {
-  routes: React.PropTypes.array.isRequired
+  routes: React.PropTypes.array.isRequired,
+  actions: PropTypes.object,
+  children: PropTypes.object,
 };
 
 function mapStateToProps(state) {
