@@ -19,10 +19,12 @@ import DeleteModal from '../../components/Delete-Modal/DeleteModal.jsx';
 const draggableListContainer = () => document.body;
 
 class StoriesList extends PureComponent {
+  displayName = 'StoriesList';
+
   state = {
     useContainer: false,
     deleteModalOpen: false,
-    deleteTargetId: false
+    deleteTarget: false
   };
 
 
@@ -38,25 +40,38 @@ class StoriesList extends PureComponent {
 
   _createKeyForStoryCard = story => `story_${story.id}`;
 
-  _openDeleteModal = (deleteTargetId) => {
+  _openDeleteModal = (deleteTargetId, name) => {
     this.setState({
       deleteModalOpen: true,
-      deleteTargetId
+      deleteTarget: {
+        id: deleteTargetId,
+        name
+      }
     })
   }
 
   _closeDeleteModal = () => {
     this.setState({
       deleteModalOpen: false,
+      deleteTarget: false
     })
   }
 
   _deleteStory = () => {
-    console.log('delete Story');
+    console.log('in delete');
+    const {actions} = this.props;
+    const {deleteTarget} = this.state;
+
+    actions.deleteStory(deleteTarget.id)
+
+    this.setState({
+      deleteModalOpen: false
+    })
+
   }
 
   render() {
-    const {useContainer, deleteModalOpen} = this.state;
+    const {useContainer, deleteModalOpen, deleteTarget} = this.state;
     const {auth, storiesOrder, stories} = this.props;
 
     const commonProps = {
@@ -66,11 +81,11 @@ class StoriesList extends PureComponent {
 
     return (
     auth === 'success' ?
-      <div>
+      <div className={ styles.StoriesList }>
         <h1>Lists</h1>
         <NewStroyForm/>
-        <div ref={ dragContainerDom => this.dragContainerDom = dragContainerDom }>
-          { Object.keys(stories).length && storiesOrder[0] &&
+        <div className="StoriesList__list" ref={ dragContainerDom => this.dragContainerDom = dragContainerDom }>
+          { stories && storiesOrder &&
             <DraggableList
               itemKey={ this._createKeyForStoryCard }
               template={ StoryCard }
@@ -81,6 +96,7 @@ class StoriesList extends PureComponent {
         </div>
         <DeleteModal
           open={ deleteModalOpen }
+          deleteTargetName={ deleteTarget.name }
           deleteFun={ this._deleteStory }
           closeModal={ this._closeDeleteModal } />
       </div>
@@ -102,11 +118,14 @@ function mapStateToProps(state) {
 
 import { actionGetStories } from '../../redux/actions/stories/actGetStories.js';
 import { actChangeStoriesOrder } from '../../redux/actions/user/actChangeStoriesOrder.js';
+import { actDeleteStory } from '../../redux/actions/stories/actDeleteStory.js';
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
       getStories: () => dispatch(actionGetStories()),
-      changeStoriesOrder: (newOrder) => dispatch(actChangeStoriesOrder(newOrder))
+      changeStoriesOrder: (newOrder) => dispatch(actChangeStoriesOrder(newOrder)),
+      deleteStory: (id) => dispatch(actDeleteStory(id))
     }
   }
 }

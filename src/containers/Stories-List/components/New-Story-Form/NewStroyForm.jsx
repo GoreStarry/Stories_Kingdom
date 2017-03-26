@@ -23,9 +23,6 @@ class NewStoryForm extends PureComponent {
   render() {
     return (
       <div className="box__addStory">
-        <Button icon id="btn__addStory">
-          <Icon name="plus" />
-        </Button>
         <Form onSubmit={ this._submitNewStory }>
           <Form.Field>
             <label>

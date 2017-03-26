@@ -2,6 +2,7 @@ import { GET_USER_INFO } from '../../actions/user/actUserInfo.js';
 import { GET_AUTH_FAIL, GET_AUTH_SUCCESS } from '../../actions/user/actAuth';
 import { CHANGE_STORIES_ORDER_SUCCESS, CHANGE_STORIES_ORDER_FAIL } from '../../actions/user/actChangeStoriesOrder.js';
 import { CREATE_STORY_SUCCESS } from '../../actions/stories/actCreateStory.js';
+import { DELETE_STORY_SUCCESS, DELETE_STORY_FAIL } from '../../actions/stories/actDeleteStory.js';
 const initialState = {
   auth: false, // [false, 'fail', 'success']
   name: false,
@@ -44,6 +45,12 @@ export function reduceUserInfo(state = initialState, action) {
         storiesOrder
       })
 
+
+    case DELETE_STORY_SUCCESS:
+      var {storiesOrder} = action;
+      return Object.assign({}, state, {
+        storiesOrder
+      })
 
     default:
       return {

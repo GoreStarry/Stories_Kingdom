@@ -1,3 +1,7 @@
-.StoriesList {}
-
-#btn__addStory {}
+.StoriesList {
+     :global {
+        .StoriesList__list {
+            padding: 1rem 0
+        }
+    }
+}

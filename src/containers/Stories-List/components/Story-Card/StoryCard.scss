@@ -1,5 +1,9 @@
 .StoryCard {
     border-radius: .28571429rem;
+    cursor: pointer;
+    &:hover {
+        color: gray;
+    }
 }
 
 
