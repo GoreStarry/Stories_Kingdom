@@ -6,8 +6,6 @@ import classNames from 'classnames/bind';
 import styles from './StoryCard.scss';
 
 let cx = classNames.bind(styles);
-// TODO: 刪除故事
-// TODO: 敘述欄位
 class StoryCard extends Component {
 
   _clickDeleteBtn = (e, data) => {

@@ -23,7 +23,7 @@ const setTokenAndSetToHeader = _flow([
  * @param {String} name 
  * @returns 
  */
-export function actGetToken(name) {
+export function actGetToken(input_name) {
   const local_token = getTokenFormLocal();
   if (local_token) {
 
@@ -33,12 +33,11 @@ export function actGetToken(name) {
     }
 
   } else {
-
     return async function FetchAuthAndDispatch(dispatch, getState) {
 
       try {
         const res = await axios.post('/api/auth/', {
-          name
+          name: input_name
         })
 
         const {token, user} = res.data;

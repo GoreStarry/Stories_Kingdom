@@ -11,6 +11,10 @@ module.exports = {
     {
       appDidMount: function() {
         return this.waitForElementVisible('#app>div');
+      },
+      login: function() {
+        return this.setValue('#input_login', 'Gore')
+          .click('#btn_login')
       }
     }
   ]

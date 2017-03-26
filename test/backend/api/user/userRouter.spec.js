@@ -35,10 +35,9 @@ describe('User API Test', () => {
       .get(api_url['user'])
       .set('x-access-token', token)
       .end((err, res) => {
-        const {data} = res.body;
-        console.log(data);
-        assert.notProperty(data, '_id', "[ _id should not pass to user]");
-        assert.property(data, 'name', "[ name in data ]");
+        const {user} = res.body;
+        assert.notProperty(user, '_id', "[ _id should not pass to user]");
+        assert.property(user, 'name', "[ name in data ]");
         done();
       })
 
@@ -61,8 +60,7 @@ describe('User API Test', () => {
       })
       .set('x-access-token', token)
       .end((err, res) => {
-        console.log(res.body.data.storiesOrder);
-        assert.deepEqual(res.body.data.storiesOrder[0].id, newOrder[0].id, "[same as new order]");
+        assert.deepEqual(res.body.user.storiesOrder[0].id, newOrder[0].id, "[same as new order]");
         done();
       })
 
