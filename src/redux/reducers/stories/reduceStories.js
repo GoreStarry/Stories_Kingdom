@@ -1,6 +1,5 @@
 import { CREATE_STORY_SUCCESS, CREATE_STORY_FAIL } from '../../actions/stories/actCreateStory';
 import { GET_STORIES_SUCCESS, GET_STORIES_FAIL } from '../../actions/stories/actGetStories.js';
-
 const initialState = {
   stories: false
 }

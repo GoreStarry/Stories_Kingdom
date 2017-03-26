@@ -4,29 +4,30 @@ import React, { PureComponent, PropTypes } from 'react';
 
 class DeleteModal extends PureComponent {
   render() {
-    const {open, deleteFun, closeModal} = this.props;
+    const {open, deleteFun, closeModal, deleteTargetName} = this.props;
     return (
       <Modal
         open={ open }
         basic
         size='small'>
-        <Header icon='archive' content='Archive Old Messages' />
+        <Header icon='archive' content='確認刪除？' />
         <Modal.Content>
           <p>
-            Your inbox is getting full, would you like us to enable automatic archiving of old messages?
+            <span>是否確定刪除 "{ deleteTargetName }"</span>
           </p>
         </Modal.Content>
         <Modal.Actions>
           <Button
             basic
             color='red'
+            onClick={ closeModal }
             inverted>
             <Icon name='remove' /> No
           </Button>
           <Button
             color='green'
             inverted
-            onClick={ closeModal }>
+            onClick={ deleteFun }>
             <Icon name='checkmark' /> Yes
           </Button>
         </Modal.Actions>
@@ -38,6 +39,7 @@ class DeleteModal extends PureComponent {
 DeleteModal.propTypes = {
   open: React.PropTypes.bool.isRequired,
   closeModal: React.PropTypes.func.isRequired,
+  deleteTargetName: PropTypes.string,
   deleteFun: React.PropTypes.func.isRequired
 };
 
