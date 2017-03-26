@@ -13,7 +13,7 @@ class CoverPage extends PureComponent {
     const inputName = this.usernameInput.value;
 
     if (inputName.trim()) {
-      this.props.getAuth(inputName)
+      this.props.actions.getAuth(inputName)
     }
 
   }
@@ -46,8 +46,8 @@ class CoverPage extends PureComponent {
 }
 
 CoverPage.propTypes = {
-
-
+  actions: PropTypes.object.isRequired,
+  user: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoverPage);
@@ -64,6 +64,8 @@ import { actGetToken } from '../../redux/actions/user/actAuth.js';
 
 function mapDispatchToProps(dispatch) {
   return {
-    getAuth: name => dispatch(actGetToken(name)),
+    actions: {
+      getAuth: name => dispatch(actGetToken(name)),
+    }
   }
 }

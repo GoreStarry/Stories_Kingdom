@@ -6,9 +6,11 @@ module.exports = {
       .page.global()
       .navigate()
       .appDidMount()
+      .login()
 
     browser
       .page.StoriesList.stories()
+      .navigate()
       .addStory()
 
     browser.end();

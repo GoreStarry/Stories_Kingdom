@@ -65,9 +65,9 @@ describe('Stories Page api Test', () => {
         .set('x-access-token', token)
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "200 success");
-          assert.deepPropertyVal(res, 'body.data.story.name', 'title1', "create by right title");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', res.body.data.story._id, "story shoud save in the user story order");
-          firstStoryId = res.body.data.story._id;
+          assert.deepPropertyVal(res, 'body.story.name', 'title1', "create by right title");
+          assert.deepPropertyVal(res, 'body.storiesOrder.0.id', res.body.story._id, "story shoud save in the user story order");
+          firstStoryId = res.body.story._id;
           done();
         })
     })
@@ -79,7 +79,7 @@ describe('Stories Page api Test', () => {
         .set('x-access-token', token)
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "get story list successful");
-          assert.deepPropertyVal(res, 'body.data.0.name', 'title1', "[first story with right title name]");
+          assert.deepPropertyVal(res, 'body.stories.0.name', 'title1', "[first story with right title name]");
           done();
         })
     })
@@ -95,11 +95,10 @@ describe('Stories Page api Test', () => {
         })
         .set('x-access-token', token)
         .end((err, res) => {
-
-          lastStoryId = res.body.data.story._id;
+          lastStoryId = res.body.story._id;
 
           assert.propertyVal(res, 'status', 200, "200 success");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', lastStoryId, "last story id");
+          assert.deepPropertyVal(res, 'body.storiesOrder.0.id', lastStoryId, "last story id");
           done();
         })
     })
@@ -117,7 +116,7 @@ describe('Stories Page api Test', () => {
         .set('x-access-token', token)
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "[success]");
-          assert.deepPropertyVal(res, 'body.data.description', description, "[get description]");
+          assert.deepPropertyVal(res, 'body.story.description', description, "[get description]");
           done();
         })
     })
@@ -134,7 +133,7 @@ describe('Stories Page api Test', () => {
         })
         .set('x-access-token', token)
         .end((err, res) => {
-          assert.deepPropertyVal(res, 'body.data.name', name, "[get description]");
+          assert.deepPropertyVal(res, 'body.story.name', name, "[get description]");
           assert.propertyVal(res, 'status', 200, "[success]");
           done();
         })
@@ -150,8 +149,8 @@ describe('Stories Page api Test', () => {
         .end((err, res) => {
           assert.propertyVal(res, 'status', 200, "delete success");
           assert.deepPropertyVal(res, 'body.success', true, "[delete success]");
-          assert.equal(res.body.data.storiesOrder.indexOf(lastStoryId), -1, "[not found deleted story in order]");
-          assert.deepPropertyVal(res, 'body.data.storiesOrder.0.id', firstStoryId, "[first story id should keep in order]");
+          assert.equal(res.body.storiesOrder.indexOf(lastStoryId), -1, "[not found deleted story in order]");
+          assert.deepPropertyVal(res, 'body.storiesOrder.0.id', firstStoryId, "[first story id should keep in order]");
           done();
         })
 

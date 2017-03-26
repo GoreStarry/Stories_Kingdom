@@ -46,7 +46,7 @@ class NewStoryForm extends PureComponent {
               title="Six or more characters"
               ref={ input => this.inputNewStoryDescrip = input } />
           </Form.Field>
-          <Button type='submit'>
+          <Button id="btn__addStory" type='submit'>
             New!
           </Button>
         </Form>
