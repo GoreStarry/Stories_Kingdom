@@ -16,6 +16,7 @@ mongoose.connect(`localhost:27017/${Database}`)
 const authRouter = require('./user/authRouter.js');
 const userRouter = require('./user/userRouter.js');
 const storiesRouter = require('./stories/storiesRouter.js');
+const articleRouter = require('./article/articleRouter.js');
 
 const apiRouter = express.Router();
 
@@ -44,6 +45,7 @@ apiRouter.use(verifyToken);
 
 apiRouter.use('/stories', storiesRouter);
 apiRouter.use('/user', userRouter);
+apiRouter.use('/article', articleRouter);
 
 module.exports = {
   apiRouter,
