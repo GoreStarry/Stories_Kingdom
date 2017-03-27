@@ -42,7 +42,7 @@ const routes = [
   },
   {
     name: 'Stories List',
-    path: '/lists',
+    path: '/list',
     component: StoriesList
   },
   {

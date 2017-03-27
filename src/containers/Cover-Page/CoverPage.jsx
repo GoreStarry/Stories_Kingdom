@@ -35,7 +35,7 @@ class CoverPage extends PureComponent {
 
     return (
     auth === 'success' ? (
-      <Redirect to={ '/lists' } />
+      <Redirect to={ '/list' } />
       ) : (
       LoginBlock
       )

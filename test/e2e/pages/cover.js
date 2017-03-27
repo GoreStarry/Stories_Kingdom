@@ -14,7 +14,7 @@ module.exports = function(browser) {
     return browser
       .setValue('#input_login', 'Gore')
       .click('#btn_login')
-      .assert.urlContains('draft_test')
+      .assert.urlContains('list')
   };
 
 }
