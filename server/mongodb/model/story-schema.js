@@ -3,7 +3,7 @@ mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
 
-const StorySchema = new Schema({
+const storySchema = new Schema({
   createBy: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -18,11 +18,11 @@ const StorySchema = new Schema({
   },
   createTime: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
   updateTime: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
   close: {
     type: Boolean,
@@ -30,14 +30,10 @@ const StorySchema = new Schema({
   }
 })
 
-StorySchema.pre('save', function(next) {
-  const now = new Date();
-  if (!this.updateTime) {
-    this.updateTime = now;
-  }
-  next();
-})
+const postUpdateTime = require('./middleware/postUpdateTime.js')
+storySchema.post('findOneAndUpdate', postUpdateTime);
 
-const Story = mongoose.model('Story', StorySchema);
+
+const Story = mongoose.model('Story', storySchema);
 
 module.exports = Story;
