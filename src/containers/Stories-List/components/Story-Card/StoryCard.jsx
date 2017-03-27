@@ -44,6 +44,7 @@ class StoryCard extends Component {
             </Link>
           </div>
           <Button
+            className="btn__delete"
             icon='delete'
             attached='right'
             data-story-id={ item.id }
