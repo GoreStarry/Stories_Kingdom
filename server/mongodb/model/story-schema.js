@@ -16,6 +16,13 @@ const storySchema = new Schema({
   description: {
     type: String,
   },
+  articleOrder: [{
+    _id: false,
+    id: {
+      type: Schema.Types.ObjectId,
+      ref: 'Article'
+    }
+  }],
   createTime: {
     type: Date,
     default: Date.now()

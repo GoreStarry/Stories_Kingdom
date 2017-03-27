@@ -4,6 +4,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const articleSchema = new Schema({
+  createBy: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  belongStory: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Story'
+  },
   outline: {
     type: String
   },
