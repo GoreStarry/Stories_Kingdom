@@ -30,11 +30,12 @@ userRouter.patch('/', async (req, res) => {
   const createBy = req.decoded.id;
   const {storiesOrder} = req.body;
   try {
+
     const newUser = await User.findByIdAndUpdate(createBy, {
       storiesOrder
     }, {
       new: true
-    }).select('-_id');
+    })
 
     res.json({
       success: true,

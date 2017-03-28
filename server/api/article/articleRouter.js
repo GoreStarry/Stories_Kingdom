@@ -5,12 +5,15 @@ const Article = require('../../mongodb/model/article-schema.js');
 
 const articleRouter = express.Router();
 
-articleRouter.get('/', async(req, res) => {
+// get all 
+articleRouter.get('/:story_id', async(req, res) => {
   const createBy = req.decoded.id;
+  const belongStory = req.params.story_id;
 
   try {
 
     const articles = await Article.find({
+      belongStory,
       createBy,
       close: false
     })
@@ -29,6 +32,8 @@ articleRouter.get('/', async(req, res) => {
 // create new article 
 // and push new article id to articleOrder
 // with right position
+// 
+// {story_id, previous_article_index} = req.body
 articleRouter.post('/', async(req, res) => {
   const createBy = req.decoded.id;
   const belongStory = req.body.story_id;
@@ -52,30 +57,76 @@ articleRouter.post('/', async(req, res) => {
         }
       }
     })
+
+    res.json({
+      success: true,
+      article_id,
+      articleOrder: storyWithNewOrder
+    })
+
   } catch (error) {
     console.log(error);
     res.send(err)
   }
 })
 
+// delete(close) article and remove article id in story order
+// { targetId } = req.body;
 articleRouter.delete('/:id', async(req, res) => {
   const createBy = req.decoded.id;
   const targetId = req.params.id;
   try {
+    const deleteArticle = await Article.findByIdAndUpdate(targetId, {
+      close: true
+    })
+
+    const storyWidhNewOrder = await Story.findByIdAndUpdate(createBy, {
+      $pull: {
+        articleOrder: {
+          id: targetId
+        }
+      }
+    }, {
+      new: true
+    })
+
+    const {articleOrder} = storyWidhNewOrder;
+
+    res.json({
+      success: true,
+      articleOrder,
+    })
 
   } catch (error) {
     console.log(error);
-
+    res.send(error)
   }
 })
 
+// update draftContent or article display align
+// {draftContent, articleAlign} = req.body;
 articleRouter.patch('/:id', async(req, res) => {
   const createBy = req.decoded.id;
   const targetId = req.params.id;
+  const {draftContent, articleAlign, outline} = req.body;
+
   try {
+
+    const newArticle = await Article.findByIdAndUpdate(targetId, {
+      draftContent,
+      articleAlign,
+      outline
+    })
+
+    res.json({
+      success: true,
+      article: newArticle
+    })
 
   } catch (error) {
     console.log(error);
-
+    res.send(error);
   }
 })
+
+module.exports = articleRouter;

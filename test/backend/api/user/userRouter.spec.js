@@ -18,7 +18,7 @@ describe('User API Test', () => {
   before((done) => {
     chai
       .request(server)
-      .post(api_url.get_jwt_token)
+      .post(api_url['get_jwt_token'])
       .send({
         name: 'stories_test'
       })
@@ -64,6 +64,6 @@ describe('User API Test', () => {
         done();
       })
 
-
   })
+
 });
