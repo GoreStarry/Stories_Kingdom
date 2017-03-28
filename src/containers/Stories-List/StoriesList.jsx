@@ -14,8 +14,6 @@ import StoryCard from './components/Story-Card/StoryCard.jsx';
 import NewStroyForm from './components/New-Story-Form/NewStroyForm.jsx';
 import DeleteModal from '../../components/Delete-Modal/DeleteModal.jsx';
 
-// TODO: 故事列表前端測試
-
 const draggableListContainer = () => document.body;
 
 class StoriesList extends PureComponent {

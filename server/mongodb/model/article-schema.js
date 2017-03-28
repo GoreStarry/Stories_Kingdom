@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-// mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 
 const Schema = mongoose.Schema;
 
@@ -19,6 +19,10 @@ const articleSchema = new Schema({
   },
   draftContent: {
     type: String
+  },
+  articleAlign: {
+    type: String,
+    default: 'right'
   },
   createTime: {
     type: Date,

@@ -7,7 +7,6 @@ const storiesRouter = express.Router();
 
 storiesRouter.get('/', async (req, res) => {
   const createBy = req.decoded.id;
-  console.log(createBy);
   try {
 
     const stories = await Story
@@ -44,7 +43,7 @@ storiesRouter.post('/', async (req, res) => {
   try {
 
     const story = await newStory.save();
-    const userWidthNewOrder = await User.findByIdAndUpdate(createBy, {
+    const userWithNewOrder = await User.findByIdAndUpdate(createBy, {
       $push: {
         storiesOrder: {
           $each: [{
@@ -57,7 +56,7 @@ storiesRouter.post('/', async (req, res) => {
       new: true
     })
 
-    const {storiesOrder} = userWidthNewOrder;
+    const {storiesOrder} = userWithNewOrder;
 
     res.json({
       success: true,
@@ -94,6 +93,7 @@ storiesRouter.patch('/:id', async (req, res) => {
 
   } catch (error) {
     console.log(error);
+    res.send(error)
   }
 
 })
@@ -112,7 +112,7 @@ storiesRouter.delete('/:id', async (req, res) => {
       close: true
     })
 
-    const userWidthNewOrder = await User.findOneAndUpdate({
+    const userWithNewOrder = await User.findOneAndUpdate({
       _id: createBy,
     }, {
       $pull: {
@@ -124,7 +124,7 @@ storiesRouter.delete('/:id', async (req, res) => {
       new: true
     })
 
-    const {storiesOrder} = userWidthNewOrder;
+    const {storiesOrder} = userWithNewOrder;
 
     res.json({
       success: true,
@@ -133,6 +133,7 @@ storiesRouter.delete('/:id', async (req, res) => {
 
   } catch (error) {
     console.log(error);
+    res.send(error)
   }
 })
 

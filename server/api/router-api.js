@@ -43,8 +43,8 @@ apiRouter.use('/auth', authRouter);
 
 apiRouter.use(verifyToken);
 
-apiRouter.use('/stories', storiesRouter);
 apiRouter.use('/user', userRouter);
+apiRouter.use('/stories', storiesRouter);
 apiRouter.use('/article', articleRouter);
 
 module.exports = {
