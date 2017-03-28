@@ -37,10 +37,13 @@ articleRouter.get('/:story_id', async(req, res) => {
 articleRouter.post('/', async(req, res) => {
   const createBy = req.decoded.id;
   const belongStory = req.body.story_id;
+  const {draftContent} = req.body;
+  // const draftContent = JSON.stringify(req.body.draftContent);
   const previousArticleIndex = req.body.previousArticleIndex;
   const newArticle = new Article({
     createBy,
-    belongStory
+    belongStory,
+    draftContent
   })
 
   try {
@@ -56,12 +59,16 @@ articleRouter.post('/', async(req, res) => {
           $position: previousArticleIndex + 1
         }
       }
+    }, {
+      new: true
     })
+
+    const {articleOrder} = storyWithNewOrder;
 
     res.json({
       success: true,
       article_id,
-      articleOrder: storyWithNewOrder
+      articleOrder
     })
 
   } catch (error) {
@@ -91,7 +98,7 @@ articleRouter.delete('/:id', async(req, res) => {
     })
 
     const {articleOrder} = storyWidhNewOrder;
-
+    console.log(articleOrder);
     res.json({
       success: true,
       articleOrder,
@@ -116,6 +123,8 @@ articleRouter.patch('/:id', async(req, res) => {
       draftContent,
       articleAlign,
       outline
+    }, {
+      new: true
     })
 
     res.json({
