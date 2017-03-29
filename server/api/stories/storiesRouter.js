@@ -112,9 +112,7 @@ storiesRouter.delete('/:id', async (req, res) => {
       close: true
     })
 
-    const userWithNewOrder = await User.findOneAndUpdate({
-      _id: createBy,
-    }, {
+    const userWithNewOrder = await User.findByIdAndUpdate(createBy, {
       $pull: {
         storiesOrder: {
           id: storyId
