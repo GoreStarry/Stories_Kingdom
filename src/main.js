@@ -32,7 +32,9 @@ import AllViewNav from './components/all-view-nav/AllNewNav.jsx';
 import StoriesList from './containers/Stories-List/StoriesList.jsx';
 import DraftTest from './test-component/draft/DraftVertical.jsx';
 import CoverPage from './containers/Cover-Page/CoverPage.jsx';
+import ChapterList from './containers/Chapter-List/ChapterList.jsx';
 
+// chapter list route should not in nav list, so I independent it
 const routes = [
   {
     name: 'Cover Page',
@@ -50,7 +52,6 @@ const routes = [
     path: '/draft_test',
     component: DraftTest
   },
-
 ];
 
 
@@ -64,6 +65,10 @@ class MainContainer extends Component {
               { routes.map((route, index) => {
                   return <Route key={ route.path + index } {...route}></Route>
                 }) }
+              <Route
+                name="Chapter List"
+                path='/chapter/:story_id'
+                component={ ChapterList } />
             </Switch>
           </AllViewNav>
         </Router>

@@ -34,7 +34,7 @@ class StoryCard extends Component {
         <div className="StoryCard__inner_flex">
           { dragHandle(<Icon disabled name='content' />) }
           <div className={ styles.story__detail }>
-            <Link to="/cover/">
+            <Link to={ `/chapter/${item.id}` }>
             <div className="detail__name">
               { commonProps.stories[item.id].name }
             </div>
