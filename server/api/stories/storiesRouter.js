@@ -96,7 +96,7 @@ storiesRouter.post('/', async (req, res) => {
 
     res.json({
       success: true,
-      story,
+      story: storyWithNewArticleOrder,
       storiesOrder
     });
 
