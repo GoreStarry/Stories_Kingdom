@@ -87,7 +87,7 @@ articleRouter.delete('/:id', async(req, res) => {
       close: true
     })
 
-    const storyWidhNewOrder = await Story.findByIdAndUpdate(createBy, {
+    const storyWidhNewOrder = await Story.findByIdAndUpdate(deleteArticle.belongStory, {
       $pull: {
         articleOrder: {
           id: targetId

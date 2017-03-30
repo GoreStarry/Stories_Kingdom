@@ -14,6 +14,9 @@ const articleSchema = new Schema({
     required: true,
     ref: 'Story'
   },
+  chapterName: {
+    type: String
+  },
   outline: {
     type: String
   },

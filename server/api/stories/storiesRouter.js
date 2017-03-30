@@ -2,6 +2,7 @@ const express = require('express');
 
 const Story = require('../../mongodb/model/story-schema.js');
 const User = require('../../mongodb/model/user-settings.js');
+const Article = require('../../mongodb/model/article-schema.js');
 
 const storiesRouter = express.Router();
 
@@ -28,7 +29,10 @@ storiesRouter.get('/', async (req, res) => {
 
 })
 
-// create a new story
+// 1.create a new story
+// 2.add the new story to storyOrder
+// 3.create first page of article for new story with chapter name
+// 4.add new artilce to story articleOrder
 storiesRouter.post('/', async (req, res) => {
 
   const {name, description} = req.body;
@@ -42,7 +46,10 @@ storiesRouter.post('/', async (req, res) => {
 
   try {
 
+    // 1.create a new story
     const story = await newStory.save();
+
+    // 2.add the new story to storyOrder
     const userWithNewOrder = await User.findByIdAndUpdate(createBy, {
       $push: {
         storiesOrder: {
@@ -56,11 +63,40 @@ storiesRouter.post('/', async (req, res) => {
       new: true
     })
 
+    // 3.create first page of article for new story with chapter name
+    const DEFAULT_CHAPTER_NAME = 'Fisrt Chapter';
+    const newArticle = new Article({
+      createBy,
+      belongStory: story._id,
+      chapterName: DEFAULT_CHAPTER_NAME,
+    })
+
+    const init_article = await newArticle.save();
+
+
+    // 4.add new artilce to story articleOrder
+    const storyWithNewArticleOrder = await Story.findByIdAndUpdate(
+      story._id,
+      {
+        $push: {
+          articleOrder: {
+            $each: [{
+              id: init_article._id
+            }],
+            $position: 0
+          }
+        }
+      }, {
+        new: true
+      }
+    )
+
     const {storiesOrder} = userWithNewOrder;
+
 
     res.json({
       success: true,
-      story,
+      story: storyWithNewArticleOrder,
       storiesOrder
     });
 
@@ -112,9 +148,7 @@ storiesRouter.delete('/:id', async (req, res) => {
       close: true
     })
 
-    const userWithNewOrder = await User.findOneAndUpdate({
-      _id: createBy,
-    }, {
+    const userWithNewOrder = await User.findByIdAndUpdate(createBy, {
       $pull: {
         storiesOrder: {
           id: storyId
