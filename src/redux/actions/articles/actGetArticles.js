@@ -14,7 +14,6 @@ export const GET_ARTICLES_FAIL = 'GET_ARTICLES_FAIL';
  */
 export function actionGetArticles(story_id) {
   return async function(dispatch, getState) {
-
     try {
 
       const {data} = await axios.get(`/api/article/${story_id}`)
