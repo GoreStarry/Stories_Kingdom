@@ -7,7 +7,6 @@ import { List } from 'semantic-ui-react';
 import ChapterCard from './components/Chapter-Card/ChapterCard.jsx';
 
 
-// TODO: 編輯ChapterName 跟 Outline
 // TODO: 進入最尾編輯頁
 // TODO: 進入上次編輯頁
 class ChapterList extends PureComponent {
@@ -41,7 +40,6 @@ class ChapterList extends PureComponent {
       return (
         <div>
           <h1>Chapter List</h1>
-          <span>{ story_id }</span>
           <List divided verticalAlign='middle'>
             { articles[story_id] && stories && articleOrder.map((article_detail) => {
                 const article_id = article_detail.id;

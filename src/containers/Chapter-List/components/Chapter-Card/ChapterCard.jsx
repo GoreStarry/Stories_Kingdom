@@ -1,5 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Input, List, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Input, List, Button, Form } from 'semantic-ui-react';
+
+import styles from './ChapterCard.scss';
 
 class ChapterCard extends PureComponent {
 
@@ -52,24 +55,38 @@ class ChapterCard extends PureComponent {
     const {editOpen, chapterName, outline} = this.state;
     return (
       <List.Item>
-        <List.Content floated='right'>
+        <List.Content floated='right' className={ styles.btn__edit }>
           <Button onClick={ this.openEditBlock }>
             edit
           </Button>
         </List.Content>
         { editOpen ? (
           <List.Content>
-            <Input value={ chapterName } onChange={ this.editChapterName } />
-            <Input value={ outline } onChange={ this.editOutline } />
+            <Form>
+              <Form.Field>
+                <label>
+                  章節名稱:
+                </label>
+                <Input value={ chapterName } onChange={ this.editChapterName } />
+              </Form.Field>
+              <Form.Field>
+                <label>
+                  大綱:
+                </label>
+                <Input value={ outline } onChange={ this.editOutline } />
+              </Form.Field>
+            </Form>
           </List.Content>
           ) : (
           <List.Content>
+            <Link to={ `/editor/${article.belongStory}` }>
             <List.Header onDoubleClick={ this.openEditBlock } as='a'>
-              { article.chapterName }
+              <h3>{ article.chapterName }</h3>
             </List.Header>
             <List.Description onDoubleClick={ this.editOutline } as='a'>
               { article.outline }
             </List.Description>
+            </Link>
           </List.Content>
           ) }
       </List.Item>
