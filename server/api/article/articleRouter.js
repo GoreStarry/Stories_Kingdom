@@ -115,15 +115,11 @@ articleRouter.delete('/:id', async(req, res) => {
 articleRouter.patch('/:id', async(req, res) => {
   const createBy = req.decoded.id;
   const targetId = req.params.id;
-  const {draftContent, articleAlign, outline} = req.body;
+  // const {draftContent, articleAlign, outline} = req.body;
 
   try {
 
-    const newArticle = await Article.findByIdAndUpdate(targetId, {
-      draftContent,
-      articleAlign,
-      outline
-    }, {
+    const newArticle = await Article.findByIdAndUpdate(targetId, req.body, {
       new: true
     })
 

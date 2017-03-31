@@ -18,7 +18,7 @@ const articleSchema = new Schema({
     type: String
   },
   outline: {
-    type: String
+    type: String,
   },
   draftContent: {
     type: String
