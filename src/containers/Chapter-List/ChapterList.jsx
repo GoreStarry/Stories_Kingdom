@@ -6,7 +6,8 @@ import { List } from 'semantic-ui-react';
 
 import ChapterCard from './components/Chapter-Card/ChapterCard.jsx';
 
-
+// TODO: chapter name 檢查
+// TODO: 只取有chapter的機制 或 ...
 // TODO: 進入最尾編輯頁
 // TODO: 進入上次編輯頁
 class ChapterList extends PureComponent {
@@ -30,6 +31,14 @@ class ChapterList extends PureComponent {
     actions.editArticle(article_id, editState)
   }
 
+  /**
+   * only render the list when article and articleOrder ready
+   * only render the article which with chapterName or outline
+   * 
+   * @returns 
+   * 
+   * @memberOf ChapterList
+   */
   render() {
     const {stories, articles} = this.props;
     const {story_id} = this.props.match.params;
@@ -44,12 +53,14 @@ class ChapterList extends PureComponent {
             { articles[story_id] && stories && articleOrder.map((article_detail) => {
                 const article_id = article_detail.id;
                 const article = articles[story_id][article_id];
-                console.log(article);
+              
                 return (
+                article.chapterName || article.outline ?
                   <ChapterCard
                     key={ article_id }
                     article={ article }
-                    editChapter={ this.editChapter } />
+                    editChapter={ this.editChapter } /> :
+                  false
                 )
               }) }
           </List>
