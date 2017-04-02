@@ -79,11 +79,11 @@ class ChapterCard extends PureComponent {
           </List.Content>
           ) : (
           <List.Content>
-            <Link to={ `/editor/${article.belongStory}` }>
-            <List.Header onDoubleClick={ this.toggleEditBlock } as='a'>
+            <Link to={ `/editor/${article.belongStory}/${article._id}/` }>
+            <List.Header onDoubleClick={ this.toggleEditBlock }>
               <h3>{ article.chapterName }</h3>
             </List.Header>
-            <List.Description onDoubleClick={ this.editOutline } as='a'>
+            <List.Description onDoubleClick={ this.editOutline }>
               { article.outline }
             </List.Description>
             </Link>

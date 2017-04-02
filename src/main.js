@@ -72,7 +72,7 @@ class MainContainer extends Component {
                 component={ ChapterList } />
               <Route
                 name="Stage Editor"
-                path='/editor/:story_id/:article_id'
+                path='/editor/:story_id/:article_id?/'
                 component={ StageEditor } />
             </Switch>
           </AllViewNav>
