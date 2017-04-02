@@ -72,7 +72,7 @@ class MainContainer extends Component {
                 component={ ChapterList } />
               <Route
                 name="Stage Editor"
-                path='/editor/:story_id'
+                path='/editor/:story_id/:article_id'
                 component={ StageEditor } />
             </Switch>
           </AllViewNav>
@@ -82,19 +82,5 @@ class MainContainer extends Component {
   }
 }
 
-
-// const MainContainer = () => (
-//   <Provider store={ store }>
-//     <Router history={ history }>
-//       <AllViewNav routes={ routes }>
-//         <Switch>
-//           { routes.map((route, index) => {
-//               return <Route key={ route.path + index } {...route}></Route>
-//             }) }
-//         </Switch>
-//       </AllViewNav>
-//     </Router>
-//   </Provider>
-// );
 
 render(<MainContainer/>, document.getElementById('app'))

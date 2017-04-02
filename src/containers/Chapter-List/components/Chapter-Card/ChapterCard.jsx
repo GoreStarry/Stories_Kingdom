@@ -21,7 +21,7 @@ class ChapterCard extends PureComponent {
     })
   }
 
-  openEditBlock = () => {
+  toggleEditBlock = () => {
     const {editOpen, chapterName, outline} = this.state;
     const {_id} = this.props.article;
 
@@ -56,7 +56,7 @@ class ChapterCard extends PureComponent {
     return (
       <List.Item>
         <List.Content floated='right' className={ styles.btn__edit }>
-          <Button onClick={ this.openEditBlock }>
+          <Button onClick={ this.toggleEditBlock }>
             edit
           </Button>
         </List.Content>
@@ -80,7 +80,7 @@ class ChapterCard extends PureComponent {
           ) : (
           <List.Content>
             <Link to={ `/editor/${article.belongStory}` }>
-            <List.Header onDoubleClick={ this.openEditBlock } as='a'>
+            <List.Header onDoubleClick={ this.toggleEditBlock } as='a'>
               <h3>{ article.chapterName }</h3>
             </List.Header>
             <List.Description onDoubleClick={ this.editOutline } as='a'>
