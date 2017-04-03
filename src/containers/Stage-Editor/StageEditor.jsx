@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _findIndex from 'lodash/fp/findIndex';
-import { Editor, EditorState, RichUtils, DefaultDraftBlockRenderMap, CompositeDecorator, Modifier, convertToRaw, genKey, ContentBlock } from 'draft-js';
+import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { TransitionMotion, spring } from 'react-motion';
 
 
@@ -10,14 +10,14 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
+import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStoryEditRecordLocal.js';
 
 class StageEditor extends PureComponent {
 
   state = {
     now_page: 1,
-    editorState_now: false,
-    editorState_prev: false,
-    editorState_next: false,
+    editorState: false,
+    updateYet: false,
   }
 
   async componentWillMount() {
@@ -25,8 +25,7 @@ class StageEditor extends PureComponent {
     const {story_id, article_id} = this.props.match.params;
 
     await this._setInitPageByParamsArticle()
-
-    // TODO: 檢查初始頁是否包含draft content,沒有則創建
+    this._initDraftEditorState();
 
     // TODO: 當前頁的控管
     // TODO: 按鍵控管：新增後頁/前頁
@@ -44,14 +43,13 @@ class StageEditor extends PureComponent {
 
     const {story_id, article_id} = this.props.match.params;
 
-    if (article_id) {
-      resolve()
-      return false
+    if (article_id) { // initial article not setting
+      return resolve()
     }
 
     const {stories} = this.props;
-
     const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
+
     this.setState({
       now_page: indexOfInitArticle + 1
     }, resolve);
@@ -60,39 +58,72 @@ class StageEditor extends PureComponent {
 
 
   _initDraftEditorState = () => {
-    const {now_page} = this.state;
-    const {stories} = this.props;
-    const {story_id} = this.props.match.params;
 
+    const contentState = this._getArticleDraftContent();
+    if (contentState) {
+      this.setState({
+        editorState: createWithContent.createEmpty(convertFromRaw(contentState))
+      });
+    } else { // new a empty EditorState
+      this.setState({
+        editorState: EditorState.createEmpty()
+      });
+    }
 
   }
-
-  _checkArticleDraftContentExist = (article_id) => {
-    const {stories, articles} = this.props;
-
-  }
-
-  componentDidMount() {}
 
 
   /**
-   * for page transition animation
-   * 
-   * @returns 
-   * 
-   * @memberOf StageEditor
+   * try to get contentState from localStorage or redux or just new one
    */
-  render() {
+  _getArticleDraftContent = () => {
     const {now_page} = this.state;
     const {stories, articles} = this.props;
     const {story_id, article_id} = this.props.match.params;
+
+    return this._getLocalDraftContent(story_id, article_id) || this._getReduxDraftContent(story_id, article_id, articles)
+  }
+
+
+  _getLocalDraftContent = (story_id, article_id) => {
+    try { // check localStorage exist cache contentState or not
+      return contentState = getStoryEditRecordLocal(story_id).update_cache.find((cache) => {
+        return cache.article_id === article_id;
+      }).contentState;
+    } catch (error) {
+      return false
+    }
+  }
+
+  _getReduxDraftContent = (story_id, article_id, articles) => {
+    return articles[story_id][article_id].draftContent;
+  }
+
+
+
+  _editorOnChange = (editorState) => {
+
+    this.setState({
+      editorState
+    });
+
+  };
+
+
+  render() {
+    const {now_page, editorState} = this.state;
+    const {stories, articles} = this.props;
+    const {story_id, article_id} = this.props.match.params;
+    console.log(editorState);
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
         <div className={ "flex--extend " + styles.body__editors }>
-          { stories[story_id].articleOrder.map(({id}, index) => {
-              return
-            }) }
+          { editorState &&
+            <Editor
+              ref={ editor => this.editor = editor }
+              editorState={ editorState }
+              onChange={ this._editorOnChange } /> }
         </div>
         <ArticleDetial now_page={ now_page } />
       </div>
