@@ -9,14 +9,14 @@ axios.defaults.validateStatus = function(status) {
   return status >= 200 && status < 405; // default
 };
 
-import style from './AllNewNav.scss';
+import styles from './AllNewNav.scss';
 
 class PageBody extends PureComponent {
 
   render() {
     return (
-      <Sidebar.Pusher>
-        <Segment basic>
+      <Sidebar.Pusher className="flex--col">
+        <Segment basic className="flex--col flex--extend">
           <div className="box__btn_setting">
             <Button icon onClick={ this.props._toggleNav }>
               <Icon name='setting' />
@@ -65,7 +65,7 @@ class AllNewNav extends PureComponent {
     const {nav_open} = this.state;
 
     return (
-      <div className={ style.AllNewNav }>
+      <div className={ styles.AllNewNav }>
         <Sidebar.Pushable as={ Segment }>
           <Sidebar
             as={ Menu }
@@ -81,7 +81,7 @@ class AllNewNav extends PureComponent {
                     <NavLink
                       exact
                       to={ route.path }
-                      activeClassName={ style.AllNewNav }
+                      activeClassName={ styles.AllNewNav }
                       onClick={ this._closeNav }>
                       { route.name }
                     </NavLink>

@@ -8,8 +8,6 @@ import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStor
 
 import ChapterCard from './components/Chapter-Card/ChapterCard.jsx';
 
-// TODO: 進入最尾編輯頁
-// TODO: 進入上次編輯頁
 class ChapterList extends PureComponent {
 
   state = {
@@ -60,14 +58,15 @@ class ChapterList extends PureComponent {
       return (
         <div>
           <h1>Chapter List</h1>
-          <Link to={ `/editor/${story_id}` }></Link>
-          <div>
+          <div className="box__special_link">
             { last_edited_article && (
+              <Link to={ `/editor/${story_id}/${last_edited_article}` }>
               <Button secondary>
                 進入上一次編輯
               </Button>
+              </Link>
               ) }
-            <Link to={ `/editor/${_last(articleOrder).id}` }>
+            <Link to={ `/editor/${story_id}/${_last(articleOrder).id}/` }>
             <Button secondary>
               進入最尾頁
             </Button>

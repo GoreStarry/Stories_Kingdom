@@ -1,10 +1,13 @@
 .AllNewNav {
-    // color: red;
      :global {
         .pusher {
             min-height: 100vh;
+            display: flex;
         }
         .box__btn_setting {
+            position: fixed;
+            right: 0;
+            top: 0;
             text-align: right;
             padding: 0.5rem;
         }
