@@ -1,3 +1,20 @@
-body {
-    // background-color: #1c1c1c;
+:global {
+    body {
+        min-height: 100vh;
+    }
+    .flex {
+        @at-root {
+            &--col {
+                display: flex;
+                flex-direction: column;
+            }
+            &--row {
+                display: flex;
+                flex-direction: row;
+            }
+            &--extend {
+                flex: 1;
+            }
+        }
+    }
 }
