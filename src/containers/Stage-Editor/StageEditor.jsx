@@ -1,7 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
+import Rx from 'rxjs/Rx';
 import { connect } from 'react-redux';
 import _findIndex from 'lodash/fp/findIndex';
-import { EditorState, convertFromRaw } from 'draft-js';
+import _flow from 'lodash/fp/flow';
+import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import EditorStoriesKingdom from './components/Editor-Stories-Kingdom/EditorStoriesKingdom.jsx';
 import { TransitionMotion, spring } from 'react-motion';
 
@@ -11,8 +13,7 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
-import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStoryEditRecordLocal.js';
-
+import { getArticleDraftContent } from './helpers/getArticleContentState.js';
 
 /**
  * EditorState would immute in this component
@@ -23,22 +24,40 @@ import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStor
  */
 class StageEditor extends PureComponent {
 
+  constructor() {
+    super();
+
+
+
+  }
+
   state = {
-    now_page: 1,
+    now_page: {
+      num: 1,
+      id: false,
+    },
     editorState: false,
     updateYet: false,
   }
 
   async componentWillMount() {
-    const {stories, articles} = this.props;
+    const {stories, articles, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
     // now page decide the Editor render target, so should set it first
     await this._setInitPageByParamsArticle()
     this._initDraftEditorState();
 
-    // TODO: 當前頁的控管
-    // TODO: 按鍵控管：新增後頁/前頁
+    // RxJS will debounce update the changed contentState to server 
+    this.autoUpdate = new Rx.Subject();
+    this.autoUpdate.debounceTime(3000)
+      .subscribe(({editorState, article_id}) => {
+        actions.editArticle(article_id, {
+          draftContent: _flow(editorState.getCurrentContent, convertToRaw, JSON.stringify)
+        })
+      })
+      // TODO: 按鍵控管：新增後頁/前頁
+      // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
   }
 
@@ -50,26 +69,34 @@ class StageEditor extends PureComponent {
    * @memberOf StageEditor
    */
   _setInitPageByParamsArticle = () => new Promise((resolve) => {
-
+    const {stories} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
     if (article_id) { // initial article not setting
-      return resolve()
+      return this.setState({
+        now_page: {
+          num: 1,
+          id: stories[story_id].articleOrder[0].id
+        }
+      }, resolve);
     }
 
-    const {stories} = this.props;
     const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
 
     this.setState({
-      now_page: indexOfInitArticle + 1
+      now_page: {
+        num: indexOfInitArticle + 1,
+        id: article_id
+      }
     }, resolve);
 
   })
 
 
   _initDraftEditorState = () => {
-
-    const contentState = this._getArticleDraftContent();
+    const {articles} = this.props;
+    const {story_id, article_id} = this.props.match.params;
+    const contentState = getArticleDraftContent(story_id, article_id, articles);
     if (contentState) {
       this.setState({
         editorState: createWithContent.createEmpty(convertFromRaw(contentState))
@@ -83,39 +110,25 @@ class StageEditor extends PureComponent {
   }
 
 
+
+
   /**
-   * try to get contentState from localStorage or redux or just new one
+   * use RxJS to control auto update
+   * (Thanks for JerryHong's RxJS tutorial and examples~~ [http://ithelp.ithome.com.tw/articles/10188121])
+   * 
+   * @memberOf StageEditor
    */
-  _getArticleDraftContent = () => {
-    const {articles} = this.props;
-    const {story_id, article_id} = this.props.match.params;
-
-    return this._getLocalDraftContent(story_id, article_id) || this._getReduxDraftContent(story_id, article_id, articles)
-  }
-
-
-  _getLocalDraftContent = (story_id, article_id) => {
-    try { // check localStorage exist cache contentState or not
-      return contentState = getStoryEditRecordLocal(story_id).update_cache.find((cache) => {
-        return cache.article_id === article_id;
-      }).contentState;
-    } catch (error) {
-      return false
-    }
-  }
-
-  _getReduxDraftContent = (story_id, article_id, articles) => {
-    return articles[story_id][article_id].draftContent;
-  }
-
-
-
   _editorOnChange = (editorState) => {
-
     this.setState({
       editorState
+    }, () => {
+      const article_id = this.state.now_page.id;
+      console.log('id=' + article_id);
+      this.autoUpdate.next({
+        editorState,
+        article_id
+      });
     });
-
   };
 
 
@@ -131,7 +144,7 @@ class StageEditor extends PureComponent {
           { editorState &&
             <EditorStoriesKingdom editorState={ editorState } onChange={ this._editorOnChange } /> }
         </div>
-        <ArticleDetial now_page={ now_page } />
+        <ArticleDetial now_page_num={ now_page.num } />
       </div>
       );
   }
@@ -151,10 +164,12 @@ function mapStateToProps(state) {
   }
 }
 
+import { actionEditArticle } from '../../redux/actions/articles/actEditArticle.js';
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-
+      editArticle: (article_id, editedState) => dispatch(actionEditArticle(article_id, editedState)),
     }
   }
 }
