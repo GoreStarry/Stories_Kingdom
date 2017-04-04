@@ -275,7 +275,7 @@ class DraftVertical extends Component {
 
   render() {
     return (
-      <div id="outer" className={ styles.test }>
+      <div id="outer" className={ styles.DraftVertical }>
         <Editor
           ref={ editor => this.editor = editor }
           customStyleMap={ StyleMap }

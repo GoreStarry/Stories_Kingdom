@@ -7,3 +7,4 @@ test/e2e/reports
 selenium-debug.log
 coverage/
 yarn-error.log
+selenium-debug.log
