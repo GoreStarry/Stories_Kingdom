@@ -15,6 +15,9 @@ const cx = classNames.bind(styles);
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
 import { getArticleDraftContent } from './helpers/getArticleContentState.js';
 
+
+const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
+
 /**
  * EditorState would immute in this component
  * anothers Draft setting like decorator,entity... would be setted in the DraftEditor component
@@ -26,9 +29,7 @@ class StageEditor extends PureComponent {
 
   constructor() {
     super();
-
-
-
+    this.autoUpdate = new Rx.Subject();
   }
 
   state = {
@@ -49,13 +50,14 @@ class StageEditor extends PureComponent {
     this._initDraftEditorState();
 
     // RxJS will debounce update the changed contentState to server 
-    this.autoUpdate = new Rx.Subject();
     this.autoUpdate.debounceTime(3000)
       .subscribe(({editorState, article_id}) => {
+
         actions.editArticle(article_id, {
-          draftContent: _flow(editorState.getCurrentContent, convertToRaw, JSON.stringify)
+          draftContent: parseContentStateToString(editorState.getCurrentContent())
         })
       })
+
       // TODO: 按鍵控管：新增後頁/前頁
       // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
@@ -99,7 +101,7 @@ class StageEditor extends PureComponent {
     const contentState = getArticleDraftContent(story_id, article_id, articles);
     if (contentState) {
       this.setState({
-        editorState: createWithContent.createEmpty(convertFromRaw(contentState))
+        editorState: EditorState.createWithContent(convertFromRaw(contentState))
       });
     } else { // new a empty EditorState
       this.setState({
