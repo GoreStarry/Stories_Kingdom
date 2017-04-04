@@ -1,7 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import _findIndex from 'lodash/fp/findIndex';
-import { Editor, EditorState, convertFromRaw } from 'draft-js';
+import { EditorState, convertFromRaw } from 'draft-js';
+import EditorStoriesKingdom from './components/Editor-Stories-Kingdom/EditorStoriesKingdom.jsx';
 import { TransitionMotion, spring } from 'react-motion';
 
 
@@ -12,6 +13,14 @@ const cx = classNames.bind(styles);
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
 import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStoryEditRecordLocal.js';
 
+
+/**
+ * EditorState would immute in this component
+ * anothers Draft setting like decorator,entity... would be setted in the DraftEditor component
+ * 
+ * @class StageEditor
+ * @extends {PureComponent}
+ */
 class StageEditor extends PureComponent {
 
   state = {
@@ -24,6 +33,7 @@ class StageEditor extends PureComponent {
     const {stories, articles} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
+    // now page decide the Editor render target, so should set it first
     await this._setInitPageByParamsArticle()
     this._initDraftEditorState();
 
@@ -77,8 +87,7 @@ class StageEditor extends PureComponent {
    * try to get contentState from localStorage or redux or just new one
    */
   _getArticleDraftContent = () => {
-    const {now_page} = this.state;
-    const {stories, articles} = this.props;
+    const {articles} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
     return this._getLocalDraftContent(story_id, article_id) || this._getReduxDraftContent(story_id, article_id, articles)
@@ -114,16 +123,13 @@ class StageEditor extends PureComponent {
     const {now_page, editorState} = this.state;
     const {stories, articles} = this.props;
     const {story_id, article_id} = this.props.match.params;
-    console.log(editorState);
+
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
-            <Editor
-              ref={ editor => this.editor = editor }
-              editorState={ editorState }
-              onChange={ this._editorOnChange } /> }
+            <EditorStoriesKingdom editorState={ editorState } onChange={ this._editorOnChange } /> }
         </div>
         <ArticleDetial now_page={ now_page } />
       </div>

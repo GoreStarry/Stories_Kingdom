@@ -1,13 +1,6 @@
-.test {
+.DraftVertical {
     text-align: right;
     font-size: 1.2rem;
-}
-
-.box__hashtag {
-    color: blue;
-}
-
-:global {
     .DraftEditor-root {
         display: inline-block;
         width: 100%;
@@ -34,4 +27,8 @@
             margin: 2px;
         }
     }
+}
+
+.box__hashtag {
+    color: blue;
 }
