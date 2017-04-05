@@ -1,5 +1,7 @@
 import { CREATE_STORY_SUCCESS, CREATE_STORY_FAIL } from '../../actions/stories/actCreateStory';
 import { GET_STORIES_SUCCESS, GET_STORIES_FAIL } from '../../actions/stories/actGetStories.js';
+import { CREATE_ARTICLE_SUCCESS } from '../../actions/articles/actCreateArticle.js';
+
 const initialState = {
   stories: false
 }
@@ -26,13 +28,23 @@ export function reduceStories(state = initialState, action) {
       }
 
     case CREATE_STORY_SUCCESS:
-      const {story} = action;
+      var {story} = action;
 
       return Object.assign({}, state, {
         stories: Object.assign({}, state.stories, {
           [story._id]: story
         })
       })
+
+    case CREATE_ARTICLE_SUCCESS:
+      var {story} = action;
+
+      return Object.assign({}, state, {
+        stories: Object.assign({}, state.stories, {
+          [story._id]: story
+        })
+      })
+
 
     case CREATE_STORY_FAIL:
       return {

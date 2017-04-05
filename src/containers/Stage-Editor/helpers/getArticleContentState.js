@@ -21,5 +21,6 @@ function getLocalDraftContent(story_id, article_id) {
 }
 
 function getReduxStoreDraftContent(story_id, article_id, articles) {
-  return JSON.parse(articles[story_id][article_id].draftContent);
+  const contentStateString = articles[story_id][article_id].draftContent;
+  return contentStateString ? JSON.parse(contentStateString) : false;
 }

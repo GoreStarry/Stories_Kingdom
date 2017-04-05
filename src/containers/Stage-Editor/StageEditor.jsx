@@ -5,7 +5,6 @@ import _findIndex from 'lodash/fp/findIndex';
 import _flow from 'lodash/fp/flow';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import EditorStoriesKingdom from './components/Editor-Stories-Kingdom/EditorStoriesKingdom.jsx';
-import { TransitionMotion, spring } from 'react-motion';
 
 
 import classNames from 'classnames/bind';
@@ -15,9 +14,12 @@ const cx = classNames.bind(styles);
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
 import { getArticleDraftContent } from './helpers/getArticleContentState.js';
 
+
+const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
+
 /**
  * EditorState would immute in this component
- * anothers Draft setting like decorator,entity... would be setted in the DraftEditor component
+ * anothers Draft setting like decorator,entity... would be setted in the EditorStoriesKingdom component
  * 
  * @class StageEditor
  * @extends {PureComponent}
@@ -27,18 +29,15 @@ class StageEditor extends PureComponent {
   constructor() {
     super();
 
+    this.state = {
+      editorState: false,
+      updateYet: false,
+      content_updated: true
+    }
 
-
+    this.autoUpdate = new Rx.Subject();
   }
 
-  state = {
-    now_page: {
-      num: 1,
-      id: false,
-    },
-    editorState: false,
-    updateYet: false,
-  }
 
   async componentWillMount() {
     const {stories, articles, actions} = this.props;
@@ -49,13 +48,21 @@ class StageEditor extends PureComponent {
     this._initDraftEditorState();
 
     // RxJS will debounce update the changed contentState to server 
-    this.autoUpdate = new Rx.Subject();
     this.autoUpdate.debounceTime(3000)
       .subscribe(({editorState, article_id}) => {
+
+        const updatedCallback = () => {
+          this.setState({
+            content_updated: true
+          })
+        }
+
         actions.editArticle(article_id, {
-          draftContent: _flow(editorState.getCurrentContent, convertToRaw, JSON.stringify)
-        })
+          draftContent: parseContentStateToString(editorState.getCurrentContent())
+        }, updatedCallback)
+
       })
+
       // TODO: 按鍵控管：新增後頁/前頁
       // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
@@ -69,26 +76,19 @@ class StageEditor extends PureComponent {
    * @memberOf StageEditor
    */
   _setInitPageByParamsArticle = () => new Promise((resolve) => {
-    const {stories} = this.props;
+    const {stories, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
-    if (article_id) { // initial article not setting
-      return this.setState({
-        now_page: {
-          num: 1,
-          id: stories[story_id].articleOrder[0].id
-        }
-      }, resolve);
+
+
+    if (article_id) { // initial article exist
+      const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
+      actions.turnPageByArticleId(article_id, indexOfInitArticle);
+    } else {
+      const articleIdOfFirstOrder = stories[story_id].ArticleOrder[0].id;
+      actions.turnPageByArticleId(articleIdOfFirstOrder, 0);
     }
-
-    const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
-
-    this.setState({
-      now_page: {
-        num: indexOfInitArticle + 1,
-        id: article_id
-      }
-    }, resolve);
+    resolve()
 
   })
 
@@ -99,7 +99,7 @@ class StageEditor extends PureComponent {
     const contentState = getArticleDraftContent(story_id, article_id, articles);
     if (contentState) {
       this.setState({
-        editorState: createWithContent.createEmpty(convertFromRaw(contentState))
+        editorState: EditorState.createWithContent(convertFromRaw(contentState))
       });
     } else { // new a empty EditorState
       this.setState({
@@ -110,8 +110,6 @@ class StageEditor extends PureComponent {
   }
 
 
-
-
   /**
    * use RxJS to control auto update
    * (Thanks for JerryHong's RxJS tutorial and examples~~ [http://ithelp.ithome.com.tw/articles/10188121])
@@ -120,10 +118,11 @@ class StageEditor extends PureComponent {
    */
   _editorOnChange = (editorState) => {
     this.setState({
-      editorState
+      editorState,
+      content_updated: false,
     }, () => {
-      const article_id = this.state.now_page.id;
-      console.log('id=' + article_id);
+
+      const article_id = this.props.stage.page_article_id;
       this.autoUpdate.next({
         editorState,
         article_id
@@ -132,19 +131,52 @@ class StageEditor extends PureComponent {
   };
 
 
+  _insertNewArticleAfter = () => {
+    this._insertArticle(1)
+  }
+
+  _insertNewArticleBefore = () => {
+    this._insertArticle(0)
+  }
+
+
+  /**
+   * @param {number} translate
+   * translate is for insert before or after now article
+   */
+  _insertArticle = (translate) => {
+    const {actions} = this.props;
+    const {story_id} = this.props.match.params;
+    let {page_order} = this.props.stage;
+    page_order += translate;
+    actions.createArticle(story_id, page_order);
+  }
+
+
+
   render() {
-    const {now_page, editorState} = this.state;
-    const {stories, articles} = this.props;
-    const {story_id, article_id} = this.props.match.params;
+    const {editorState, content_updated} = this.state;
+    const {stories, articles, stage} = this.props;
+    const {story_id} = this.props.match.params;
 
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
+        <button onClick={ this._insertNewArticleAfter }>
+          NEXT
+        </button>
+        <button onClick={ this._insertNewArticleBefore }>
+          PREV
+        </button>
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
-            <EditorStoriesKingdom editorState={ editorState } onChange={ this._editorOnChange } /> }
+            <EditorStoriesKingdom
+              articleOrder={ stories[story_id].articleOrder }
+              article_id={ stage.page_article_id }
+              editorState={ editorState }
+              onChange={ this._editorOnChange } /> }
         </div>
-        <ArticleDetial now_page_num={ now_page.num } />
+        <ArticleDetial page_order={ stage.page_order } content_updated={ content_updated } />
       </div>
       );
   }
@@ -153,6 +185,7 @@ class StageEditor extends PureComponent {
 StageEditor.propTypes = {
   stories: PropTypes.any,
   articles: PropTypes.any,
+  stage: PropTypes.object,
   match: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
@@ -161,15 +194,19 @@ function mapStateToProps(state) {
   return {
     stories: state.stories.stories,
     articles: state.articles,
+    stage: state.stage,
   }
 }
 
 import { actionEditArticle } from '../../redux/actions/articles/actEditArticle.js';
-
+import { actionCreateArticle } from '../../redux/actions/articles/actCreateArticle.js';
+import { actionTurnPageByArticleId } from '../../redux/actions/stage/actTurnPageByArticleId.js';
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      editArticle: (article_id, editedState) => dispatch(actionEditArticle(article_id, editedState)),
+      editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
+      createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
+      turnPageByArticleId: (article_id, article_index) => dispatch(actionTurnPageByArticleId(article_id, article_index))
     }
   }
 }

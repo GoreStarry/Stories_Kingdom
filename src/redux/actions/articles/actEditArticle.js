@@ -13,11 +13,12 @@ export const EDIT_ARTICLE_FAIL = 'EDIT_ARTICLE_FAIL';
  * @param {Object} edited 
  * @returns async function to ReduxThunk
  */
-export function actionEditArticle(article_id, editedState) {
+export function actionEditArticle(article_id, editedState, cb) {
 
   return async function(dispatch, getState) {
     try {
       const {data} = await axios.patch(`/api/article/${article_id}`, editedState);
+      cb && cb();
       dispatch({
         type: EDIT_ARTICLE_SUCCESS,
         article: data.article,
