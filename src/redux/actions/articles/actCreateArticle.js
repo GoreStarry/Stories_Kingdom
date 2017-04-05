@@ -22,7 +22,7 @@ export function actionCreateArticle(story_id, now_page_num) {
         now_page_num
       })
 
-      const {artilce, story} = data;
+      const {article, story} = data;
 
       dispatch({
         type: CREATE_ARTICLE_SUCCESS,

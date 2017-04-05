@@ -39,13 +39,25 @@ class StageEditor extends PureComponent {
   }
 
 
+  componentWillUpdate(nextProps, nextState) {
+    const {page_article_id} = nextProps.stage;
+
+    // detect page change by page_article_id , and switch the editorState for this.state
+    if (this.props.stage.page_article_id !== page_article_id) {
+      this._initDraftEditorState(page_article_id, nextProps.articles)
+    }
+
+  }
+
+
+
   async componentWillMount() {
     const {stories, articles, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
     // now page decide the Editor render target, so should set it first
     await this._setInitPageByParamsArticle()
-    this._initDraftEditorState();
+    this._initDraftEditorState(article_id, articles);
 
     // RxJS will debounce update the changed contentState to server 
     this.autoUpdate.debounceTime(3000)
@@ -63,7 +75,7 @@ class StageEditor extends PureComponent {
 
       })
 
-      // TODO: 按鍵控管：新增後頁/前頁
+      // 換頁前的update機制
       // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
   }
@@ -93,9 +105,8 @@ class StageEditor extends PureComponent {
   })
 
 
-  _initDraftEditorState = () => {
-    const {articles} = this.props;
-    const {story_id, article_id} = this.props.match.params;
+  _initDraftEditorState = (article_id, articles) => {
+    const {story_id} = this.props.match.params;
     const contentState = getArticleDraftContent(story_id, article_id, articles);
     if (contentState) {
       this.setState({

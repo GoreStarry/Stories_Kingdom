@@ -9,6 +9,7 @@ const initialState = {
 export function reduceStage(state = initialState, action) {
 
   switch (action.type) {
+
     case TURN_PAGE_BY_ARTICLE_ID:
       return Object.assign({}, state, {
         page_order: action.article_index,
@@ -16,10 +17,10 @@ export function reduceStage(state = initialState, action) {
       })
 
     case CREATE_ARTICLE_SUCCESS:
-      var {id} = action.article.id;
+      var {_id} = action.article;
       return Object.assign({}, state, {
         page_order: action.page_num,
-        page_article_id: id
+        page_article_id: _id
       })
 
     default:
