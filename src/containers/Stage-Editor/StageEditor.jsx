@@ -5,7 +5,6 @@ import _findIndex from 'lodash/fp/findIndex';
 import _flow from 'lodash/fp/flow';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import EditorStoriesKingdom from './components/Editor-Stories-Kingdom/EditorStoriesKingdom.jsx';
-import { TransitionMotion, spring } from 'react-motion';
 
 
 import classNames from 'classnames/bind';
@@ -31,10 +30,6 @@ class StageEditor extends PureComponent {
     super();
 
     this.state = {
-      now_page: {
-        num: 1,
-        id: false,
-      },
       editorState: false,
       updateYet: false,
       content_updated: true
@@ -81,26 +76,19 @@ class StageEditor extends PureComponent {
    * @memberOf StageEditor
    */
   _setInitPageByParamsArticle = () => new Promise((resolve) => {
-    const {stories} = this.props;
+    const {stories, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
-    if (article_id) { // initial article not exist
-      return this.setState({
-        now_page: {
-          num: 1,
-          id: stories[story_id].articleOrder[0].id
-        }
-      }, resolve);
+
+
+    if (article_id) { // initial article exist
+      const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
+      actions.turnPageByArticleId(article_id, indexOfInitArticle);
+    } else {
+      const articleIdOfFirstOrder = stories[story_id].ArticleOrder[0].id;
+      actions.turnPageByArticleId(articleIdOfFirstOrder, 0);
     }
-
-    const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
-
-    this.setState({
-      now_page: {
-        num: indexOfInitArticle + 1,
-        id: article_id
-      }
-    }, resolve);
+    resolve()
 
   })
 
@@ -133,7 +121,8 @@ class StageEditor extends PureComponent {
       editorState,
       content_updated: false,
     }, () => {
-      const article_id = this.state.now_page.id;
+
+      const article_id = this.props.stage.page_article_id;
       this.autoUpdate.next({
         editorState,
         article_id
@@ -142,45 +131,52 @@ class StageEditor extends PureComponent {
   };
 
 
-  /**
-   * insert the new article to next or previous
-   * 
-   * @param {String} type = 'NEXT' || 'PREV'
-   * @memberOf StageEditor
-   */
-  _createNewArticle = (type) => {
-    const {actions} = this.props;
-    const {story_id} = this.props.match.params;
-    let now_page_num = this.state.now_page.num;
+  _insertNewArticleAfter = () => {
+    this._insertArticle(1)
+  }
 
-    if (type === 'PREV') { //insert berfore now page
-      now_page_num -= 1;
-    }
-
-    actions.createArticle(story_id, now_page_num);
-
+  _insertNewArticleBefore = () => {
+    this._insertArticle(0)
   }
 
 
+  /**
+   * @param {number} translate
+   * translate is for insert before or after now article
+   */
+  _insertArticle = (translate) => {
+    const {actions} = this.props;
+    const {story_id} = this.props.match.params;
+    let {page_order} = this.props.stage;
+    page_order += translate;
+    actions.createArticle(story_id, page_order);
+  }
+
+
+
   render() {
-    const {now_page, editorState, content_updated} = this.state;
-    const {stories, articles} = this.props;
-    const {story_id, article_id} = this.props.match.params;
+    const {editorState, content_updated} = this.state;
+    const {stories, articles, stage} = this.props;
+    const {story_id} = this.props.match.params;
 
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
-        <button onClick={ this._createNewArticle('NEXT') }>
+        <button onClick={ this._insertNewArticleAfter }>
           NEXT
         </button>
-        <button onClick={ this._createNewArticle('PREV') }>
+        <button onClick={ this._insertNewArticleBefore }>
           PREV
         </button>
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
-            <EditorStoriesKingdom editorState={ editorState } onChange={ this._editorOnChange } /> }
+            <EditorStoriesKingdom
+              articleOrder={ stories[story_id].articleOrder }
+              article_id={ stage.page_article_id }
+              editorState={ editorState }
+              onChange={ this._editorOnChange } /> }
         </div>
-        <ArticleDetial now_page_num={ now_page.num } content_updated={ content_updated } />
+        <ArticleDetial page_order={ stage.page_order } content_updated={ content_updated } />
       </div>
       );
   }
@@ -189,6 +185,7 @@ class StageEditor extends PureComponent {
 StageEditor.propTypes = {
   stories: PropTypes.any,
   articles: PropTypes.any,
+  stage: PropTypes.object,
   match: PropTypes.object.isRequired,
   actions: PropTypes.object.isRequired,
 };
@@ -197,16 +194,19 @@ function mapStateToProps(state) {
   return {
     stories: state.stories.stories,
     articles: state.articles,
+    stage: state.stage,
   }
 }
 
 import { actionEditArticle } from '../../redux/actions/articles/actEditArticle.js';
 import { actionCreateArticle } from '../../redux/actions/articles/actCreateArticle.js';
+import { actionTurnPageByArticleId } from '../../redux/actions/stage/actTurnPageByArticleId.js';
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
       editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
       createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
+      turnPageByArticleId: (article_id, article_index) => dispatch(actionTurnPageByArticleId(article_id, article_index))
     }
   }
 }

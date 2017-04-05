@@ -3,11 +3,21 @@ import axios from 'axios';
 export const CREATE_ARTICLE_SUCCESS = 'CREATE_ARTICLES_SUCCESS';
 export const CREATE_ARTICLE_FAIL = 'CREATE_ARTICLES_FAIL';
 
+
+
+/**
+ * 
+ * 
+ * @export
+ * @param {any} story_id 
+ * @param {any} now_page_num 
+ * @returns 
+ */
 export function actionCreateArticle(story_id, now_page_num) {
   return async function(dispatch, getState) {
     try {
 
-      const {data} = axios.post(`/api/article/`, {
+      const {data} = await axios.post(`/api/article/`, {
         story_id,
         now_page_num
       })
@@ -17,7 +27,8 @@ export function actionCreateArticle(story_id, now_page_num) {
       dispatch({
         type: CREATE_ARTICLE_SUCCESS,
         article,
-        story
+        story,
+        page_num: now_page_num
       })
 
     } catch (error) {

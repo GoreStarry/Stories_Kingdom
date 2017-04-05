@@ -2,10 +2,10 @@ import React, { PureComponent, PropTypes } from 'react';
 
 class ArticleDetial extends PureComponent {
   render() {
-    const {now_page_num, content_updated} = this.props;
+    const {page_order, content_updated} = this.props;
     return (
       <div>
-        <span>p.{ now_page_num }</span>
+        <span>p.{ page_order + 1 }</span>
         <span>{ content_updated ? 'G' : 'R' }</span>
       </div>
       );
@@ -13,7 +13,7 @@ class ArticleDetial extends PureComponent {
 }
 
 ArticleDetial.propTypes = {
-  now_page_num: PropTypes.number,
+  page_order: PropTypes.number,
   content_updated: PropTypes.bool.isRequired,
 };
 
