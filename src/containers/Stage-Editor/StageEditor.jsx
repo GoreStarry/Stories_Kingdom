@@ -20,7 +20,7 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
 
 /**
  * EditorState would immute in this component
- * anothers Draft setting like decorator,entity... would be setted in the DraftEditor component
+ * anothers Draft setting like decorator,entity... would be setted in the EditorStoriesKingdom component
  * 
  * @class StageEditor
  * @extends {PureComponent}
@@ -29,17 +29,20 @@ class StageEditor extends PureComponent {
 
   constructor() {
     super();
+
+    this.state = {
+      now_page: {
+        num: 1,
+        id: false,
+      },
+      editorState: false,
+      updateYet: false,
+      content_updated: true
+    }
+
     this.autoUpdate = new Rx.Subject();
   }
 
-  state = {
-    now_page: {
-      num: 1,
-      id: false,
-    },
-    editorState: false,
-    updateYet: false,
-  }
 
   async componentWillMount() {
     const {stories, articles, actions} = this.props;
@@ -53,9 +56,16 @@ class StageEditor extends PureComponent {
     this.autoUpdate.debounceTime(3000)
       .subscribe(({editorState, article_id}) => {
 
+        const updatedCallback = () => {
+          this.setState({
+            content_updated: true
+          })
+        }
+
         actions.editArticle(article_id, {
           draftContent: parseContentStateToString(editorState.getCurrentContent())
-        })
+        }, updatedCallback)
+
       })
 
       // TODO: 按鍵控管：新增後頁/前頁
@@ -74,7 +84,7 @@ class StageEditor extends PureComponent {
     const {stories} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
-    if (article_id) { // initial article not setting
+    if (article_id) { // initial article not exist
       return this.setState({
         now_page: {
           num: 1,
@@ -112,8 +122,6 @@ class StageEditor extends PureComponent {
   }
 
 
-
-
   /**
    * use RxJS to control auto update
    * (Thanks for JerryHong's RxJS tutorial and examples~~ [http://ithelp.ithome.com.tw/articles/10188121])
@@ -122,10 +130,10 @@ class StageEditor extends PureComponent {
    */
   _editorOnChange = (editorState) => {
     this.setState({
-      editorState
+      editorState,
+      content_updated: false,
     }, () => {
       const article_id = this.state.now_page.id;
-      console.log('id=' + article_id);
       this.autoUpdate.next({
         editorState,
         article_id
@@ -134,19 +142,45 @@ class StageEditor extends PureComponent {
   };
 
 
+  /**
+   * insert the new article to next or previous
+   * 
+   * @param {String} type = 'NEXT' || 'PREV'
+   * @memberOf StageEditor
+   */
+  _createNewArticle = (type) => {
+    const {actions} = this.props;
+    const {story_id} = this.props.match.params;
+    let now_page_num = this.state.now_page.num;
+
+    if (type === 'PREV') { //insert berfore now page
+      now_page_num -= 1;
+    }
+
+    actions.createArticle(story_id, now_page_num);
+
+  }
+
+
   render() {
-    const {now_page, editorState} = this.state;
+    const {now_page, editorState, content_updated} = this.state;
     const {stories, articles} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
+        <button onClick={ this._createNewArticle('NEXT') }>
+          NEXT
+        </button>
+        <button onClick={ this._createNewArticle('PREV') }>
+          PREV
+        </button>
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
             <EditorStoriesKingdom editorState={ editorState } onChange={ this._editorOnChange } /> }
         </div>
-        <ArticleDetial now_page_num={ now_page.num } />
+        <ArticleDetial now_page_num={ now_page.num } content_updated={ content_updated } />
       </div>
       );
   }
@@ -167,11 +201,12 @@ function mapStateToProps(state) {
 }
 
 import { actionEditArticle } from '../../redux/actions/articles/actEditArticle.js';
-
+import { actionCreateArticle } from '../../redux/actions/articles/actCreateArticle.js';
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      editArticle: (article_id, editedState) => dispatch(actionEditArticle(article_id, editedState)),
+      editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
+      createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
     }
   }
 }

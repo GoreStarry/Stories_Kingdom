@@ -37,9 +37,8 @@ articleRouter.get('/:story_id', async(req, res) => {
 articleRouter.post('/', async(req, res) => {
   const createBy = req.decoded.id;
   const belongStory = req.body.story_id;
-  const {draftContent} = req.body;
-  // const draftContent = JSON.stringify(req.body.draftContent);
-  const previousArticleIndex = req.body.previousArticleIndex;
+  const {draftContent, now_page_num} = req.body;
+
   const newArticle = new Article({
     createBy,
     belongStory,
@@ -56,19 +55,19 @@ articleRouter.post('/', async(req, res) => {
           $each: [{
             id: article_id
           }],
-          $position: previousArticleIndex + 1
+          $position: now_page_num
         }
       }
     }, {
       new: true
     })
 
-    const {articleOrder} = storyWithNewOrder;
+    // const {articleOrder} = storyWithNewOrder;
 
     res.json({
       success: true,
-      article_id,
-      articleOrder
+      article,
+      story: storyWithNewOrder
     })
 
   } catch (error) {

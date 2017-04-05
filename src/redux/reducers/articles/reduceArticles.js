@@ -1,6 +1,6 @@
 import { GET_ARTICLES_SUCCESS, GET_ARTICLES_FAIL } from '../../actions/articles/actGetArticles';
 import { EDIT_ARTICLE_SUCCESS, EDIT_ARTICLE_FAIL } from '../../actions/articles/actEditArticle';
-
+import { CREATE_ARTICLE_SUCCESS, CREATE_ARTICLE_FAIL } from '../../actions/articles/actCreateArticle';
 
 const initialState = {
 
@@ -24,13 +24,22 @@ export function reduceArticle(state = initialState, action) {
       })
 
     case EDIT_ARTICLE_SUCCESS:
-      const {article} = action;
+      var {article} = action;
 
       return Object.assign({}, state, {
         [article.belongStory]: Object.assign({}, state[article.belongStory], {
           [article._id]: article
         })
       })
+
+    case CREATE_ARTICLE_SUCCESS:
+      var {article} = action;
+      return Object.assign({}, state, {
+        [article.belongStory]: Object.assign({}, state[article.belongStory], {
+          [article._id]: article
+        })
+      })
+
 
     default:
       return state
