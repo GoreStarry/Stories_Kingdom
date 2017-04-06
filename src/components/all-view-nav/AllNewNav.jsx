@@ -113,13 +113,12 @@ function mapStateToProps(state) {
 }
 
 import { getUserInfo } from '../../redux/actions/user/actUserInfo.js';
+import { actionGetStories } from '../../redux/actions/stories/actGetStories.js';
 
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
-      getUserInfo: token => {
-        dispatch(getUserInfo(token))
-      }
+      getUserInfo: token => dispatch(getUserInfo(token)),
     }
   }
 }
