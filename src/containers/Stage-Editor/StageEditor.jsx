@@ -26,6 +26,9 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
+  // TODO: 翻頁前的更新機制
+  // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
+
   constructor() {
     super();
 
@@ -39,13 +42,32 @@ class StageEditor extends PureComponent {
   }
 
 
+  componentWillUpdate(nextProps, nextState) {
+    const {page_article_id} = nextProps.stage;
+
+    // detect page change by page_article_id , 
+    // and switch the editorState for this.state
+    if (this.props.stage.page_article_id !== page_article_id) {
+      this._initDraftEditorState(page_article_id, nextProps.articles)
+    }
+
+  }
+
+
+
   async componentWillMount() {
     const {stories, articles, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
+    // if stories/articles in redux store not been update before ChapterList page,
+    // then it should get it self
+    if (!stories) {
+      actions.getStories();
+      await actions.getArticles(story_id);
+    }
+
     // now page decide the Editor render target, so should set it first
     await this._setInitPageByParamsArticle()
-    this._initDraftEditorState();
 
     // RxJS will debounce update the changed contentState to server 
     this.autoUpdate.debounceTime(3000)
@@ -63,8 +85,6 @@ class StageEditor extends PureComponent {
 
       })
 
-      // TODO: 按鍵控管：新增後頁/前頁
-      // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
   }
 
@@ -83,19 +103,18 @@ class StageEditor extends PureComponent {
 
     if (article_id) { // initial article exist
       const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
-      actions.turnPageByArticleId(article_id, indexOfInitArticle);
+      actions.turnPage(article_id, indexOfInitArticle);
     } else {
       const articleIdOfFirstOrder = stories[story_id].ArticleOrder[0].id;
-      actions.turnPageByArticleId(articleIdOfFirstOrder, 0);
+      actions.turnPage(articleIdOfFirstOrder, 0);
     }
     resolve()
 
   })
 
 
-  _initDraftEditorState = () => {
-    const {articles} = this.props;
-    const {story_id, article_id} = this.props.match.params;
+  _initDraftEditorState = (article_id, articles) => {
+    const {story_id} = this.props.match.params;
     const contentState = getArticleDraftContent(story_id, article_id, articles);
     if (contentState) {
       this.setState({
@@ -147,11 +166,32 @@ class StageEditor extends PureComponent {
   _insertArticle = (translate) => {
     const {actions} = this.props;
     const {story_id} = this.props.match.params;
-    let {page_order} = this.props.stage;
-    page_order += translate;
-    actions.createArticle(story_id, page_order);
+    let {page_index} = this.props.stage;
+    page_index += translate;
+    actions.createArticle(story_id, page_index);
   }
 
+  _turnToNextPage = () => {
+    const next_page_index = this.props.stage.page_index + 1;
+    this._turnPageByIndex(next_page_index)
+  }
+
+  _turnToPrevPage = () => {
+    const prev_page_index = this.props.stage.page_index - 1;
+    this._turnPageByIndex(prev_page_index)
+  }
+
+  _turnPageByIndex = (index) => {
+    const {story_id} = this.props.match.params;
+
+    try { //prevent index = -1 or exceed max page
+      const {id} = this.props.stories[story_id].articleOrder[index];
+      this.props.actions.turnPage(id, index)
+    } catch (error) {
+      return false
+    }
+
+  }
 
 
   render() {
@@ -163,10 +203,10 @@ class StageEditor extends PureComponent {
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
         <button onClick={ this._insertNewArticleAfter }>
-          NEXT
+          New an article after
         </button>
         <button onClick={ this._insertNewArticleBefore }>
-          PREV
+          new an article before
         </button>
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
@@ -176,7 +216,13 @@ class StageEditor extends PureComponent {
               editorState={ editorState }
               onChange={ this._editorOnChange } /> }
         </div>
-        <ArticleDetial page_order={ stage.page_order } content_updated={ content_updated } />
+        <button onClick={ this._turnToNextPage }>
+          turn next page
+        </button>
+        <button onClick={ this._turnToPrevPage }>
+          turn previous page
+        </button>
+        <ArticleDetial page_index={ stage.page_index } content_updated={ content_updated } />
       </div>
       );
   }
@@ -198,15 +244,20 @@ function mapStateToProps(state) {
   }
 }
 
+import { actionGetStories } from '../../redux/actions/stories/actGetStories.js';
+import { actionGetArticles } from '../../redux/actions/articles/actGetArticles.js';
 import { actionEditArticle } from '../../redux/actions/articles/actEditArticle.js';
 import { actionCreateArticle } from '../../redux/actions/articles/actCreateArticle.js';
-import { actionTurnPageByArticleId } from '../../redux/actions/stage/actTurnPageByArticleId.js';
+import { actionTurnPage } from '../../redux/actions/stage/actTurnPage.js';
+
 function mapDispatchToProps(dispatch) {
   return {
     actions: {
+      getStories: () => dispatch(actionGetStories()),
+      getArticles: story_id => dispatch(actionGetArticles(story_id)),
       editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
       createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
-      turnPageByArticleId: (article_id, article_index) => dispatch(actionTurnPageByArticleId(article_id, article_index))
+      turnPage: (article_id, article_index) => dispatch(actionTurnPage(article_id, article_index)),
     }
   }
 }

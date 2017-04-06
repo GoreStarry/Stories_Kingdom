@@ -17,15 +17,11 @@ class EditorStoriesKingdom extends PureComponent {
       y: spring(0)
     };
   }
+
+
   render() {
     const {article_id, editorState, onChange, articleOrder} = this.props;
-    let motion_styles = {
-      key: article_id,
-      style: {
-        x: 0,
-        y: 0
-      }
-    };
+
     return (
       <div className={ styles.EditorStoriesKingdom }>
         <TransitionMotion
@@ -33,6 +29,10 @@ class EditorStoriesKingdom extends PureComponent {
           willLeave={ this.willLeave }
           styles={ articleOrder.map(({id}) => ({
                      key: id,
+                     style: {
+                       x: 0,
+                       y: 0
+                     }
                    })) }>
           { interpolatedStyles => <div key={ article_id }>
                                     <Editor editorState={ editorState } onChange={ onChange } />
@@ -45,6 +45,9 @@ class EditorStoriesKingdom extends PureComponent {
 
 EditorStoriesKingdom.propTypes = {
   article_id: PropTypes.string,
+  editorState: PropTypes.any,
+  onChange: PropTypes.func.isRequired,
+  articleOrder: PropTypes.array.isRequired,
 };
 
 export default EditorStoriesKingdom;

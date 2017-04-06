@@ -3,7 +3,7 @@ import { GET_STORIES_SUCCESS, GET_STORIES_FAIL } from '../../actions/stories/act
 import { CREATE_ARTICLE_SUCCESS } from '../../actions/articles/actCreateArticle.js';
 
 const initialState = {
-  stories: false
+  stories: false,
 }
 
 export function reduceStories(state = initialState, action) {
