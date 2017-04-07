@@ -198,7 +198,6 @@ class StageEditor extends PureComponent {
     const {editorState, content_updated} = this.state;
     const {stories, articles, stage} = this.props;
     const {story_id} = this.props.match.params;
-
     return (
       <div className="flex--col flex--extend ">
         <h1>Stage Editor</h1>
@@ -211,7 +210,9 @@ class StageEditor extends PureComponent {
         <div className={ "flex--extend " + styles.body__editors }>
           { editorState &&
             <EditorStoriesKingdom
-              articleOrder={ stories[story_id].articleOrder }
+              story={ stories[story_id] }
+              articles={ articles[story_id] }
+              article_index={ stage.page_index }
               article_id={ stage.page_article_id }
               editorState={ editorState }
               onChange={ this._editorOnChange } /> }
@@ -256,7 +257,7 @@ function mapDispatchToProps(dispatch) {
       getStories: () => dispatch(actionGetStories()),
       getArticles: story_id => dispatch(actionGetArticles(story_id)),
       editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
-      createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
+      createArticle: (story_id, now_page_num) => dispatch(actionCreateArticle(story_id, now_page_num)),
       turnPage: (article_id, article_index) => dispatch(actionTurnPage(article_id, article_index)),
     }
   }
