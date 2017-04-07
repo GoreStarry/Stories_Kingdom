@@ -84,7 +84,10 @@ class EditorStoriesKingdom extends PureComponent {
       <div className={ styles.EditorStoriesKingdom }>
         { page_array.map(({article_id, editorState, position}) => {
             return <Motion key={ article_id } style={ { x: spring(position == 'next' && -innerWidth) } }>
-                     { style => <div className={ styles.box__editor } style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
+                     { style => <div
+                                  id={ !position && 'main_Editor' }
+                                  className={ styles.box__editor }
+                                  style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
                                   <Editor editorState={ editorState || this.props.editorState } onChange={ onChange } />
                                 </div> }
                    </Motion>
