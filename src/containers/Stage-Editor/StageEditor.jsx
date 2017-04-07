@@ -30,6 +30,7 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
 class StageEditor extends PureComponent {
 
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
+  // TODO: article detail 細節編輯區
 
   constructor() {
     super();
@@ -195,12 +196,14 @@ class StageEditor extends PureComponent {
 
 
 
-  _turnToNextPage = () => {
+  _turnToNextPage = (event) => {
+    event.preventDefault()
     const next_page_index = this.props.stage.page_index + 1;
     this._turnPageByIndex(next_page_index)
   }
 
-  _turnToPrevPage = () => {
+  _turnToPrevPage = (event) => {
+    event.preventDefault()
     const prev_page_index = this.props.stage.page_index - 1;
     this._turnPageByIndex(prev_page_index)
   }
@@ -218,8 +221,6 @@ class StageEditor extends PureComponent {
   }
 
 
-
-
   render() {
     const {editorState, content_updated} = this.state;
     const {stories, articles, stage} = this.props;
@@ -227,6 +228,7 @@ class StageEditor extends PureComponent {
     return (
       <div className="flex--col flex--extend ">
         <HotKeys
+          id="hotkey_container"
           className={ `flex--col flex--extend ${styles.HotKeys}` }
           keyMap={ keyMap }
           handlers={ this._hotKeysHandlers }>

@@ -1,13 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
-import { Motion, TransitionMotion, spring } from 'react-motion';
 import styles from './EditorStoriesKingdom.scss';
+
+import MotionEditor from './MotionEditor.jsx';
 
 const emptyEditorStateForDisplay = EditorState.createEmpty();
 
-const emptyOnChange = () => {
-  
-}
 
 /**
  * 
@@ -80,21 +78,27 @@ class EditorStoriesKingdom extends PureComponent {
     })
   }
 
+  _focusMainEditor = () => {
+    this.main_editor.focus();
+  }
+
+  _setMainEditorRef = (editor) => {
+    this.main_editor = editor
+  }
+
   render() {
-    const {article_id, onChange, story, article_index} = this.props;
+    const {onChange, editorState} = this.props;
     const {page_array, innerWidth} = this.state;
 
     return (
-      <div className={ styles.EditorStoriesKingdom }>
-        { page_array.map(({article_id, editorState, position}) => {
-            return <Motion key={ article_id } style={ { x: spring(position == 'next' && -innerWidth) } }>
-                     { style => <div
-                                  id={ !position && 'main_Editor' }
-                                  className={ styles.box__editor }
-                                  style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
-                                  <Editor editorState={ editorState || this.props.editorState } onChange={ position ? emptyOnChange : onChange } />
-                                </div> }
-                   </Motion>
+      <div className={ styles.EditorStoriesKingdom } onClick={ this._focusMainEditor }>
+        { page_array.map((page) => {
+            return <MotionEditor
+                     key={ page.article_id }
+                     onChange={ onChange }
+                     page={ page }
+                     setMainEditorRef={ this._setMainEditorRef }
+                     editorState={ editorState } />
           }) }
       </div>
       );
