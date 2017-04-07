@@ -6,10 +6,13 @@ import _flow from 'lodash/fp/flow';
 import { EditorState, convertFromRaw, convertToRaw } from 'draft-js';
 import EditorStoriesKingdom from './components/Editor-Stories-Kingdom/EditorStoriesKingdom.jsx';
 
-
 import classNames from 'classnames/bind';
 import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
+
+import { HotKeys } from 'react-hotkeys';
+import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
+
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
 import { getArticleDraftContent } from './helpers/getArticleContentState.js';
@@ -26,7 +29,6 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
-  // TODO: 翻頁前的更新機制
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
   constructor() {
@@ -34,21 +36,32 @@ class StageEditor extends PureComponent {
 
     this.state = {
       editorState: false,
-      updateYet: false,
-      content_updated: true
+      content_updated: true,
     }
 
     this.autoUpdate = new Rx.Subject();
+
+    this._hotKeysHandlers = {
+      [TURN_TO_NEXT_PAGE]: this._turnToNextPage,
+      [SAVE_ARTICLE]: this._updateNowArticle,
+      [TURN_TO_PREV_PAGE]: this._turnToPrevPage,
+      [CREATE_NEW_PAGE_AFTER]: this._insertNewArticleAfter,
+      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore
+    }
   }
 
 
   componentWillUpdate(nextProps, nextState) {
-    const {page_article_id} = nextProps.stage;
-
+    const now_page_id = this.props.stage.page_article_id;
+    const next_page_id = nextProps.stage.page_article_id;
     // detect page change by page_article_id , 
     // and switch the editorState for this.state
-    if (this.props.stage.page_article_id !== page_article_id) {
-      this._initDraftEditorState(page_article_id, nextProps.articles)
+    if (now_page_id !== next_page_id) {
+
+      // make sure editor state would patch before trun page
+      now_page_id && this._updateArticle(now_page_id, this.state.editorState)
+
+      this._initDraftEditorState(next_page_id, nextProps.articles)
     }
 
   }
@@ -62,7 +75,7 @@ class StageEditor extends PureComponent {
     // if stories/articles in redux store not been update before ChapterList page,
     // then it should get it self
     if (!stories) {
-      actions.getStories();
+      await actions.getStories();
       await actions.getArticles(story_id);
     }
 
@@ -72,19 +85,27 @@ class StageEditor extends PureComponent {
     // RxJS will debounce update the changed contentState to server 
     this.autoUpdate.debounceTime(3000)
       .subscribe(({editorState, article_id}) => {
-
-        const updatedCallback = () => {
-          this.setState({
-            content_updated: true
-          })
-        }
-
-        actions.editArticle(article_id, {
-          draftContent: parseContentStateToString(editorState.getCurrentContent())
-        }, updatedCallback)
-
+        this._updateArticle(article_id, editorState)
       })
 
+  }
+
+  _updateNowArticle = () => {
+    event.stopPropagation();
+    event.preventDefault();
+    this._updateArticle(this.props.stage.page_article_id, this.state.editorState);
+  }
+
+  _updateArticle = (article_id, editorState) => {
+    const updatedCallback = () => {
+      this.setState({
+        content_updated: true
+      })
+    }
+
+    this.props.actions.editArticle(article_id, {
+      draftContent: parseContentStateToString(editorState.getCurrentContent())
+    }, updatedCallback)
 
   }
 
@@ -136,6 +157,7 @@ class StageEditor extends PureComponent {
    * @memberOf StageEditor
    */
   _editorOnChange = (editorState) => {
+
     this.setState({
       editorState,
       content_updated: false,
@@ -150,12 +172,12 @@ class StageEditor extends PureComponent {
   };
 
 
-  _insertNewArticleAfter = () => {
-    this._insertArticle(1)
+  _insertNewArticleAfter = (event) => {
+    this._insertArticle(1);
   }
 
-  _insertNewArticleBefore = () => {
-    this._insertArticle(0)
+  _insertNewArticleBefore = (event) => {
+    this._insertArticle(0);
   }
 
 
@@ -170,6 +192,8 @@ class StageEditor extends PureComponent {
     page_index += translate;
     actions.createArticle(story_id, page_index);
   }
+
+
 
   _turnToNextPage = () => {
     const next_page_index = this.props.stage.page_index + 1;
@@ -194,36 +218,45 @@ class StageEditor extends PureComponent {
   }
 
 
+
+
   render() {
     const {editorState, content_updated} = this.state;
     const {stories, articles, stage} = this.props;
     const {story_id} = this.props.match.params;
-
     return (
       <div className="flex--col flex--extend ">
-        <h1>Stage Editor</h1>
-        <button onClick={ this._insertNewArticleAfter }>
-          New an article after
-        </button>
-        <button onClick={ this._insertNewArticleBefore }>
-          new an article before
-        </button>
-        <div className={ "flex--extend " + styles.body__editors }>
-          { editorState &&
-            <EditorStoriesKingdom
-              articleOrder={ stories[story_id].articleOrder }
-              article_id={ stage.page_article_id }
-              editorState={ editorState }
-              onChange={ this._editorOnChange } /> }
-        </div>
-        <button onClick={ this._turnToNextPage }>
-          turn next page
-        </button>
-        <button onClick={ this._turnToPrevPage }>
-          turn previous page
-        </button>
-        <ArticleDetial page_index={ stage.page_index } content_updated={ content_updated } />
+        <HotKeys
+          className={ `flex--col flex--extend ${styles.HotKeys}` }
+          keyMap={ keyMap }
+          handlers={ this._hotKeysHandlers }>
+          <h1>Stage Editor</h1>
+          <button onClick={ this._insertNewArticleAfter }>
+            New an article after
+          </button>
+          <button onClick={ this._insertNewArticleBefore }>
+            new an article before
+          </button>
+          <div className={ "flex--extend " + styles.body__editors }>
+            { editorState &&
+              <EditorStoriesKingdom
+                story={ stories[story_id] }
+                articles={ articles[story_id] }
+                article_index={ stage.page_index }
+                article_id={ stage.page_article_id }
+                editorState={ editorState }
+                onChange={ this._editorOnChange } /> }
+          </div>
+          <button onClick={ this._turnToNextPage }>
+            turn next page
+          </button>
+          <button onClick={ this._turnToPrevPage }>
+            turn previous page
+          </button>
+          <ArticleDetial page_index={ stage.page_index } content_updated={ content_updated } />
+        </HotKeys>
       </div>
+
       );
   }
 }
@@ -256,7 +289,7 @@ function mapDispatchToProps(dispatch) {
       getStories: () => dispatch(actionGetStories()),
       getArticles: story_id => dispatch(actionGetArticles(story_id)),
       editArticle: (article_id, editedState, cb) => dispatch(actionEditArticle(article_id, editedState, cb)),
-      createArticle: (story_id, now_page_num, cb) => dispatch(actionCreateArticle(story_id, now_page_num, cb)),
+      createArticle: (story_id, now_page_num) => dispatch(actionCreateArticle(story_id, now_page_num)),
       turnPage: (article_id, article_index) => dispatch(actionTurnPage(article_id, article_index)),
     }
   }
