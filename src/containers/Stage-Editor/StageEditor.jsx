@@ -26,7 +26,6 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
-  // TODO: 翻頁前的更新機制
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
 
   constructor() {
@@ -43,12 +42,16 @@ class StageEditor extends PureComponent {
 
 
   componentWillUpdate(nextProps, nextState) {
-    const {page_article_id} = nextProps.stage;
-
+    const now_page_id = this.props.stage.page_article_id;
+    const next_page_id = nextProps.stage.page_article_id;
     // detect page change by page_article_id , 
     // and switch the editorState for this.state
-    if (this.props.stage.page_article_id !== page_article_id) {
-      this._initDraftEditorState(page_article_id, nextProps.articles)
+    if (now_page_id !== next_page_id) {
+
+      // make sure editor state would patch before trun page
+      now_page_id && this._updateArticle(now_page_id, this.state.editorState)
+
+      this._initDraftEditorState(next_page_id, nextProps.articles)
     }
 
   }
@@ -73,18 +76,32 @@ class StageEditor extends PureComponent {
     this.autoUpdate.debounceTime(3000)
       .subscribe(({editorState, article_id}) => {
 
-        const updatedCallback = () => {
-          this.setState({
-            content_updated: true
-          })
-        }
+        this._updateArticle(article_id, editorState)
 
-        actions.editArticle(article_id, {
-          draftContent: parseContentStateToString(editorState.getCurrentContent())
-        }, updatedCallback)
+        // const updatedCallback = () => {
+        //   this.setState({
+        //     content_updated: true
+        //   })
+        // }
+
+        // actions.editArticle(article_id, {
+        //   draftContent: parseContentStateToString(editorState.getCurrentContent())
+        // }, updatedCallback)
 
       })
 
+  }
+
+  _updateArticle = (article_id, editorState) => {
+    const updatedCallback = () => {
+      this.setState({
+        content_updated: true
+      })
+    }
+
+    this.props.actions.editArticle(article_id, {
+      draftContent: parseContentStateToString(editorState.getCurrentContent())
+    }, updatedCallback)
 
   }
 

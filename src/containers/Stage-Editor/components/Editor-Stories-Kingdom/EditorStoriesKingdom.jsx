@@ -14,6 +14,7 @@ class EditorStoriesKingdom extends PureComponent {
 
   state = {
     page_render_array: [],
+    innerWidth: window.innerWidth
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -25,7 +26,21 @@ class EditorStoriesKingdom extends PureComponent {
 
   componentWillMount() {
     this._makePageArray(this.props.article_id, this.props.article_index)
+    window.addEventListener('resize', () => {
+      this.setState({
+        innerWidth: window.innerWidth
+      });
+    })
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => {
+      this.setState({
+        innerWidth: window.innerWidth
+      });
+    })
+  }
+
 
 
   _makePageArray = (article_id, article_index) => {
@@ -63,9 +78,8 @@ class EditorStoriesKingdom extends PureComponent {
 
   render() {
     const {article_id, onChange, story, article_index} = this.props;
-    const {page_array} = this.state;
+    const {page_array, innerWidth} = this.state;
 
-    const innerWidth = window.innerWidth;
     return (
       <div className={ styles.EditorStoriesKingdom }>
         { page_array.map(({article_id, editorState, position}) => {
