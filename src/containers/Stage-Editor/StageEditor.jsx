@@ -11,7 +11,7 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import { HotKeys } from 'react-hotkeys';
-import { keyMap, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
+import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
 
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
@@ -30,7 +30,6 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
 class StageEditor extends PureComponent {
 
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
-  //
 
   constructor() {
     super();
@@ -44,6 +43,7 @@ class StageEditor extends PureComponent {
 
     this._hotKeysHandlers = {
       [TURN_TO_NEXT_PAGE]: this._turnToNextPage,
+      [SAVE_ARTICLE]: this._updateNowArticle,
       [TURN_TO_PREV_PAGE]: this._turnToPrevPage,
       [CREATE_NEW_PAGE_AFTER]: this._insertNewArticleAfter,
       [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore
@@ -88,6 +88,12 @@ class StageEditor extends PureComponent {
         this._updateArticle(article_id, editorState)
       })
 
+  }
+
+  _updateNowArticle = () => {
+    event.stopPropagation();
+    event.preventDefault();
+    this._updateArticle(this.props.stage.page_article_id, this.state.editorState);
   }
 
   _updateArticle = (article_id, editorState) => {
@@ -167,14 +173,10 @@ class StageEditor extends PureComponent {
 
 
   _insertNewArticleAfter = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
     this._insertArticle(1);
   }
 
   _insertNewArticleBefore = (event) => {
-    event.stopPropagation();
-    event.preventDefault();
     this._insertArticle(0);
   }
 
