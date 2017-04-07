@@ -11,7 +11,7 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import { HotKeys } from 'react-hotkeys';
-import { keyMap, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE } from './helpers/reactHotKeyMap.js';
+import { keyMap, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
 
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
@@ -44,7 +44,9 @@ class StageEditor extends PureComponent {
 
     this._hotKeysHandlers = {
       [TURN_TO_NEXT_PAGE]: this._turnToNextPage,
-      [TURN_TO_PREV_PAGE]: this._turnToPrevPage
+      [TURN_TO_PREV_PAGE]: this._turnToPrevPage,
+      [CREATE_NEW_PAGE_AFTER]: this._insertNewArticleAfter,
+      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore
     }
   }
 
@@ -73,7 +75,7 @@ class StageEditor extends PureComponent {
     // if stories/articles in redux store not been update before ChapterList page,
     // then it should get it self
     if (!stories) {
-      actions.getStories();
+      await actions.getStories();
       await actions.getArticles(story_id);
     }
 
@@ -164,12 +166,16 @@ class StageEditor extends PureComponent {
   };
 
 
-  _insertNewArticleAfter = () => {
-    this._insertArticle(1)
+  _insertNewArticleAfter = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    this._insertArticle(1);
   }
 
-  _insertNewArticleBefore = () => {
-    this._insertArticle(0)
+  _insertNewArticleBefore = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    this._insertArticle(0);
   }
 
 

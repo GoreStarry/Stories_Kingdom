@@ -5,6 +5,10 @@ import styles from './EditorStoriesKingdom.scss';
 
 const emptyEditorStateForDisplay = EditorState.createEmpty();
 
+const emptyOnChange = () => {
+  
+}
+
 /**
  * 
  * @class EditorStoriesKingdom
@@ -88,7 +92,7 @@ class EditorStoriesKingdom extends PureComponent {
                                   id={ !position && 'main_Editor' }
                                   className={ styles.box__editor }
                                   style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
-                                  <Editor editorState={ editorState || this.props.editorState } onChange={ onChange } />
+                                  <Editor editorState={ editorState || this.props.editorState } onChange={ position ? emptyOnChange : onChange } />
                                 </div> }
                    </Motion>
           }) }
