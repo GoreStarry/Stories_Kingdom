@@ -86,6 +86,7 @@ class EditorStoriesKingdom extends PureComponent {
     this.main_editor = editor
   }
 
+
   render() {
     const {onChange, editorState} = this.props;
     const {page_array, innerWidth} = this.state;

@@ -29,8 +29,12 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
+  // FIXME: fisrt enter form stage eitor?
+
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
   // TODO: article detail 細節編輯區
+  // TODO: command + enter 自動focus
+  // didmount HotKeys focus
 
   constructor() {
     super();
@@ -90,6 +94,7 @@ class StageEditor extends PureComponent {
       })
 
   }
+
 
   _updateNowArticle = () => {
     event.stopPropagation();
