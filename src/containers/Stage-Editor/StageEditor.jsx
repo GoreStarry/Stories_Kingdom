@@ -11,7 +11,7 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import { HotKeys } from 'react-hotkeys';
-import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
+import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE, FOCUS_ARTICLE } from './helpers/reactHotKeyMap.js';
 
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
@@ -29,7 +29,17 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
+  // FIXME: fisrt enter form stage eitor?
+
+  // v1
+  // TODO: article detail 細節編輯區
+  // TODO: auto focus
+
+
+  // future
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
+  // TODO: command + enter 自動focus
+  // didmount HotKeys focus
 
   constructor() {
     super();
@@ -46,7 +56,8 @@ class StageEditor extends PureComponent {
       [SAVE_ARTICLE]: this._updateNowArticle,
       [TURN_TO_PREV_PAGE]: this._turnToPrevPage,
       [CREATE_NEW_PAGE_AFTER]: this._insertNewArticleAfter,
-      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore
+      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore,
+      [FOCUS_ARTICLE]: this._focusMainEditor,
     }
   }
 
@@ -90,7 +101,7 @@ class StageEditor extends PureComponent {
 
   }
 
-  _updateNowArticle = () => {
+  _updateNowArticle = (event) => {
     event.stopPropagation();
     event.preventDefault();
     this._updateArticle(this.props.stage.page_article_id, this.state.editorState);
@@ -173,11 +184,20 @@ class StageEditor extends PureComponent {
 
 
   _insertNewArticleAfter = (event) => {
+    event.preventDefault();
     this._insertArticle(1);
   }
 
+
+  /**
+   * can't insert new Article before first one page, because of chapter name must exist for first article 
+   * @memberOf StageEditor
+   */
   _insertNewArticleBefore = (event) => {
-    this._insertArticle(0);
+    event.preventDefault();
+    if (this.props.stage.page_index !== 0) {
+      this._insertArticle(0);
+    }
   }
 
 
@@ -186,21 +206,23 @@ class StageEditor extends PureComponent {
    * translate is for insert before or after now article
    */
   _insertArticle = (translate) => {
+    let {page_index} = this.props.stage;
     const {actions} = this.props;
     const {story_id} = this.props.match.params;
-    let {page_index} = this.props.stage;
     page_index += translate;
     actions.createArticle(story_id, page_index);
   }
 
-
-
-  _turnToNextPage = () => {
+  _turnToNextPage = (event) => {
+    event.preventDefault()
+    event.stopPropagation();
     const next_page_index = this.props.stage.page_index + 1;
     this._turnPageByIndex(next_page_index)
   }
 
-  _turnToPrevPage = () => {
+  _turnToPrevPage = (event) => {
+    event.preventDefault()
+    event.stopPropagation();
     const prev_page_index = this.props.stage.page_index - 1;
     this._turnPageByIndex(prev_page_index)
   }
@@ -217,7 +239,16 @@ class StageEditor extends PureComponent {
 
   }
 
+  _setMainEditorRef = (editor) => {
+    if (editor) {
+      this.main_editor = editor
+      this.main_editor.focus();
+    }
+  }
 
+  _focusMainEditor = () => {
+    this.main_editor.focus();
+  }
 
 
   render() {
@@ -225,35 +256,46 @@ class StageEditor extends PureComponent {
     const {stories, articles, stage} = this.props;
     const {story_id} = this.props.match.params;
     return (
-      <div className="flex--col flex--extend ">
+      <div className={ `flex--col flex--extend ${styles.container}` }>
         <HotKeys
+          id="hotkey_container"
           className={ `flex--col flex--extend ${styles.HotKeys}` }
           keyMap={ keyMap }
           handlers={ this._hotKeysHandlers }>
-          <h1>Stage Editor</h1>
-          <button onClick={ this._insertNewArticleAfter }>
-            New an article after
-          </button>
-          <button onClick={ this._insertNewArticleBefore }>
-            new an article before
-          </button>
-          <div className={ "flex--extend " + styles.body__editors }>
+          <header className={ `flex--row ${styles.stage__header}` }>
+            <span className={ styles.story__title }>{ stories && stories[story_id].name }</span>
+          </header>
+          { /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <button onClick={ this._insertNewArticleAfter }>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    New an article after
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <button onClick={ this._insertNewArticleBefore }>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    new an article before
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  */ }
+          <div className={ `flex--extend ${styles.stage__editor}` } onClick={ this._focusMainEditor }>
             { editorState &&
               <EditorStoriesKingdom
                 story={ stories[story_id] }
                 articles={ articles[story_id] }
                 article_index={ stage.page_index }
                 article_id={ stage.page_article_id }
+                setMainEditorRef={ this._setMainEditorRef }
                 editorState={ editorState }
                 onChange={ this._editorOnChange } /> }
           </div>
-          <button onClick={ this._turnToNextPage }>
-            turn next page
-          </button>
-          <button onClick={ this._turnToPrevPage }>
-            turn previous page
-          </button>
-          <ArticleDetial page_index={ stage.page_index } content_updated={ content_updated } />
+          { /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <button onClick={ this._turnToNextPage }>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    turn next page
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <button onClick={ this._turnToPrevPage }>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    turn previous page
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                  */ }
+          <ArticleDetial
+            className={ styles.stage__footer }
+            page_index={ stage.page_index }
+            content_updated={ content_updated } />
         </HotKeys>
       </div>
 

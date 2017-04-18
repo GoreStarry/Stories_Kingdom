@@ -1,0 +1,27 @@
+.container {
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin update--status($color) {
+    &:after {
+        display: block;
+        content: '';
+        width: 0.7rem;
+        height: 0.7rem;
+        border-radius: 50%;
+        background: $color;
+    }
+}
+
+.update--already {
+    @include update--status(rgb(10.2%, 97.6%, 10.2%));
+}
+
+.update--yet {
+    @include update--status(red);
+}
+
+.detail__page_num {
+    font-style: italic;
+}

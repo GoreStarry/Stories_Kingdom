@@ -1,0 +1,12 @@
+:global {
+    .ui.segment {
+        background-color: black;
+        padding: 0 1em;
+    }
+    .ui.list>.item {
+        .header,
+        .description {
+            color: rgba(255, 255, 255, .87)
+        }
+    }
+}

@@ -1,26 +1,31 @@
+$font_size: 1.2rem;
+$letter_spacing: 0.2rem;
+
 .EditorStoriesKingdom {
     position: relative;
+    height: inherit;
+    word-break: break-all;
      :global {
         .DraftEditor-root {
             display: inline-block;
-            width: 100%;
-            min-height: 300px;
-            min-width: 100px;
-            padding: 1rem 1.5rem;
-            line-height: 2rem; // background-color: #c3c1c1;
-            background-color: black;
-            color: white;
+            height: inherit;
+            min-width: 60vw;
+            padding: 3rem 5rem;
+            line-height: 2rem;
+            font-family: Heiti TC, Microsoft JhengHei;
+            font-size: $font_size;
+            letter-spacing: $letter_spacing;
+            line-height: 2.2rem;
+            font-weight: 100;
+            color: #c9c9c9;
             writing-mode: vertical-rl;
             text-align: left;
             overflow: scroll;
         }
-    }
-}
 
-.box__editor {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    border: 1px solid red;
+        .public-DraftStyleDefault-block {
+            padding: 0.5rem;
+            text-indent: #{($letter_spacing + $font_size)*2};
+        }
+    }
 }
