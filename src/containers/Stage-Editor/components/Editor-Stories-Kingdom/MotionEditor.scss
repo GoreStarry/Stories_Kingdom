@@ -2,6 +2,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    border: 1px solid red;
+    right: 0; // border: 1px solid red;
+    height: inherit;
+    text-align: center;
+    background-color: black;
 }

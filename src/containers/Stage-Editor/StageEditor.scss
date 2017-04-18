@@ -1,6 +1,29 @@
+$header_height: 3rem;
+$footer_height: 3rem;
+
 .HotKeys {
     &:focus {
         border: none;
         outline: none;
     }
+}
+
+.container {}
+
+.stage__header {
+    align-items: center;
+    height: $header_height;
+}
+
+.stage__footer {
+    height: $footer_height;
+}
+
+.stage__editor {
+    height: calc( 100vh - #{ $header_height + $footer_height });
+}
+
+.story__title {
+    font-size: 1.2rem;
+    color: rgb(78.8%, 78.8%, 78.8%);
 }

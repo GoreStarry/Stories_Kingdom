@@ -105,7 +105,11 @@ class MotionEditor extends PureComponent {
         { style => {
             if (position) { // next & prev Editor (just for display)
               return <div className={ styles.box__editor } style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
-                       <Editor editorState={ editorState } onChange={ onChangeFake } />
+                       <Editor
+                         blockRenderMap={ extendedBlockRenderMap }
+                         blockStyleFn={ blockStyleFn }
+                         editorState={ editorState }
+                         onChange={ onChangeFake } />
                      </div>
           
             } else { // main Editor can be realy edited

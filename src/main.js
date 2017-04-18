@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { syncHistoryWithStore } from 'react-router-redux';
 import createBrowserHistory from 'history/createBrowserHistory'
 import 'semantic-ui-css/semantic.min.css';
+import './semanticRewrite.scss';
 
 import { configureStore } from './redux/store/index.js';
 

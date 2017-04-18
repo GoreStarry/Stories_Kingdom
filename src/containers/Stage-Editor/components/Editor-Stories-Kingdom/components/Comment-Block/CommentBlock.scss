@@ -1,6 +1,14 @@
 .CommentBlock {
-    color: gray;
+    color: rgb(87.8%, 6.1%, 6.1%);
+    padding: 0 1rem;
     & span :before {
-        content: '＊ ';
+        color: rgb(87.8%, 6.1%, 6.1%);
+        font-size: 2rem;
+        content: '＊';
+    }
+     :global {
+        .public-DraftStyleDefault-block {
+            text-indent: 0;
+        }
     }
 }
