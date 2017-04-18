@@ -11,7 +11,7 @@ import styles from './StageEditor.scss';
 const cx = classNames.bind(styles);
 
 import { HotKeys } from 'react-hotkeys';
-import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE } from './helpers/reactHotKeyMap.js';
+import { keyMap, SAVE_ARTICLE, TURN_TO_NEXT_PAGE, TURN_TO_PREV_PAGE, CREATE_NEW_PAGE_AFTER, CREATE_NEW_PAGE_BEFORE, FOCUS_ARTICLE } from './helpers/reactHotKeyMap.js';
 
 
 import ArticleDetial from './components/Article-Detial/ArticleDetial.jsx';
@@ -31,8 +31,13 @@ class StageEditor extends PureComponent {
 
   // FIXME: fisrt enter form stage eitor?
 
-  // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
+  // v1
   // TODO: article detail 細節編輯區
+  // TODO: auto focus
+
+
+  // future
+  // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
   // TODO: command + enter 自動focus
   // didmount HotKeys focus
 
@@ -51,7 +56,8 @@ class StageEditor extends PureComponent {
       [SAVE_ARTICLE]: this._updateNowArticle,
       [TURN_TO_PREV_PAGE]: this._turnToPrevPage,
       [CREATE_NEW_PAGE_AFTER]: this._insertNewArticleAfter,
-      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore
+      [CREATE_NEW_PAGE_BEFORE]: this._insertNewArticleBefore,
+      [FOCUS_ARTICLE]: this._focusMainEditor,
     }
   }
 
@@ -95,8 +101,7 @@ class StageEditor extends PureComponent {
 
   }
 
-
-  _updateNowArticle = () => {
+  _updateNowArticle = (event) => {
     event.stopPropagation();
     event.preventDefault();
     this._updateArticle(this.props.stage.page_article_id, this.state.editorState);
@@ -178,11 +183,11 @@ class StageEditor extends PureComponent {
   };
 
 
-  _insertNewArticleAfter = (event) => {
+  _insertNewArticleAfter = () => {
     this._insertArticle(1);
   }
 
-  _insertNewArticleBefore = (event) => {
+  _insertNewArticleBefore = () => {
     this._insertArticle(0);
   }
 
@@ -225,6 +230,18 @@ class StageEditor extends PureComponent {
 
   }
 
+  _setMainEditorRef = (editor) => {
+    if (editor) {
+      this.main_editor = editor
+      this.main_editor.focus();
+    }
+  }
+
+
+  _focusMainEditor = () => {
+    this.main_editor.focus();
+  }
+
 
   render() {
     const {editorState, content_updated} = this.state;
@@ -244,13 +261,14 @@ class StageEditor extends PureComponent {
           <button onClick={ this._insertNewArticleBefore }>
             new an article before
           </button>
-          <div className={ "flex--extend " + styles.body__editors }>
+          <div className={ "flex--extend " + styles.body__editors } onClick={ this._focusMainEditor }>
             { editorState &&
               <EditorStoriesKingdom
                 story={ stories[story_id] }
                 articles={ articles[story_id] }
                 article_index={ stage.page_index }
                 article_id={ stage.page_article_id }
+                setMainEditorRef={ this._setMainEditorRef }
                 editorState={ editorState }
                 onChange={ this._editorOnChange } /> }
           </div>

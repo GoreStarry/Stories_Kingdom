@@ -78,27 +78,19 @@ class EditorStoriesKingdom extends PureComponent {
     })
   }
 
-  _focusMainEditor = () => {
-    this.main_editor.focus();
-  }
-
-  _setMainEditorRef = (editor) => {
-    this.main_editor = editor
-  }
-
 
   render() {
-    const {onChange, editorState} = this.props;
+    const {onChange, editorState, setMainEditorRef} = this.props;
     const {page_array, innerWidth} = this.state;
 
     return (
-      <div className={ styles.EditorStoriesKingdom } onClick={ this._focusMainEditor }>
+      <div className={ styles.EditorStoriesKingdom }>
         { page_array.map((page) => {
             return <MotionEditor
                      key={ page.article_id }
                      onChange={ onChange }
                      page={ page }
-                     setMainEditorRef={ this._setMainEditorRef }
+                     setMainEditorRef={ setMainEditorRef }
                      editorState={ editorState } />
           }) }
       </div>
@@ -113,6 +105,7 @@ EditorStoriesKingdom.propTypes = {
   onChange: PropTypes.func.isRequired,
   story: PropTypes.object,
   articles: PropTypes.object,
+  setMainEditorRef: PropTypes.func.isRequired,
 };
 
 export default EditorStoriesKingdom;
