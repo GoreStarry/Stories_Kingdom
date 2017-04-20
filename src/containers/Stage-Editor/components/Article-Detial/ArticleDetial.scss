@@ -3,6 +3,14 @@
     align-items: center;
 }
 
+.checkbox__toggle {
+    opacity: 0.5;
+    transform: scale(0.7);
+    &:hover {
+        opacity: 1;
+    }
+}
+
 @mixin update--status($color) {
     &:after {
         display: block;

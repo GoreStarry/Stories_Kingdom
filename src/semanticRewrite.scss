@@ -9,4 +9,24 @@
             color: rgba(255, 255, 255, .87)
         }
     }
+
+
+    .ui.toggle.checkbox .box:hover::before,
+    .ui.toggle.checkbox label:hover::before {}
+    .ui.toggle.checkbox .box:after,
+    .ui.toggle.checkbox label:after {
+        background: #5e5e5e linear-gradient(transparent, rgba(0, 0, 0, .05));
+        &:hover {
+            background-color: rgb(137, 21, 21);
+        }
+    }
+
+    .ui.toggle.checkbox .box:before,
+    .ui.toggle.checkbox label:before {
+        background-color: rgb(49, 49, 49);
+    }
+    .ui.toggle.checkbox input:checked~.box:before,
+    .ui.toggle.checkbox input:checked~label:before {
+        background-color: rgba(33, 133, 208, 0.38)!important;
+    }
 }

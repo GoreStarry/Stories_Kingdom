@@ -46,16 +46,16 @@ class EditorStoriesKingdom extends PureComponent {
 
 
   _makePageArray = (article_id, article_index) => {
-    const {story, articles} = this.props;
+    const {story, articles, articleAlign} = this.props;
     const prev_article = story.articleOrder[article_index - 1];
     const next_article = story.articleOrder[article_index + 1];
-
 
     const page_array = [prev_article, 'now_article', next_article]
       .map((article, index) => {
         if (article == 'now_article') {
           return {
             article_id,
+            articleAlign,
             editorState: false // it shold render directly form this.props.editorState
           }
         } else if (article) {
@@ -63,9 +63,10 @@ class EditorStoriesKingdom extends PureComponent {
           return {
             article_id: id,
             position: index === 2 ? 'next' : 'prev',
+            articleAlign: articles[id].articleAlign,
             editorState: articles[id].draftContent ? EditorState.createWithContent(convertFromRaw(JSON.parse(articles[id].draftContent))) : emptyEditorStateForDisplay,
           }
-        } else {
+        } else { // when now_article at first page or last page
           return article
         }
       })
@@ -80,7 +81,7 @@ class EditorStoriesKingdom extends PureComponent {
 
 
   render() {
-    const {onChange, editorState, setMainEditorRef} = this.props;
+    const {onChange, editorState, setMainEditorRef, articleAlign} = this.props;
     const {page_array, innerWidth} = this.state;
 
     return (
@@ -91,6 +92,7 @@ class EditorStoriesKingdom extends PureComponent {
                      onChange={ onChange }
                      page={ page }
                      setMainEditorRef={ setMainEditorRef }
+                     articleAlign={ articleAlign }
                      editorState={ editorState } />
           }) }
       </div>
@@ -101,6 +103,7 @@ class EditorStoriesKingdom extends PureComponent {
 EditorStoriesKingdom.propTypes = {
   article_id: PropTypes.string,
   article_index: PropTypes.number,
+  articleAlign: PropTypes.string.isRequired,
   editorState: PropTypes.any,
   onChange: PropTypes.func.isRequired,
   story: PropTypes.object,
