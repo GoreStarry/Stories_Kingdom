@@ -99,12 +99,12 @@ class MotionEditor extends PureComponent {
   };
 
   render() {
-    const {article_id, position, editorState} = this.props.page;
+    const {article_id, position, editorState, articleAlign} = this.props.page;
     return (
       <Motion key={ article_id } style={ { x: spring(position == 'next' && -innerWidth) } }>
         { style => {
             if (position) { // next & prev Editor (just for display)
-              return <div className={ styles.box__editor } style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
+              return <div className={ styles.box__editor } style={ { transform: `translate3d(${style.x}px, 0, 0)`, textAlign: articleAlign } }>
                        <Editor
                          blockRenderMap={ extendedBlockRenderMap }
                          blockStyleFn={ blockStyleFn }
@@ -113,10 +113,11 @@ class MotionEditor extends PureComponent {
                      </div>
           
             } else { // main Editor can be realy edited
+              console.log(articleAlign);
               return <div
                        { ...this.state.main_props}
                        className={ styles.box__editor }
-                       style={ { transform: `translate3d(${style.x}px, 0, 0)` } }>
+                       style={ { transform: `translate3d(${style.x}px, 0, 0)`, textAlign: this.props.articleAlign } }>
                        <Editor
                          ref={ this.props.setMainEditorRef }
                          editorState={ this.props.editorState }
@@ -139,6 +140,7 @@ MotionEditor.propTypes = {
   editorState: PropTypes.any,
   onChange: PropTypes.func.isRequired,
   setMainEditorRef: PropTypes.func.isRequired,
+  articleAlign: PropTypes.string.isRequired,
 };
 
 export default MotionEditor;
