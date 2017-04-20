@@ -4,6 +4,7 @@ export const CREATE_NEW_PAGE_AFTER = 'CREATE_NEW_PAGE_AFTER';
 export const CREATE_NEW_PAGE_BEFORE = 'CREATE_NEW_PAGE_BEFORE';
 export const SAVE_ARTICLE = 'SAVE_ARTICLE';
 export const FOCUS_ARTICLE = 'FOCUS_ARTICLE';
+export const ARTICLE_ALIGN_TOGGLE = 'ARTICLE_ALIGN_TOGGLE';
 
 
 export const keyMap = {
@@ -11,7 +12,8 @@ export const keyMap = {
   [TURN_TO_PREV_PAGE]: 'alt+left',
   [CREATE_NEW_PAGE_AFTER]: 'alt+n',
   [CREATE_NEW_PAGE_BEFORE]: 'alt+shift+n',
+  [ARTICLE_ALIGN_TOGGLE]: 'alt+a',
   [SAVE_ARTICLE]: 'command+s',
-  [FOCUS_ARTICLE]: 'command+enter'
+  [FOCUS_ARTICLE]: 'command+enter',
 }
 
