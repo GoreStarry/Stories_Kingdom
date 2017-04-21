@@ -113,7 +113,6 @@ class MotionEditor extends PureComponent {
                      </div>
           
             } else { // main Editor can be realy edited
-              console.log(articleAlign);
               return <div
                        { ...this.state.main_props}
                        className={ styles.box__editor }
