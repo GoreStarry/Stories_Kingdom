@@ -8,8 +8,7 @@ $letter_spacing: 0.2rem;
      :global {
         .DraftEditor-root {
             display: inline-block;
-            height: inherit;
-            min-width: 60vw;
+            height: inherit; // min-width: 60vw;
             padding: 3rem 5rem;
             line-height: 2rem;
             font-family: Heiti TC, Microsoft JhengHei;

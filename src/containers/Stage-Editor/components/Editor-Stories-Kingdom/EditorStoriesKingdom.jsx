@@ -83,7 +83,6 @@ class EditorStoriesKingdom extends PureComponent {
   render() {
     const {onChange, editorState, setMainEditorRef, articleAlign} = this.props;
     const {page_array, innerWidth} = this.state;
-
     return (
       <div className={ styles.EditorStoriesKingdom }>
         { page_array.map((page) => {
