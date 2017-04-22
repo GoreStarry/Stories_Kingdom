@@ -1,8 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Checkbox } from 'semantic-ui-react';
-import styles from './ArticleDetial.scss';
+import styles from './StageDetail.scss';
 
-class ArticleDetial extends PureComponent {
+class StageDetail extends PureComponent {
 
   render() {
     const {page_index, content_updated, className, articleAlign, toggleArticleAlign} = this.props;
@@ -20,7 +20,7 @@ class ArticleDetial extends PureComponent {
   }
 }
 
-ArticleDetial.propTypes = {
+StageDetail.propTypes = {
   page_index: PropTypes.number,
   content_updated: PropTypes.bool.isRequired,
   className: PropTypes.string.isRequired,
@@ -28,4 +28,4 @@ ArticleDetial.propTypes = {
   toggleArticleAlign: PropTypes.func.isRequired,
 };
 
-export default ArticleDetial;
+export default StageDetail;

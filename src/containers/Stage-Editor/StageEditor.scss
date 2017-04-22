@@ -26,4 +26,6 @@ $footer_height: 3rem;
 .story__title {
     font-size: 1.2rem;
     color: rgb(78.8%, 78.8%, 78.8%);
+    position: relative;
+    z-index: 2;
 }
