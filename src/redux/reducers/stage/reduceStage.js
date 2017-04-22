@@ -1,9 +1,10 @@
 import { TURN_PAGE_BY_ARTICLE_ID } from '../../actions/stage/actTurnPage.js';
 import { CREATE_ARTICLE_SUCCESS } from '../../actions/articles/actCreateArticle.js';
-
+import { TOGGLE_ARTICLE_DETAIL } from '../../actions/stage/actToggleArticleDetail.js';
 const initialState = {
   page_index: 0,
   page_article_id: false,
+  articleDetail_open: false,
 }
 
 export function reduceStage(state = initialState, action) {
@@ -21,6 +22,11 @@ export function reduceStage(state = initialState, action) {
       return Object.assign({}, state, {
         page_index: action.page_num,
         page_article_id: _id
+      })
+
+    case TOGGLE_ARTICLE_DETAIL:
+      return Object.assign({}, state, {
+        articleDetail_open: !stata.articleDetail_open
       })
 
     default:
