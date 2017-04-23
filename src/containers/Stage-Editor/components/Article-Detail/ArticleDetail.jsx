@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 class ArticleDetail extends PureComponent {
 
   state = {
-    chapter: false,
+    chapterName: false,
     outline: false,
   }
 
@@ -24,8 +24,15 @@ class ArticleDetail extends PureComponent {
     }
   }
 
-
-
+  // update changed data
+  componentWillUnmount() {
+    const {chapterName, outline} = this.state;
+    const {article_id, updateDetail} = this.props;
+    updateDetail(article_id, {
+      chapterName,
+      outline
+    })
+  }
 
 
   /**
@@ -40,7 +47,6 @@ class ArticleDetail extends PureComponent {
   }
 
   _onChangeChapterName = (event, {value}) => {
-    console.log(value);
     this.setState({
       chapterName: value,
     })
@@ -50,30 +56,6 @@ class ArticleDetail extends PureComponent {
     this.setState({
       outline: value,
     })
-  }
-
-  /**
-  * if ArticleDetia already open
-  * update changed chapter/detial and clean changed cache, close articleDetial at last
-  * 
-  * if 
-  * 
-  * @memberOf ArticleDetail
-  */
-  _toggleArticleDetail = () => {
-    const {open, toggle, chapterName, outline} = this.props;
-    if (open) { // update chapter/detial if changed, and close component
-      toggle();
-      this.setState({
-        chapterName: false,
-        outline: false,
-      })
-    } else { // init input value open component
-      this.setState({
-        chapterName,
-        outline,
-      }, toggle)
-    }
   }
 
   render() {
@@ -102,10 +84,10 @@ class ArticleDetail extends PureComponent {
 
 ArticleDetail.propTypes = {
   open: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
   chapterName: PropTypes.string,
   outline: PropTypes.string,
   article_id: PropTypes.string.isRequired,
+  updateDetail: PropTypes.func.isRequired,
 };
 
 export default ArticleDetail;
