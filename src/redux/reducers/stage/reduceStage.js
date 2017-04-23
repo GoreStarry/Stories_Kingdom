@@ -26,7 +26,7 @@ export function reduceStage(state = initialState, action) {
 
     case TOGGLE_ARTICLE_DETAIL:
       return Object.assign({}, state, {
-        articleDetail_open: !stata.articleDetail_open
+        articleDetail_open: !state.articleDetail_open
       })
 
     default:

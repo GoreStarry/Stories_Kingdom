@@ -29,3 +29,34 @@ $footer_height: 3rem;
     position: relative;
     z-index: 2;
 }
+
+
+.box__toggle_articleDetail {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    width: 100vw;
+    left: 0;
+}
+
+$box_icon_height: 3rem;
+.box__icon {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 4rem;
+    height: $box_icon_height;
+    bottom: -$box_icon_height;
+    text-align: center;
+    line-height: $box_icon_height;
+    cursor: pointer;
+}
+
+.icon__toggle {
+    transition: transform 0.5s linear;
+    transform: rotate(0deg);
+    &--open {
+        transform: rotate(-180deg);
+    }
+}

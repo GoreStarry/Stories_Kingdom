@@ -1,9 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { Input, Icon } from 'semantic-ui-react'
+import classNames from 'classnames/bind';
 import styles from './ArticleDetail.scss';
-import { Segment, Input, Icon } from 'semantic-ui-react'
-// const cx = classNames.bind(styles);
-
+const cx = classNames.bind(styles);
 // TODO: input onchange 之後 icon變紅色
+
 // TODO: 點up之後變綠色上滑
 
 class ArticleDetail extends PureComponent {
@@ -17,33 +18,14 @@ class ArticleDetail extends PureComponent {
     this._initChapterAndOutlineState(this.props);
   }
 
-
   componentWillUpdate(nextProps, nextState) {
-    if (nextProps.article_id != this.props.article_id) {
+    if (this.props.open && nextProps.article_id != this.props.article_id) {
       this._initChapterAndOutlineState(nextProps);
     }
   }
 
 
-  /**
-   * if ArticleDetia already open
-   * update changed chapter/detial and clean changed cache, close articleDetial at last
-   * 
-   * if 
-   * 
-   * @memberOf ArticleDetail
-   */
-  _toggleArticleDetail = () => {
-    const {open, toggle, chapterName, outline} = this.props;
-    if (open) { // update chapter/detial if changed, and close component
 
-    } else { // init input value open component
-      this.setState({
-        chapterName,
-        outline,
-      }, toggle)
-    }
-  }
 
 
   /**
@@ -70,27 +52,49 @@ class ArticleDetail extends PureComponent {
     })
   }
 
+  /**
+  * if ArticleDetia already open
+  * update changed chapter/detial and clean changed cache, close articleDetial at last
+  * 
+  * if 
+  * 
+  * @memberOf ArticleDetail
+  */
+  _toggleArticleDetail = () => {
+    const {open, toggle, chapterName, outline} = this.props;
+    if (open) { // update chapter/detial if changed, and close component
+      toggle();
+      this.setState({
+        chapterName: false,
+        outline: false,
+      })
+    } else { // init input value open component
+      this.setState({
+        chapterName,
+        outline,
+      }, toggle)
+    }
+  }
+
   render() {
     const {chapterName, outline} = this.state;
+    const {open} = this.props;
     return (
-      <div className={ `flex--col ${styles.container }` }>
-        <Input
-          fluid
-          value={ chapterName || "" }
-          onChange={ this._onChangeChapterName }
-          label={ { basic: true, content: 'Chapter Name' } }
-          placeholder='Search...' />
-        <Input
-          fluid
-          value={ outline || "" }
-          onChange={ this._onChangeOutline }
-          label={ { basic: true, content: 'Outline' } }
-          placeholder='Search...' />
-        <Icon
-          onClick={ this._toggleArticleDetail }
-          name='dropdown'
-          size='large'
-          className={ styles.icon__toogle } />
+      <div className={ styles.container }>
+        <div className="box__input">
+          <Input
+            fluid
+            value={ chapterName || "" }
+            onChange={ this._onChangeChapterName }
+            label={ { basic: true, content: 'Chapter Name' } }
+            placeholder='Search...' />
+          <Input
+            fluid
+            value={ outline || "" }
+            onChange={ this._onChangeOutline }
+            label={ { basic: true, content: 'Outline' } }
+            placeholder='Search...' />
+        </div>
       </div>
       );
   }

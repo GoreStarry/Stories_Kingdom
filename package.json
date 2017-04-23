@@ -39,6 +39,7 @@
         "rxjs": "^5.3.0",
         "semantic-ui-css": "^2.2.9",
         "semantic-ui-react": "^0.67.1",
+        "velocity-react": "^1.2.2",
         "vue": "^2.1.0",
         "why-did-you-update": "^0.0.8"
     },

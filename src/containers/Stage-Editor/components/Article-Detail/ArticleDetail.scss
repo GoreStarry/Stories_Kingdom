@@ -1,20 +1,19 @@
 .container {
-    position: absolute;
-    z-index: 1;
-    align-items: center;
-    width: 100vw;
-    left: 0;
-    top: 0;
-    padding: 3rem 1rem 1rem 1rem;
-    background-color: rgba(36, 36, 36, 0.74);
+    // position: absolute;
+    // z-index: 1;
+    // align-items: center;
+    // width: 100vw;
+    // left: 0;
+    // bottom: 100vh;
+    background-color: rgba(36, 36, 36, 0.74); // transition: transform 0.5s linear;
+    // transform: translateY(0%);
+    padding: 3rem 1rem 1rem 1rem; // &--open {
+    //     transform: translateY(100%);
+    // }
      :global {
         .input {
             width: 100%;
             margin-bottom: 0.5rem;
         }
     }
-}
-
-.icon__toogle[i] {
-    margin: 0;
 }
