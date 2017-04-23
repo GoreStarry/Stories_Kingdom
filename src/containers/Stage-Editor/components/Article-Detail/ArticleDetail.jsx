@@ -16,6 +16,8 @@ class ArticleDetail extends PureComponent {
 
   componentDidMount() {
     this._initChapterAndOutlineState(this.props);
+  // console.log(this.chapterNameRef);
+  // this.chapterNameRef.focus();
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -27,11 +29,12 @@ class ArticleDetail extends PureComponent {
   // update changed data
   componentWillUnmount() {
     const {chapterName, outline} = this.state;
-    const {article_id, updateDetail} = this.props;
+    const {article_id, updateDetail, focusBackToEditor} = this.props;
     updateDetail(article_id, {
       chapterName,
       outline
     })
+    focusBackToEditor();
   }
 
 
@@ -58,6 +61,10 @@ class ArticleDetail extends PureComponent {
     })
   }
 
+  _setChapterNameRef = (input) => {
+    this.chapterNameRef = input;
+  }
+
   render() {
     const {chapterName, outline} = this.state;
     const {open} = this.props;
@@ -66,6 +73,8 @@ class ArticleDetail extends PureComponent {
         <div className="box__input">
           <Input
             fluid
+            focus
+            ref={ this._setChapterNameRef }
             value={ chapterName || "" }
             onChange={ this._onChangeChapterName }
             label={ { basic: true, content: 'Chapter Name' } }
@@ -88,6 +97,7 @@ ArticleDetail.propTypes = {
   outline: PropTypes.string,
   article_id: PropTypes.string.isRequired,
   updateDetail: PropTypes.func.isRequired,
+  focusBackToEditor: PropTypes.func.isRequired,
 };
 
 export default ArticleDetail;
