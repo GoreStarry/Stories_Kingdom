@@ -60,3 +60,35 @@ $box_icon_height: 3rem;
         transform: rotate(-180deg);
     }
 }
+
+.box__ctrl {
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    padding: 0 0.5rem;
+    &>i {
+        cursor: pointer;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        transition: 0.3s linear;
+        &:hover {
+            transform: scale(1.2);
+            color: aqua;
+        }
+    }
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.box__ctrl_before {
+    // for segment default padding
+    position: relative;
+    right: -1em;
+}
+
+.box__ctrl_after {
+    // for segment default padding
+    position: relative;
+    left: -1em;
+}

@@ -5,6 +5,7 @@ $letter_spacing: 0.2rem;
     position: relative;
     height: inherit;
     word-break: break-all;
+    flex: 1;
      :global {
         .DraftEditor-root {
             display: inline-block;
