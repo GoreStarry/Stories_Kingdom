@@ -1,14 +1,31 @@
 # Stories Kingdom
 
-> The environment for vertical writing
+> The environment builds for vertical writing 
 
 <p align="center">
-  <img alt="Stories Kingdom dev gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_test_gif.gif">
+  <img alt="Stories Kingdom ver.1 gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_v1.gif">
 </p>
+
+
 
 ## Prerequisite Technologies
 * *Node.js*
 * *MongoDB*
+
+## Article Editing Shortcuts
+
+| Key | Description | shortcut only |
+| -----------------------------------------------|:------------:| -------:|
+| `command+enter` |  Break out with new block (when editor have focus) | * |
+| `command+enter` | Focus article editor (when editor blur) | * |
+| `command+s` | Save | * |
+| `command+/` | Toggle block comment | * |
+| `alt+right` | Turn to next page |  |
+| `alt+left` | Turn to previous page |  |
+| `alt+n` | Insert new page |  |
+| `alt+shift+n` | Insert new page before |  |
+| `alt+a` | Switch article text-align mode (Right / Center) |  |
+| `alt+d` | Toggle article detail bar |  |
 
 ## Build Setup
 
@@ -21,6 +38,10 @@ npm run dev
 
 # build for production with minification
 npm run build
+
+# run production server
+# (should run build at first time)
+npm start
 
 # run api tests
 npm run api_test
