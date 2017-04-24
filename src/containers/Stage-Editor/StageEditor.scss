@@ -11,6 +11,7 @@ $footer_height: 3rem;
 .container {}
 
 .stage__header {
+    padding: 0 1rem;
     align-items: center;
     height: $header_height;
 }
@@ -51,6 +52,7 @@ $box_icon_height: 3rem;
     text-align: center;
     line-height: $box_icon_height;
     cursor: pointer;
+    color: #909090;
 }
 
 .icon__toggle {
@@ -58,6 +60,7 @@ $box_icon_height: 3rem;
     transform: rotate(0deg);
     &--open {
         transform: rotate(-180deg);
+        color: white;
     }
 }
 
@@ -81,14 +84,6 @@ $box_icon_height: 3rem;
     }
 }
 
-.box__ctrl_before {
-    // for segment default padding
-    position: relative;
-    right: -1em;
-}
+.box__ctrl_before {}
 
-.box__ctrl_after {
-    // for segment default padding
-    position: relative;
-    left: -1em;
-}
+.box__ctrl_after {}
