@@ -35,6 +35,7 @@ class StageEditor extends PureComponent {
 
   // v1
   // FIXME: 修正從chapter list近來 stage page不會更新問題
+  // TODO: 刪除文章
 
   // future
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
@@ -194,10 +195,12 @@ class StageEditor extends PureComponent {
     const {stories, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
-
+    console.log(article_id);
 
     if (article_id) { // initial article exist
-      const indexOfInitArticle = _findIndex(stories[story_id].ArticleOrder)(['id', article_id]);
+      console.log(stories[story_id].articleOrder);
+      const indexOfInitArticle = _findIndex(['id', article_id])(stories[story_id].articleOrder);
+      console.log(indexOfInitArticle);
       actions.turnPage(article_id, indexOfInitArticle);
     } else {
       const articleIdOfFirstOrder = stories[story_id].ArticleOrder[0].id;

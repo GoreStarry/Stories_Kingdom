@@ -56,7 +56,7 @@ $box_icon_height: 3rem;
 }
 
 .icon__toggle {
-    transition: transform 0.5s linear;
+    transition: 0.5s linear;
     transform: rotate(0deg);
     &--open {
         transform: rotate(-180deg);
