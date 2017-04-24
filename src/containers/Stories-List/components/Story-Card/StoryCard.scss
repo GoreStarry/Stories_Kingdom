@@ -1,21 +1,27 @@
 .StoryCard {
     border-radius: .28571429rem;
     cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     &:hover {
-        color: gray;
+         :global {
+            .detail__name {
+                color: white;
+            }
+        }
     }
 }
 
 
 .dragged {
-    color: blue;
+    color: white;
 }
 
+$inner_padding_top: 0.6rem;
 :global {
     .StoryCard__inner_flex {
         display: flex;
         flex-direction: row;
-        .icon.icon.icon {
+        &>.icon.icon.icon {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -26,14 +32,20 @@
 .story__detail {
     flex: 1;
      :global {
-        div {}
         .detail__name {
-            padding: 0.6rem 0 0.1rem 0.2rem;
+            color: #dddddd;
+            padding: $inner_padding_top 0 0.1rem 0.2rem;
             font-size: 1.5rem;
         }
         .detail__description {
             padding: 0.2rem 0 0.4rem 0.4rem;
             color: gray;
         }
+    }
+}
+
+.btn__delete {
+    &.ui {
+        background-color: #696969;
     }
 }

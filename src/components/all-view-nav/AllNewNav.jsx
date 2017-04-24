@@ -10,17 +10,24 @@ axios.defaults.validateStatus = function(status) {
 };
 
 import styles from './AllNewNav.scss';
+import classNames from 'classnames/bind';
+const cx = classNames.bind(styles);
 
 class PageBody extends PureComponent {
 
   render() {
+    const {nav_open} = this.props;
     return (
       <Sidebar.Pusher className="flex--col">
         <Segment basic className="flex--col flex--extend">
-          <div className="box__btn_setting">
-            <Button icon onClick={ this.props._toggleNav }>
-              <Icon name='setting' />
-            </Button>
+          <div className={ styles.box__btn_setting }>
+            <Icon
+              className={ cx('btn__navToggle', {
+                            'btn__navToggle--active': nav_open
+                          }) }
+              name="setting"
+              size="large"
+              onClick={ this.props.toggleNav } />
           </div>
           { this.props.pages }
         </Segment>
@@ -30,8 +37,9 @@ class PageBody extends PureComponent {
 }
 
 PageBody.propTypes = {
-  _toggleNav: PropTypes.func.isRequired,
+  toggleNav: PropTypes.func.isRequired,
   pages: PropTypes.object.isRequired,
+  nav_open: PropTypes.bool.isRequired,
 }
 
 import { getTokenAndSetToHeader } from '../../redux/actions/user/actAuth.js';
@@ -39,7 +47,7 @@ import { getTokenAndSetToHeader } from '../../redux/actions/user/actAuth.js';
 
 class AllNewNav extends PureComponent {
   state = {
-    navOpen: false,
+    nav_open: false,
   }
 
   componentWillMount() {
@@ -92,7 +100,8 @@ class AllNewNav extends PureComponent {
           <PageBody
             visible="nav_open"
             pages={ children }
-            _toggleNav={ this._toggleNav } />
+            nav_open={ nav_open }
+            toggleNav={ this._toggleNav } />
         </Sidebar.Pushable>
       </div>
       );

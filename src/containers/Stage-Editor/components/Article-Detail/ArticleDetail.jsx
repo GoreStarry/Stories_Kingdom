@@ -3,9 +3,6 @@ import { Input, Icon } from 'semantic-ui-react'
 import classNames from 'classnames/bind';
 import styles from './ArticleDetail.scss';
 const cx = classNames.bind(styles);
-// TODO: input onchange 之後 icon變紅色
-
-// TODO: 點up之後變綠色上滑
 
 class ArticleDetail extends PureComponent {
 

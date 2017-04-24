@@ -49,11 +49,11 @@ const routes = [
     path: '/list',
     component: StoriesList
   },
-  {
-    name: 'Draft Test',
-    path: '/draft_test',
-    component: DraftTest
-  },
+// {
+//   name: 'Draft Test',
+//   path: '/draft_test',
+//   component: DraftTest
+// },
 ];
 
 

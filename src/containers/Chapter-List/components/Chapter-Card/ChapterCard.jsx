@@ -54,7 +54,7 @@ class ChapterCard extends PureComponent {
     const {article} = this.props;
     const {editOpen, chapterName, outline} = this.state;
     return (
-      <List.Item>
+      <List.Item className={styles.container}>
         <List.Content floated='right' className={ styles.btn__edit }>
           <Button onClick={ this.toggleEditBlock }>
             edit

@@ -34,9 +34,7 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
 class StageEditor extends PureComponent {
 
   // v1
-  // TODO: 為了效能，把UI改成ArticleDetail非永續背景mount
-  // TODO: article detail 細節編輯區
-
+  // FIXME: 修正從chapter list近來 stage page不會更新問題
 
   // future
   // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
@@ -139,6 +137,23 @@ class StageEditor extends PureComponent {
 
 
   _updateNowArticle = (event) => {
+    
+function fireKey(el, key) {
+  console.log(key);
+  if (document.createEventObject) {
+    var eventObj = document.createEventObject();
+    eventObj.which = key;
+    eventObj.keyCode = key;
+    el.fireEvent("onkeydown", eventObj);
+  } else if (document.createEvent) {
+    var eventObj = document.createEvent("Events");
+    eventObj.initEvent("keydown", true, true);
+    eventObj.which = key;
+    eventObj.keyCode = key;
+    el.dispatchEvent(eventObj);
+  }
+} 
+fireKey(document.querySelector('.public-DraftEditor-content'), 40)
     event.stopPropagation();
     event.preventDefault();
     this._updateArticle(this.props.stage.page_article_id, this.state.editorState);

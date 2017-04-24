@@ -6,6 +6,8 @@ export function testKeyBindingFn(e) {
   // console.log(e.keyCode);
   const hasCommand = hasCommandModifier(e);
   switch (e.keyCode) {
+    // case 37: // redefine arrow direction in future
+    //   e.preventDefault();
     case ( hasCommand && 83):
       return 'myeditor-save';
 
