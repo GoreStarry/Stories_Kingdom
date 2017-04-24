@@ -4,7 +4,6 @@
 
 <p align="center">
   <img alt="Stories Kingdom ver.1 gif" src="https://raw.githubusercontent.com/GoreStarry/Stories_Kingdom/master/static/sk_v1.gif">
-  <iframe src="//giphy.com/embed/3og0IvSszZ2iBs4dlS" width="480" height="294" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
 </p>
 
 
