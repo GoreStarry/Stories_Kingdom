@@ -80,7 +80,7 @@ class StoriesList extends PureComponent {
     return (
     auth === 'success' ?
       <div className={ styles.StoriesList }>
-        <h1>Lists</h1>
+        <h1>Stories</h1>
         <NewStroyForm/>
         <div className="StoriesList__list" ref={ dragContainerDom => this.dragContainerDom = dragContainerDom }>
           { stories && storiesOrder &&
@@ -90,6 +90,7 @@ class StoriesList extends PureComponent {
               commonProps={ commonProps }
               list={ storiesOrder }
               onMoveEnd={ this._onMoveEnd }
+              padding={ 15 }
               container={ draggableListContainer } /> }
         </div>
         <DeleteModal

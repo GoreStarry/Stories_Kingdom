@@ -11,6 +11,7 @@ $footer_height: 3rem;
 .container {}
 
 .stage__header {
+    padding: 0 1rem;
     align-items: center;
     height: $header_height;
 }
@@ -51,12 +52,38 @@ $box_icon_height: 3rem;
     text-align: center;
     line-height: $box_icon_height;
     cursor: pointer;
+    color: #909090;
 }
 
 .icon__toggle {
-    transition: transform 0.5s linear;
+    transition: 0.5s linear;
     transform: rotate(0deg);
     &--open {
         transform: rotate(-180deg);
+        color: white;
     }
 }
+
+.box__ctrl {
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    padding: 0 0.5rem;
+    &>i {
+        cursor: pointer;
+        margin: 1rem 0;
+        padding: 0.5rem;
+        transition: 0.3s linear;
+        &:hover {
+            transform: scale(1.2);
+            color: aqua;
+        }
+    }
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.box__ctrl_before {}
+
+.box__ctrl_after {}

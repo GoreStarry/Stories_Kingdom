@@ -8,6 +8,8 @@ import { getStoryEditRecordLocal } from '../../helpers/Local-Edit-Record/getStor
 
 import ChapterCard from './components/Chapter-Card/ChapterCard.jsx';
 
+import styles from './ChapterList.scss';
+
 class ChapterList extends PureComponent {
 
   state = {
@@ -56,9 +58,9 @@ class ChapterList extends PureComponent {
 
       const {articleOrder} = stories[story_id];
       return (
-        <div>
-          <h1>Chapter List</h1>
-          <div className="box__special_link">
+        <div className={ styles.container }>
+          <h1>{ stories[story_id].name }</h1>
+          <div className={ styles.box__special_link }>
             { last_edited_article && (
               <Link to={ `/editor/${story_id}/${last_edited_article}` }>
               <Button secondary>

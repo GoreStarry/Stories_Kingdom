@@ -5,12 +5,28 @@
             min-height: 100vh;
             display: flex;
         }
-        .box__btn_setting {
-            position: fixed;
-            right: 0;
-            top: 0;
-            text-align: right;
-            padding: 0.5rem;
-        }
     }
+}
+
+.box__btn_setting {
+    position: fixed;
+    right: 0;
+    top: 0;
+    text-align: center;
+    padding: 0.7rem;
+}
+
+.btn__navToggle {
+    cursor: pointer;
+    transform-origin: center;
+    transition: transform 0.5s ease;
+    margin: 0;
+    color: #c9c9c9;
+    &:hover {
+        color: white;
+    }
+}
+
+.btn__navToggle--active {
+    transform: rotate(180deg) scale(1.2);
 }

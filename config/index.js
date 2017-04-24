@@ -4,6 +4,7 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
+    port: 3000,
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
@@ -28,5 +29,5 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
-  }
+  },
 }

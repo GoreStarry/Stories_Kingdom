@@ -16,7 +16,7 @@ class StoryCard extends Component {
     const {item, itemSelected, dragHandle, commonProps} = this.props;
     const dragged = itemSelected !== 0;
     const scale = itemSelected * 0.05 + 1;
-    const shadow = itemSelected * 15 + 1;
+    const shadow = itemSelected * 15;
 
     const boxClassName = cx('StoryCard', {
       dragged,
@@ -24,7 +24,7 @@ class StoryCard extends Component {
 
     const boxStyle = {
       transform: `scale(${scale})`,
-      boxShadow: `rgba(0, 0, 0, 0.3) 0px ${shadow}px ${2 * shadow}px 0px`
+      boxShadow: `rgba(255, 255, 255, 0.3) 0px 0px ${2 * shadow}px 0px`
     };
 
 
@@ -44,7 +44,7 @@ class StoryCard extends Component {
             </Link>
           </div>
           <Button
-            className="btn__delete"
+            className={ styles.btn__delete }
             icon='delete'
             attached='right'
             data-story-id={ item.id }

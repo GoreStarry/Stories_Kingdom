@@ -10,6 +10,9 @@
         }
     }
 
+    .pusher .ui.segment {
+        padding: 0;
+    }
 
     .ui.toggle.checkbox .box:hover::before,
     .ui.toggle.checkbox label:hover::before {}
