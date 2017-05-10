@@ -33,12 +33,9 @@ const parseContentStateToString = _flow([convertToRaw, JSON.stringify]);
  */
 class StageEditor extends PureComponent {
 
-  // v1
-  // FIXME: 修正從chapter list近來 stage page不會更新問題
-  // TODO: 刪除文章
-
   // future
-  // TODO: 點.DraftEditor-root自動foucs再最後一段的尾巴
+  // TODO: first/last page new article btn disabled
+  // TODO: delete article
 
   constructor() {
     super();
@@ -140,7 +137,6 @@ class StageEditor extends PureComponent {
   _updateNowArticle = (event) => {
 
     function fireKey(el, key) {
-      console.log(key);
       if (document.createEventObject) {
         var eventObj = document.createEventObject();
         eventObj.which = key;
@@ -195,12 +191,9 @@ class StageEditor extends PureComponent {
     const {stories, actions} = this.props;
     const {story_id, article_id} = this.props.match.params;
 
-    console.log(article_id);
 
     if (article_id) { // initial article exist
-      console.log(stories[story_id].articleOrder);
       const indexOfInitArticle = _findIndex(['id', article_id])(stories[story_id].articleOrder);
-      console.log(indexOfInitArticle);
       actions.turnPage(article_id, indexOfInitArticle);
     } else {
       const articleIdOfFirstOrder = stories[story_id].ArticleOrder[0].id;

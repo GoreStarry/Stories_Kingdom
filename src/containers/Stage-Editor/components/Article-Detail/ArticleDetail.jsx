@@ -13,7 +13,6 @@ class ArticleDetail extends PureComponent {
 
   componentDidMount() {
     this._initChapterAndOutlineState(this.props);
-  // console.log(this.chapterNameRef);
   // this.chapterNameRef.focus();
   }
 
