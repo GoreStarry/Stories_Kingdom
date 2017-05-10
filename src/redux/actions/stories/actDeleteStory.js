@@ -13,7 +13,6 @@ export const DELETE_STORY_FAIL = 'DELETE_STORY_FAIL';
 export function actDeleteStory(storyId) {
   return async function(dispatch, getState) {
     try {
-      console.log('in redux');
       const res = await axios.delete(`/api/stories/${storyId}`);
       const {storiesOrder} = res.data;
 

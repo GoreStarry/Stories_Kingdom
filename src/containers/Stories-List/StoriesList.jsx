@@ -32,7 +32,6 @@ class StoriesList extends PureComponent {
 
 
   _onMoveEnd = (newList) => {
-    console.log(newList);
     this.props.actions.changeStoriesOrder(newList);
   }
 
@@ -56,7 +55,6 @@ class StoriesList extends PureComponent {
   }
 
   _deleteStory = () => {
-    console.log('in delete');
     const {actions} = this.props;
     const {deleteTarget} = this.state;
 

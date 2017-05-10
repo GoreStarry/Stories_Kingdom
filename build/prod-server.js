@@ -19,9 +19,7 @@ app.set('jwt_hash_key', jwt_hash_key);
 const apiRouter = require('../server/api/router-api').apiRouter;
 app.use('/api', apiRouter);
 
-app.get('/', function(req, res) {
-  res.sendFile(config.build.index);
-})
+
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
@@ -29,6 +27,10 @@ app.use(require('connect-history-api-fallback')())
 // serve pure static assets
 var staticPath = path.posix.join(config.build.assetsPublicPath, config.build.assetsSubDirectory)
 app.use(staticPath, express.static(path.resolve(config.build.assetsRoot, config.build.assetsSubDirectory)))
+
+app.get(/^\//, function(req, res) {
+  res.sendFile(config.build.index);
+})
 
 var uri = 'http://localhost:' + port
 

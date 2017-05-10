@@ -23,7 +23,6 @@ export function actionCreateNewStroy({name, description}) {
         description
       });
 
-      console.log(res.data);
       const {story, storiesOrder} = res.data;
 
       dispatch({
