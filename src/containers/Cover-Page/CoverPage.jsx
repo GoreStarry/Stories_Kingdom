@@ -12,14 +12,13 @@ class CoverPage extends PureComponent {
     // localStorage.removeItem('auth_token')
   }
 
-  clickLoginBtn = (event) => {
+  _onSubmit = (event) => {
     event.preventDefault()
     const inputName = this.usernameInput.value;
 
     if (inputName.trim()) {
       this.props.actions.getAuth(inputName)
     }
-
   }
 
   render() {
@@ -28,7 +27,7 @@ class CoverPage extends PureComponent {
     const LoginBlock = (
     <div className={ styles.container }>
       <h1>Stories Kingdom</h1>
-      <Form onSubmit={ this.clickLoginBtn }>
+      <Form onSubmit={ this._onSubmit }>
         <Form.Field>
           <input
             placeholder='User Name...'
