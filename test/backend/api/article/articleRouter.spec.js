@@ -99,10 +99,10 @@ describe('Article Router Api Test', () => {
         })
         .set('x-access-token', token)
         .end((err, res) => {
-          const res_article_id = res.body.article_id;
+          const res_article_id = res.body.article._id;
           assert.propertyVal(res, 'status', 200, "status 200 success")
           assert.isString(res_article_id, "[created aricle id exist]");
-          assert.deepPropertyVal(res.body, 'articleOrder.0.id', res_article_id, "[first order of article id is same as first create id ]")
+          assert.deepPropertyVal(res.body.story, 'articleOrder.1.id', res_article_id, "[first order of article id is same as first create id ]")
           article_id = res_article_id
           done();
         })
