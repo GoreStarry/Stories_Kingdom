@@ -25,11 +25,9 @@ class StoriesList extends PureComponent {
     deleteTarget: false
   };
 
-
-  componentWillMount() {
+  componentDidMount() {
     this.props.actions.getStories();
   }
-
 
   _onMoveEnd = (newList) => {
     this.props.actions.changeStoriesOrder(newList);
