@@ -35,7 +35,7 @@ class CoverPage extends PureComponent {
             type="text"
             ref={ input => this.usernameInput = input } />
         </Form.Field>
-        <Button type='submit'>
+        <Button id="btn_login" type='submit'>
           ENTER
         </Button>
       </Form>
