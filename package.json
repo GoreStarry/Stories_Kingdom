@@ -6,11 +6,11 @@
     "private": true,
     "scripts": {
         "start": "node build/prod-server.js",
-        "dev": "node --harmony-async-await build/dev-server.js",
-        "sever_dev": "nodemon --harmony-async-await build/dev-server.js",
+        "dev": "node build/dev-server.js",
+        "sever_dev": "nodemon build/dev-server.js",
         "build": "node build/build.js",
         "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-        "e2e": "node --harmony-async-await test/e2e/runner.js",
+        "e2e": "node test/e2e/runner.js",
         "api_test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --compilers js:babel-core/register --recursive ./test/backend/",
         "test": "npm run unit && npm run e2e",
         "cosmos": "node_modules/.bin/cosmos"
