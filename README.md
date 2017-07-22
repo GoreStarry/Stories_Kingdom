@@ -9,7 +9,7 @@
 
 
 ## Prerequisite Technologies
-* *Node.js* (v7.x.x)
+* *Node.js* (^7.6.x)
 * *MongoDB*
 
 ## Article Editing Shortcuts
