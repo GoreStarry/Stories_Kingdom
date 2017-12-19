@@ -8,3 +8,4 @@ selenium-debug.log
 coverage/
 yarn-error.log
 selenium-debug.log
+release-builds/
