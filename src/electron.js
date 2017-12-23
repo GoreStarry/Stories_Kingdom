@@ -1,15 +1,14 @@
-require("escape-string-regexp");
 const spawn = require("child_process").spawn;
-const pipe = spawn("mongod", []);
-pipe.stdout.on("data", function(data) {
-  console.log(data.toString("utf8"));
-});
-pipe.stderr.on("data", function(data) {
-  console.log(data.toString("utf8"));
-});
-pipe.on("close", function(code) {
-  console.log("Process exited with code: " + code);
-});
+// const pipe = spawn("mongod", []);
+// pipe.stdout.on("data", function(data) {
+//   console.log(data.toString("utf8"));
+// });
+// pipe.stderr.on("data", function(data) {
+//   console.log(data.toString("utf8"));
+// });
+// pipe.on("close", function(code) {
+//   console.log("Process exited with code: " + code);
+// });
 
 const electron = require("electron");
 // Module to control application life.
@@ -20,13 +19,14 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const url = require("url");
 
-require("../build/prod-server.js");
+// require("../build/prod-server.js");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 function createWindow() {
+  require("../build/prod-server.js");
   // Create the browser window.
   mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
@@ -34,14 +34,14 @@ function createWindow() {
   mainWindow.loadURL("http://localhost:3000/");
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", function() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    pipe.kill("SIGINT");
+    // pipe.kill("SIGINT");
     mainWindow = null;
   });
 }

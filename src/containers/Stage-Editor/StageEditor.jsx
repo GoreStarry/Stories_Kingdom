@@ -1,4 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
+import React, { PureComponent} from 'react';
+import PropTypes from "prop-types";
 import Rx from 'rxjs/Rx';
 import { connect } from 'react-redux';
 import _findIndex from 'lodash/fp/findIndex';
