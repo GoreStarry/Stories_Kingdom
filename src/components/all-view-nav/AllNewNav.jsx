@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { Sidebar, Segment, Button, Menu, Icon } from "semantic-ui-react";
+import { Route, Switch } from "react-router-dom";
+
 
 import axios from "axios";
 // for 400 request
@@ -30,7 +32,7 @@ class PageBody extends PureComponent {
               onClick={this.props.toggleNav}
             />
           </div>
-          {this.props.pages}
+          {React.cloneElement(this.props.children, this.props.router)}
         </Segment>
       </Sidebar.Pusher>
     );
@@ -39,7 +41,7 @@ class PageBody extends PureComponent {
 
 PageBody.propTypes = {
   toggleNav: PropTypes.func.isRequired,
-  pages: PropTypes.object.isRequired,
+  router: PropTypes.object.isRequired,
   nav_open: PropTypes.bool.isRequired
 };
 
@@ -70,10 +72,9 @@ class AllNewNav extends PureComponent {
   render() {
     const { routes, children, router } = this.props;
     const { nav_open } = this.state;
-
     return (
       <div className={styles.AllNewNav}>
-        <Sidebar.Pushable as={Segment}>
+        <Sidebar.Pushable as={Segment}> 
           <Sidebar
             as={Menu}
             animation="overlay"
@@ -101,10 +102,15 @@ class AllNewNav extends PureComponent {
           <PageBody
             visible="nav_open"
             router={router}
-            pages={children}
             nav_open={nav_open}
             toggleNav={this._toggleNav}
-          />
+          >
+          <Switch>
+              {routes.map((route, index) => {
+                return <Route key={route.path + index} {...route}/>;
+              })}
+            </Switch>
+          </PageBody>
         </Sidebar.Pushable>
       </div>
     );
@@ -113,12 +119,12 @@ class AllNewNav extends PureComponent {
 
 AllNewNav.propTypes = {
   routes: PropTypes.array.isRequired,
+  router: PropTypes.object.isRequired,
   actions: PropTypes.object,
   children: PropTypes.object
 };
 
 function mapStateToProps(state) {
-  console.log(state.router.location.pathname);
   return {
     router: state.router, // for trigger Page update
     auth: state.auth

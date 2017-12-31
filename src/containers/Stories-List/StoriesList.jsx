@@ -64,7 +64,6 @@ class StoriesList extends PureComponent {
   render() {
     const { useContainer, deleteModalOpen, deleteTarget } = this.state;
     const { auth, storiesOrder, stories } = this.props;
-    console.log("list");
     const commonProps = {
       stories,
       openDeleteModal: this._openDeleteModal

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { render } from "react-dom";
-import { Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "react-router-redux";
 import createHistory from "history/createBrowserHistory";
@@ -32,25 +31,24 @@ const routes = [
   {
     name: "Cover Page",
     path: "/",
-    component: ({ match }) => {
-      console.log(match);
-      return <CoverPage />;
-    },
+    component: CoverPage,
     exact: true
   },
   {
     name: "Stories List",
     path: "/list",
-    component: ({ match }) => {
-      console.log(match);
-      return <StoriesList />;
-    }
+    component: StoriesList
+  },
+  {
+    name: "Chapter List",
+    path: "/chapter/:story_id",
+    component: ChapterList
+  },
+  {
+    name: "Stage Editor",
+    path: "/editor/:story_id/:article_id?/",
+    component: StageEditor
   }
-  // {
-  //   name: 'Draft Test',
-  //   path: '/draft_test',
-  //   component: DraftTest
-  // },
 ];
 
 class MainContainer extends Component {
@@ -62,23 +60,7 @@ class MainContainer extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <AllViewNav routes={routes}>
-            <Switch>
-              {routes.map((route, index) => {
-                return <Route key={route.path + index} {...route} />;
-              })}
-              <Route
-                name="Chapter List"
-                path="/chapter/:story_id"
-                component={ChapterList}
-              />
-              <Route
-                name="Stage Editor"
-                path="/editor/:story_id/:article_id?/"
-                component={StageEditor}
-              />
-            </Switch>
-          </AllViewNav>
+          <AllViewNav routes={routes} />
         </ConnectedRouter>
       </Provider>
     );
