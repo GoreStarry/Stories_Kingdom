@@ -10,11 +10,9 @@ const spawn = require("child_process").spawn;
 //   console.log("Process exited with code: " + code);
 // });
 
-const electron = require("electron");
 // Module to control application life.
-const app = electron.app;
 // Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
+const { app, Menu, BrowserWindow } = require("electron");
 
 const path = require("path");
 const url = require("url");
@@ -44,6 +42,28 @@ function createWindow() {
     // pipe.kill("SIGINT");
     mainWindow = null;
   });
+
+  if (process.platform === "darwin") {
+    // Create our menu entries so that we can use MAC shortcuts
+    Menu.setApplicationMenu(
+      Menu.buildFromTemplate([
+        {
+          label: "Edit",
+          submenu: [
+            { role: "undo" },
+            { role: "redo" },
+            { type: "separator" },
+            { role: "cut" },
+            { role: "copy" },
+            { role: "paste" },
+            { role: "pasteandmatchstyle" },
+            { role: "delete" },
+            { role: "selectall" }
+          ]
+        }
+      ])
+    );
+  }
 }
 
 // This method will be called when Electron has finished
