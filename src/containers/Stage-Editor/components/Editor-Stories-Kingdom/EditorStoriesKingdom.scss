@@ -2,31 +2,30 @@ $font_size: 1.2rem;
 $letter_spacing: 0.2rem;
 
 .EditorStoriesKingdom {
-    position: relative;
-    height: inherit;
-    word-break: break-all;
-    flex: 1;
-     :global {
-        .DraftEditor-root {
-            display: inline-block;
-            height: inherit; // min-width: 60vw;
-            padding: 3rem 5rem;
-            line-height: 2rem;
-            font-family: Heiti TC, Microsoft JhengHei;
-            font-size: $font_size;
-            letter-spacing: $letter_spacing;
-            line-height: 2.2rem;
-            font-weight: 100;
-            color: #c9c9c9;
-            writing-mode: vertical-rl;
-            text-align: left;
-            overflow: scroll;
-            direction: ltr;
-        }
-
-        .public-DraftStyleDefault-block {
-            padding: 0.5rem;
-            text-indent: #{($letter_spacing + $font_size)*2};
-        }
+  position: relative;
+  height: inherit;
+  word-break: break-all;
+  flex: 1;
+  :global {
+    .DraftEditor-root {
+      display: inline-block;
+      height: inherit; // min-width: 60vw;
+      padding: 3rem 5rem;
+      line-height: 2rem;
+      font-family: Heiti TC, Microsoft JhengHei;
+      font-size: $font_size;
+      letter-spacing: $letter_spacing;
+      line-height: 2.2rem;
+      font-weight: 100;
+      color: #c9c9c9;
+      writing-mode: vertical-rl;
+      text-align: left;
+      direction: ltr;
     }
+
+    .public-DraftStyleDefault-block {
+      padding: 0.5rem;
+      text-indent: #{($letter_spacing + $font_size)*2};
+    }
+  }
 }

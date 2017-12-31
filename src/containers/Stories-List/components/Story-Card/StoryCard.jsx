@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import download from "downloadjs";
 
 import classNames from "classnames/bind";
 import styles from "./StoryCard.scss";
@@ -13,6 +15,17 @@ class StoryCard extends Component {
       data["data-story-id"],
       data["data-story-name"]
     );
+  };
+
+  _getStoryBackupFile = async () => {
+    const { item: { id: story_id }, commonProps } = this.props;
+    await axios.get(`/api/stories/backup/${story_id}`).then(res => {
+      download(
+        res.data,
+        `${commonProps.stories[story_id].name}.txt`,
+        "text/plain"
+      );
+    });
   };
 
   render() {
@@ -46,8 +59,14 @@ class StoryCard extends Component {
           </div>
           <Button
             className={`btn__delete ${styles.btn__delete}`}
+            icon="save"
+            data-story-id={item.id}
+            data-story-name={commonProps.stories[item.id].name}
+            onClick={this._getStoryBackupFile}
+          />
+          <Button
+            className={`btn__delete ${styles.btn__delete}`}
             icon="delete"
-            attached="right"
             data-story-id={item.id}
             data-story-name={commonProps.stories[item.id].name}
             onClick={this._clickDeleteBtn}

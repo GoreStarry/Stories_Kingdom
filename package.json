@@ -25,6 +25,7 @@
     "axios": "^0.15.3",
     "body-parser": "^1.16.1",
     "classnames": "^2.2.5",
+    "downloadjs": "^1.4.7",
     "draft-js": "^0.10.0",
     "draft-js-block-breakout-plugin": "^1.0.2",
     "draft-js-plugins-editor": "2.0.0-beta10",

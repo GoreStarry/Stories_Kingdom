@@ -26,9 +26,24 @@ class MotionEditor extends PureComponent {
   state = {
     main_props: {
       id: "main_Editor"
-    }
+    },
+    main_overflowX: false,
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if(this.props.editorState !== prevProps.editorState){
+      this._checkEditorOverFlowX();
+    }
+  }
+
+  _checkEditorOverFlowX = ()=>{
+    if(this.refBoxMainEditor && this.refBoxMainEditor.childNodes[0].offsetWidth >= window.innerWidth){
+      this.setState({
+        main_overflowX: true,
+      })
+    }
+  }
+  
   toggleComment = () => {
     const { editorState, onChange } = this.props;
     const myEditorState = RichUtils.toggleBlockType(
@@ -146,10 +161,12 @@ class MotionEditor extends PureComponent {
             return (
               <div
                 {...this.state.main_props}
+                ref={boxMain => this.refBoxMainEditor = boxMain}
                 className={styles.box__editor}
                 style={{
                   transform: `translate3d(${style.x}px, 0, 0)`,
-                  textAlign: this.props.articleAlign
+                  textAlign: this.props.articleAlign,
+                  overflow: this.state.main_overflowX ? "scroll" : "initail"
                 }}
               >
                 <Editor

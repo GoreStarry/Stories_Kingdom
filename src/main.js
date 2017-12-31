@@ -32,22 +32,26 @@ const routes = [
     name: "Cover Page",
     path: "/",
     component: CoverPage,
-    exact: true
+    exact: true,
+    inNav: true
   },
   {
     name: "Stories List",
     path: "/list",
-    component: StoriesList
+    component: StoriesList,
+    inNav: true
   },
   {
     name: "Chapter List",
     path: "/chapter/:story_id",
-    component: ChapterList
+    component: ChapterList,
+    inNav: false
   },
   {
     name: "Stage Editor",
     path: "/editor/:story_id/:article_id?/",
-    component: StageEditor
+    component: StageEditor,
+    inNav: false
   }
 ];
 
