@@ -1,7 +1,7 @@
 {
   "name": "stories_kingdom",
   "productName": "Stories Kingdom",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "description": "The environment builds for vertical writing.",
   "author": "Gore Wang <sunrise91.t3@gmail.com>",
   "private": true,
@@ -11,15 +11,20 @@
     "dev": "node build/dev-server.js",
     "sever_dev": "nodemon build/dev-server.js",
     "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "unit":
+      "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
-    "api_test": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --compilers js:babel-core/register --recursive ./test/backend/",
+    "api_test":
+      "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- --compilers js:babel-core/register --recursive ./test/backend/",
     "test": "npm run unit && npm run e2e",
     "cosmos": "node_modules/.bin/cosmos",
     "electron": "electron ./src/electron.js",
-    "package-mac": "electron-packager . stories_kingdom --overwrite --platform=darwin --arch=x64 --icon=static/icons/mac/icon.icns --no-prune --out=release-builds",
-    "package-win": "electron-packager . stories_kingdom --overwrite --asar=true --platform=win32 --arch=ia32 --icon=static/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Stories Kingdom\"",
-    "package-linux": "electron-packager . stories_kingdom --overwrite --asar=true --platform=linux --arch=x64 --icon=static/icons/png/icon.png --prune=true --out=release-builds"
+    "package-mac":
+      "electron-packager . stories_kingdom --overwrite --platform=darwin --arch=x64 --icon=static/icons/mac/icon.icns --no-prune --out=release-builds",
+    "package-win":
+      "electron-packager . stories_kingdom --overwrite --asar=true --platform=win32 --arch=ia32 --icon=static/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Stories Kingdom\"",
+    "package-linux":
+      "electron-packager . stories_kingdom --overwrite --asar=true --platform=linux --arch=x64 --icon=static/icons/png/icon.png --prune=true --out=release-builds"
   },
   "dependencies": {
     "axios": "^0.15.3",
